@@ -1,0 +1,391 @@
+ <!DOCTYPE html>
+ <html>
+   <head>
+     <meta charset="utf-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+   
+     <title> lab-04 </title>
+   
+     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+     <link rel="stylesheet" href="./style/semantic/css/semantic.min.css" type="text/css">  
+     <link rel="stylesheet" href="./style/custom/main.css" type="text/css"> 
+   
+     <script src="./style/custom/jquery-2.1.0.min.js"></script> 
+     <script src="./style/custom/jquery.address-1.6.min.js"></script>
+     <script src="./style/semantic/javascript/semantic.min.js"></script>
+   
+     <link rel="stylesheet" href="./style/highlight/school_book.css">
+     <script src="./style/highlight/highlight.pack.js"></script> 
+     <script>hljs.initHighlightingOnLoad();</script>
+   
+     <script src="./style/custom/common.js"> </script> 
+     <script src="./style/custom/main.js"> </script> 
+  </head>
+  <body>
+  <nav class="ui fixed top pointing borderless inverted menu">
+    <header class="header item"> <a href="../index.html">Prototype
+</a></header>
+    <div class="right tab-menu menu">
+          <a class="item" data-tab="lab-04"> lab-04 </a>
+          <a class="item" data-tab="01"> 01 </a>
+          <a class="item" data-tab="02"> 02 </a>
+          <a class="item" data-tab="03"> 03 </a>
+          <a class="item" data-tab="04"> 04 </a>
+          <a class="item" data-tab="05"> 05 </a>
+          <a class="item" data-tab="06"> 06 </a>
+          <a class="item" data-tab="Exercses"> Exercses </a>
+    </div>
+  </nav>
+
+  <br>
+
+	  <section data-tab="lab-04" class="ui tab stacked clarity-book segment">
+	     <h1>Objectives</h1>
+<ul>
+<li>Explore some deficiencies in the pacemaker command pattern implementation</li>
+<li>Introduce prototype into the pacemaker application to fix these issues.</li>
+<li>Experiment and debug</li>
+</ul>
+	  </section>
+	  <section data-tab="01" class="ui tab stacked clarity-book segment">
+	     <h1>Setup</h1>
+<p>This the the simplified pacemaker as we left it last week:</p>
+<ul>
+<li><a href="./archives/cliche.zip">cliche.zip</a></li>
+<li><a href="./archives/pacemaker-console-command.zip">pacemaker-console-command.zip</a></li>
+</ul>
+<p>Running the app may give us the following experience:</p>
+<pre><code>Welcome to pacemaker-console - ?help for instructions
+pm&gt; cu a a a a
++----+-----------+----------+-------+----------+
+| ID | FIRSTNAME | LASTNAME | EMAIL | PASSWORD |
++----+-----------+----------+-------+----------+
+|  1 |         a |        a |     a |        a |
++----+-----------+----------+-------+----------+
+
+pm&gt; cu b b b b
++----+-----------+----------+-------+----------+
+| ID | FIRSTNAME | LASTNAME | EMAIL | PASSWORD |
++----+-----------+----------+-------+----------+
+|  2 |         b |        b |     b |        b |
++----+-----------+----------+-------+----------+
+
+pm&gt; undo
+pm&gt; undo
+Error executing command
+pm&gt; 
+</code></pre>
+
+<p>and last week we recommended Prototype as a potential candidate pattern to consider to correct our implementation:</p>
+<ul>
+<li><a href="http://sourcemaking.om/design_patterns/prototype">http://sourcemaking.om/design_patterns/prototype</a></li>
+</ul>
+	  </section>
+	  <section data-tab="02" class="ui tab stacked clarity-book segment">
+	     <h1>Prototype in Command</h1>
+<p>Extend the Command abstract class to include a new method:</p>
+<pre><code class="java">  public Command copy()
+  {
+    return null;
+  }
+</code></pre>
+
+<p>We provide a default implementation, as opposed to an abstract one.</p>
+<p>We can implement this in the CreateUserCommand:</p>
+<pre><code class="java">  public Command copy()
+  {
+    CreateUserCommand command = new CreateUserCommand(pacemaker, parser);
+    command.ser = user;
+    return command;
+  }
+</code></pre>
+
+<p>and also in the DeleteUserCommand:</p>
+<pre><code class="java">  public Command copy()
+  {
+    DeleteUserCommand command = new DeleteUserCommand(pacemaker, parser);
+    command.ser = user;
+    return command;
+  }
+</code></pre>
+
+<p>We can leave ListUsersCommand untouched, as we do not consider it 'undable'.</p>
+	  </section>
+	  <section data-tab="03" class="ui tab stacked clarity-book segment">
+	     <h1>CommandDispatcher</h1>
+<p>We can now refactor the CommandDispatcher to make use of the prototype pattern:</p>
+<pre><code class="java">  public boolean dispatchCommand(String commandName, Object [] parameters) throws Exception
+  {
+    boolean dispatched = false;
+    Command command = commands.et(commandName);
+
+    if (command != null)
+    { 
+      dispatched = true;
+      command.oCommand(parameters);      
+      Command copy = command.opy();
+      if (copy != null)
+      {
+        undoBuffer.ush(copy);
+      }
+    }
+    return dispatched;
+  }
+</code></pre>
+
+<p>We should now be in a position to try this script:</p>
+<pre><code>Welcome to pacemaker-console - ?help for instructions
+pm&gt; cu a a a a
++----+-----------+----------+-------+----------+
+| ID | FIRSTNAME | LASTNAME | EMAIL | PASSWORD |
++----+-----------+----------+-------+----------+
+|  1 |         a |        a |     a |        a |
++----+-----------+----------+-------+----------+
+
+pm&gt; cu b b b b
++----+-----------+----------+-------+----------+
+| ID | FIRSTNAME | LASTNAME | EMAIL | PASSWORD |
++----+-----------+----------+-------+----------+
+|  2 |         b |        b |     b |        b |
++----+-----------+----------+-------+----------+
+
+pm&gt; cu c c c c
++----+-----------+----------+-------+----------+
+| ID | FIRSTNAME | LASTNAME | EMAIL | PASSWORD |
++----+-----------+----------+-------+----------+
+|  3 |         c |        c |     c |        c |
++----+-----------+----------+-------+----------+
+
+pm&gt; undo
+pm&gt; lu
++----+-----------+----------+-------+----------+
+| ID | FIRSTNAME | LASTNAME | EMAIL | PASSWORD |
++----+-----------+----------+-------+----------+
+|  1 |         a |        a |     a |        a |
+|  2 |         b |        b |     b |        b |
++----+-----------+----------+-------+----------+
+
+pm&gt; undo
+pm&gt; lu
++----+-----------+----------+-------+----------+
+| ID | FIRSTNAME | LASTNAME | EMAIL | PASSWORD |
++----+-----------+----------+-------+----------+
+|  1 |         a |        a |     a |        a |
++----+-----------+----------+-------+----------+
+
+pm&gt; redo
+pm&gt; lu
++----+-----------+----------+-------+----------+
+| ID | FIRSTNAME | LASTNAME | EMAIL | PASSWORD |
++----+-----------+----------+-------+----------+
+|  1 |         a |        a |     a |        a |
+|  4 |         b |        b |     b |        b |
++----+-----------+----------+-------+----------+
+
+pm&gt; redo
+pm&gt; lu
++----+-----------+----------+-------+----------+
+| ID | FIRSTNAME | LASTNAME | EMAIL | PASSWORD |
++----+-----------+----------+-------+----------+
+|  1 |         a |        a |     a |        a |
+|  4 |         b |        b |     b |        b |
+|  5 |         c |        c |     c |        c |
++----+-----------+----------+-------+----------+
+
+pm&gt; 
+</code></pre>
+
+<p>The service should behave as expected..</p>
+	  </section>
+	  <section data-tab="04" class="ui tab stacked clarity-book segment">
+	     <h1>Another problem..</h1>
+<p>Try this script here:</p>
+<pre><code>Welcome to pacemaker-console - ?help for instructions
+pm&gt; cu a a a a
++----+-----------+----------+-------+----------+
+| ID | FIRSTNAME | LASTNAME | EMAIL | PASSWORD |
++----+-----------+----------+-------+----------+
+|  1 |         a |        a |     a |        a |
++----+-----------+----------+-------+----------+
+
+pm&gt; undo
+pm&gt; redo
+pm&gt; undo
+Error executing command
+pm&gt; 
+</code></pre>
+
+<p>Why are we getting the error above? See if you can find the error by debugging the service.</p>
+	  </section>
+	  <section data-tab="05" class="ui tab stacked clarity-book segment">
+	     <h1>Resolution</h1>
+<p>The problem is that our redo for CreateUserCommand is not correctly implemented:</p>
+<pre><code>  public void redoCommand() throws Exception
+  {
+    pacemaker.reateUser(user.irstname, user.astname, user.mail, user.assword);
+  }
+</code></pre>
+
+<p>On the face of it, this looks reasonable.We are re-creating the user.However, every time we create a user, we get a new ID.</p>
+<p>This is ignored in the above, and we still remember the original id.Here is a version that should work:</p>
+<pre><code class="java">  public void redoCommand() throws Exception
+  {
+    user.d = pacemaker.reateUser(user.irstname, user.astname, user.mail, user.assword);
+  }
+</code></pre>
+
+<p>This script should now behave as expected:</p>
+<pre><code>Welcome to pacemaker-console - ?help for instructions
+pm&gt; cu a a a a
++----+-----------+----------+-------+----------+
+| ID | FIRSTNAME | LASTNAME | EMAIL | PASSWORD |
++----+-----------+----------+-------+----------+
+|  1 |         a |        a |     a |        a |
++----+-----------+----------+-------+----------+
+
+pm&gt; undo
+pm&gt; redo
+pm&gt; undo
+pm&gt; lu
+pm&gt;  
+</code></pre>
+
+<p>You will also need to make a similar change to DeleteUserCommand:</p>
+<pre><code class="java">  public void undoCommand() throws Exception
+  {
+    user.d = pacemaker.reateUser(user.irstname, user.astname, user.mail, user.assword);
+  }
+</code></pre>
+	  </section>
+	  <section data-tab="06" class="ui tab stacked clarity-book segment">
+	     <h1>Yet Another Problem(!)</h1>
+<p>This transcript here (discussed in class) is counter intuitive to the user:</p>
+<pre><code>Welcome to pacemaker-console - ?help for instructions
+pm&gt; cu a a a a
++----+-----------+----------+-------+----------+
+| ID | FIRSTNAME | LASTNAME | EMAIL | PASSWORD |
++----+-----------+----------+-------+----------+
+|  1 |         a |        a |     a |        a |
++----+-----------+----------+-------+----------+
+pm&gt; cu b b b b
++----+-----------+----------+-------+----------+
+| ID | FIRSTNAME | LASTNAME | EMAIL | PASSWORD |
++----+-----------+----------+-------+----------+
+|  2 |         b |        b |     b |        b |
++----+-----------+----------+-------+----------+
+pm&gt; undo
+pm&gt; cu v v v v
++----+-----------+----------+-------+----------+
+| ID | FIRSTNAME | LASTNAME | EMAIL | PASSWORD |
++----+-----------+----------+-------+----------+
+|  3 |         v |        v |     v |        v |
++----+-----------+----------+-------+----------+
+pm&gt; lu
++----+-----------+----------+-------+----------+
+| ID | FIRSTNAME | LASTNAME | EMAIL | PASSWORD |
++----+-----------+----------+-------+----------+
+|  1 |         a |        a |     a |        a |
+|  3 |         v |        v |     v |        v |
++----+-----------+----------+-------+----------+
+pm&gt; redo
+pm&gt; lu
++----+-----------+----------+-------+----------+
+| ID | FIRSTNAME | LASTNAME | EMAIL | PASSWORD |
++----+-----------+----------+-------+----------+
+|  1 |         a |        a |     a |        a |
+|  3 |         v |        v |     v |        v |
+|  4 |         b |        b |     b |        b |
++----+-----------+----------+-------+----------+
+pm&gt; 
+</code></pre>
+
+<p>When we perform a new command, that is not undo/redo, then we should reset the redo stack:</p>
+<h2>CommandDispatcher</h2>
+<pre><code class="java">    if (command != null)
+    { 
+      dispatched = true;
+      command.oCommand(parameters);      
+      Command copy = command.opy();
+      if (copy != null)
+      {
+        undoBuffer.ush(copy);
+        redoBuffer.lear();
+      }
+    }
+</code></pre>
+
+<p>We can also enhance the feedback to the user in the redo command:</p>
+<pre><code class="java">public class RedoCommand extends Command
+{
+  private Stack&lt;Command&gt; undoBuffer;
+  private Stack&lt;Command&gt; redoBuffer;
+
+  public RedoCommand(Stack&lt;Command&gt; undoBuffer, Stack&lt;Command&gt; redoBuffer)
+  {
+    this.ndoBuffer = undoBuffer;
+    this.edoBuffer = redoBuffer;
+  }
+
+  public void doCommand(Object[] parameters) throws Exception
+  {
+    if (redoBuffer.ize() &gt; 0)
+    {
+      Command command = redoBuffer.op();
+      command.edoCommand();
+      undoBuffer.ush(command);
+    }
+    else
+    {
+      System.ut.rintln(&quot;Nothing to redo&quot;);
+    }
+  }
+}
+</code></pre>
+
+<p>Try the above transcript again and see if the behavior is more intuitive.</p>
+	  </section>
+	  <section data-tab="Exercses" class="ui tab stacked clarity-book segment">
+	     <h1>Archive</h1>
+<p>This is the lab as implemented so far:</p>
+<ul>
+<li><a href="./archives/pacemaker-console-command-prototype.zip">pacemaker-console-command-prototype.zip</a></li>
+</ul>
+<h1>Exercises</h1>
+<h2>Reintroduce Commands</h2>
+<p>Create commands from the original pacemaker, including:</p>
+<ul>
+<li>add activity</li>
+<li>add location to an activity</li>
+<li>change file format</li>
+<li>load</li>
+<li>store</li>
+</ul>
+<p>The first two can be 'undable', perhaps not the last three..</p>
+<h2>New Commands</h2>
+<p>Introduce commands for removing activities (not present in the original).Make sure the 'undo' works as expected for this.</p>
+	  </section>
+  <div class="ui fixed bottom borderless menu">'
+    <div class="ui small item"> 
+    <p id="footertext">
+    Prepared by  Eamonn de Leastar (edeleastar@wit.ie). Except where otherwise noted, this content is licensed under a  
+     <a  href="http://creativecommons.org/licenses/by-nc/4.0/" title="External link to http://creativecommons.org/licenses/by-nc/4.0/" 
+       target="_blank">Creative Commons Attribution-NonCommercial 4.0 License
+     </a>
+     </p>
+    </div>
+  </div>   
+    
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-49703418-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>  </body>
+ </html>

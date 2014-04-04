@@ -1,0 +1,741 @@
+ <!DOCTYPE html>
+ <html>
+   <head>
+     <meta charset="utf-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+   
+     <title> Lab-05 </title>
+   
+     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+     <link rel="stylesheet" href="./style/semantic/css/semantic.min.css" type="text/css">  
+     <link rel="stylesheet" href="./style/custom/main.css" type="text/css"> 
+   
+     <script src="./style/custom/jquery-2.1.0.min.js"></script> 
+     <script src="./style/custom/jquery.address-1.6.min.js"></script>
+     <script src="./style/semantic/javascript/semantic.min.js"></script>
+   
+     <link rel="stylesheet" href="./style/highlight/school_book.css">
+     <script src="./style/highlight/highlight.pack.js"></script> 
+     <script>hljs.initHighlightingOnLoad();</script>
+   
+     <script src="./style/custom/common.js"> </script> 
+     <script src="./style/custom/main.js"> </script> 
+  </head>
+  <body>
+  <nav class="ui fixed top pointing borderless inverted menu">
+    <header class="header item"> <a href="../index.html">GoF Patterns
+</a></header>
+    <div class="right tab-menu menu">
+          <a class="item" data-tab="Lab-05"> Lab-05 </a>
+          <a class="item" data-tab="01"> 01 </a>
+          <a class="item" data-tab="02"> 02 </a>
+          <a class="item" data-tab="03"> 03 </a>
+          <a class="item" data-tab="04"> 04 </a>
+          <a class="item" data-tab="05"> 05 </a>
+          <a class="item" data-tab="06"> 06 </a>
+          <a class="item" data-tab="07"> 07 </a>
+          <a class="item" data-tab="08"> 08 </a>
+          <a class="item" data-tab="09"> 09 </a>
+          <a class="item" data-tab="Exercises"> Exercises </a>
+    </div>
+  </nav>
+
+  <br>
+
+	  <section data-tab="Lab-05" class="ui tab stacked clarity-book segment">
+	     <h1>Objectives</h1>
+<ul>
+<li>Layout a new Android project with a single activity</li>
+<li>Design this activity to permit simple sports activities to be specified</li>
+<li>Implement the Activity class to support these controls</li>
+</ul>
+	  </section>
+	  <section data-tab="01" class="ui tab stacked clarity-book segment">
+	     <h1>Create Project</h1>
+<p>Download and install the latest Android/Ecliose SDL</p>
+<p>Create a new Android application, with the following properties:</p>
+<p><img alt="" src="img/x01.png"></p>
+<p>Note the 'Minimum Required SDK' which may be different from the default.</p>
+<p>Accept all the defaults in the wizard - except the name of the main activity:</p>
+<p><img alt="" src="img/x02.png"></p>
+<p>The project will look like this:</p>
+<p><img alt="" src="img/x03.png"></p>
+<p>With the activity_donate open in the visual designer:</p>
+<p><img alt="" src="img/x04.png"></p>
+<p>It is important to become familiar with the structure and purpose of the three panes surrounding the Donation 'canvas':</p>
+<h2>Pallette:</h2>
+<p><img alt="" src="img/x05.png"></p>
+<h2>Outline</h2>
+<p><img alt="" src="img/x06.png"></p>
+<h2>Properties</h2>
+<p><img alt="" src="img/x07.png"></p>
+<p>These views are closely related - and you will need to monitor the information displayed there continually as you evolve the appearance of your activities screens.</p>
+	  </section>
+	  <section data-tab="02" class="ui tab stacked clarity-book segment">
+	     <h1>Layout Donation Activity</h1>
+<p>For this lab, out objective is to reproduce in Android this feature from this web app:</p>
+<p><img alt="" src="img/x08.png"></p>
+<p>In eclipse, delete the current 'Hello World' text, and drag and drop a new'LargeText' form widget onto the canvas. Look closely at the following:</p>
+<p><img alt="" src="img/x09.png"></p>
+<p>Note carefully the following features:</p>
+<ul>
+<li>the guides tyeing the text to the left, top and right corner</li>
+<li>in Outline - the name of the control has been changed from a default to 'donateTitle'. This is changed by selecting the item in outline, and selecting 'Edit ID' from the context menu.</li>
+<li>in Properties - where we entered 'Welcome Homer' into the text field</li>
+</ul>
+<p>Recreate the above precisely.</p>
+<p>A 'Lint warning' will have popped up in the top right:</p>
+<p><img alt="" src="img/x10.png"></p>
+<p>Click on this:</p>
+<p><img alt="" src="img/x11.png"></p>
+<p>.. and select 'Fix' - this is inviting us to give a name to the string, which will be stored in a separate 'string.xml' file. Give it the name 'donateTitle':</p>
+<p><img alt="" src="img/11.png"></p>
+<p>Save everything - and the lint warning should (eventually) disappear.</p>
+<p>Locate the following two files and inspect them closely:</p>
+<h2>res/layout/activity_dontate.xml</h2>
+<pre><code class="xml">&lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:tools=&quot;http://schemas.android.com/tools&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;
+    android:paddingBottom=&quot;@dimen/activity_vertical_margin&quot;
+    android:paddingLeft=&quot;@dimen/activity_horizontal_margin&quot;
+    android:paddingRight=&quot;@dimen/activity_horizontal_margin&quot;
+    android:paddingTop=&quot;@dimen/activity_vertical_margin&quot;
+    tools:context=&quot;.CreateActivity&quot; &gt;
+
+    &lt;TextView
+        android:id=&quot;@+id/textView1&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_alignParentLeft=&quot;true&quot;
+        android:layout_alignParentRight=&quot;true&quot;
+        android:layout_alignParentTop=&quot;true&quot;
+        android:text=&quot;@string/CreateActivityTitle&quot;
+        android:textAppearance=&quot;?android:attr/textAppearanceLarge&quot; /&gt;
+
+&lt;/RelativeLayout&gt;
+</code></pre>
+
+<h2>res/values/strings.xml</h2>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;resources&gt;
+
+    &lt;string name=&quot;app_name&quot;&gt;pacemaker&lt;/string&gt;
+    &lt;string name=&quot;action_settings&quot;&gt;Settings&lt;/string&gt;
+    &lt;string name=&quot;hello_world&quot;&gt;Hello world!&lt;/string&gt;
+    &lt;string name=&quot;CreateActivityTitle&quot;&gt;Enter Activity Details&lt;/string&gt;
+
+&lt;/resources&gt;
+
+</code></pre>
+
+<p>Note the relationship between 'donateTitle' in both files. Also note we have a superfluous 'hello_world' string left over from the generated app. We can delete this now.</p>
+	  </section>
+	  <section data-tab="03" class="ui tab stacked clarity-book segment">
+	     <h1>Donate Button</h1>
+<p>Place a button directly on to the activity - attached to the bottom of the screen as shown:</p>
+<p><img alt="Android Visual Designer" src="img/x12.png"></p>
+<p>Rename both the button and the text field in the Outline view:</p>
+<p><img alt="Outline View" src="img/x13.png"></p>
+<p>Do this by selecting the item and invoking 'Edit ID' from the context menu.</p>
+<p>Fix the lint error - and give the button the text 'Donate!'. If all goes as expected, your xml files should be like this:</p>
+<h3>activity_donate.xml</h3>
+<pre><code class="xml">&lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:tools=&quot;http://schemas.android.com/tools&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;
+    android:paddingBottom=&quot;@dimen/activity_vertical_margin&quot;
+    android:paddingLeft=&quot;@dimen/activity_horizontal_margin&quot;
+    android:paddingRight=&quot;@dimen/activity_horizontal_margin&quot;
+    android:paddingTop=&quot;@dimen/activity_vertical_margin&quot;
+    tools:context=&quot;.CreateActivity&quot; &gt;
+
+    &lt;TextView
+        android:id=&quot;@+id/createActivityTitle&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_alignParentLeft=&quot;true&quot;
+        android:layout_alignParentRight=&quot;true&quot;
+        android:layout_alignParentTop=&quot;true&quot;
+        android:text=&quot;@string/createActivityTitle&quot;
+        android:textAppearance=&quot;?android:attr/textAppearanceLarge&quot; /&gt;
+
+    &lt;Button
+        android:id=&quot;@+id/createActivityButton&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_alignParentBottom=&quot;true&quot;
+        android:layout_centerHorizontal=&quot;true&quot;
+        android:layout_marginBottom=&quot;22dp&quot;
+        android:text=&quot;@string/createActivityButton&quot; /&gt;
+
+&lt;/RelativeLayout&gt;
+</code></pre>
+
+<h2>strings.xml</h2>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;resources&gt;
+
+    &lt;string name=&quot;app_name&quot;&gt;pacemaker&lt;/string&gt;
+    &lt;string name=&quot;action_settings&quot;&gt;Settings&lt;/string&gt;
+    &lt;string name=&quot;createActivityTitle&quot;&gt;Enter Activity Details&lt;/string&gt;
+    &lt;string name=&quot;createActivityButton&quot;&gt;Create Activity&lt;/string&gt;
+
+&lt;/resources&gt;
+</code></pre>
+
+<p>If there is a deviation from the above - retrace your steps (delete the button) until you can match the above.</p>
+<p>We can now switch our attention to the Java Activity class Donate:</p>
+<pre><code class="java">package org.pacemaker;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.view.Menu;
+
+public class CreateActivity extends Activity
+{
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState)
+  {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_create);
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu)
+  {
+    // Inflate the menu; this adds items to the action bar if it is present.
+    getMenuInflater().inflate(R.menu.create, menu);
+    return true;
+  }
+}
+</code></pre>
+
+<p>For any 'controls' a user can interact with we usually find it useful to associate a class member with that object. Currently we have one only on - a Button. The text fields we dont consider 'interactive' as such, so we will not include those.</p>
+<p>Insert the following new field into the class:</p>
+<pre><code class="java">  private Button createActivityButton;
+</code></pre>
+
+<p>The class will have to be imported. The class name will always match the name in the Pallette:</p>
+<p><img alt="" src="img/x14.png"></p>
+<p>We are free to call the variable anything we like. However, in order to keep confusion to a minimum, always call the variable by the same name you used in the Outline view:</p>
+<p><img alt="" src="img/x13.png"></p>
+<p>In onCreate - we need to initialise this variable:</p>
+<pre><code class="java">    createActivityButton = (Button) findViewById(R.id.createActivityButton);
+</code></pre>
+
+<p>We might also add a logging message so we can have some feedback as the app launches:</p>
+<pre><code>    Log.v(&quot;Pacemaker&quot;, &quot;got the CreateActivity button&quot;);
+</code></pre>
+
+<p>This is the complete activity class:</p>
+<pre><code class="java">package org.pacemaker;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.util.Log;
+import android.view.Menu;
+import android.widget.Button;
+
+public class CreateActivity extends Activity
+{
+  private Button createActivityButton;
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState)
+  {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_create);
+
+    createActivityButton = (Button) findViewById(R.id.createActivityButton);
+
+    Log.v(&quot;Pacemaker&quot;, &quot;got the CreateActivity button&quot;);
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu)
+  {
+    // Inflate the menu; this adds items to the action bar if it is present.
+    getMenuInflater().inflate(R.menu.create, menu);
+    return true;
+  }
+}
+</code></pre>
+
+<p>Finding the log message can be very difficult, unless you set a filter. In the 'LogCat' view in eclipse, create a filter like this:</p>
+<p><img alt="" src="img/x15.png"></p>
+<p>If you then select the filter, we should see our message:</p>
+<p><img alt="" src="img/x16.png"></p>
+	  </section>
+	  <section data-tab="04" class="ui tab stacked clarity-book segment">
+	     <h1>Documentation</h1>
+<p>The android documentation is particularly helpful and well designed. These are the two key starting points:</p>
+<ul>
+<li><a href="http://developer.android.com/guide/components/index.html">http://developer.android.com/guide/components/index.html</a></li>
+<li><a href="http://developer.android.com/reference/packages.html">http://developer.android.com/reference/packages.html</a></li>
+</ul>
+<p>The first is designed to be read though as a guide, perhaps independent of any work in eclipse. You should get into the habit of devoting an hour or two a week just reading this section.</p>
+<p>The Reference guide should always be open as you are working on labs or projects, and you should make a serious effort to get to grips with at least some of the information here.</p>
+<p>Taking the Button class we have just started using. We can immediately find the reference just by knowing the import statement in our Activity class:</p>
+<pre><code class="java">import android.widget.Button;
+</code></pre>
+
+<p>.. translates to</p>
+<ul>
+<li><a href="http://developer.android.com/reference/android/widget/Button.html">http://developer.android.com/reference/android/widget/Button.html</a></li>
+</ul>
+<p>(note the last three segments match the package name). Open this page now. Read just as far as the "Button Style" heading. There seems to be two ways of learning when an button event occurs. The first method is using the event handler/listener - but a second easier method is also available.</p>
+<p>Try this now. Bring in a new method into Donate class:</p>
+<pre><code class="java">  public void createActivityButtonPressed (View view) 
+  {
+    Log.v(&quot;Donate&quot;, &quot;CreateActivity Button Pressed!&quot;);
+  }
+</code></pre>
+
+<p>Then, edit the activity_donate xml file - and add a new attribute into the Button xml fragment:</p>
+<pre><code class="xml">    &lt;Button
+        android:id=&quot;@+id/createActivityButton&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_alignParentBottom=&quot;true&quot;
+        android:layout_centerHorizontal=&quot;true&quot;
+        android:layout_marginBottom=&quot;22dp&quot;
+        android:text=&quot;@string/createActivityButton&quot; 
+        android:onClick=&quot;createActivityButtonPressed&quot;/&gt;
+</code></pre>
+
+<p>(the very last entry)</p>
+<p>Save everything and execute the app, and monitor the log as you press the button:</p>
+<p><img alt="" src="img/x17.png"></p>
+<p>We now have our first interaction working!</p>
+	  </section>
+	  <section data-tab="05" class="ui tab stacked clarity-book segment">
+	     <h1>Research + New Control Layout</h1>
+<p>Recall the UI we are trying to implement:</p>
+<p><img alt="" src="img/x18.png"></p>
+<p>We need a Radio Buttons, some sort of selection/combo box + a progress bar. These can be found in various locations in the pallette:</p>
+<p><img alt="" src="img/x21.png">
+<img alt="" src="img/x22.png"></p>
+<p>RadioGroup, ProgressBar and NumberPicker seem likely candidates. The names of these controls are exactly as advertised, and we can expect them to be in the 'widgets' package. To verify this, try importing them at the top of the Donate activity class:</p>
+<pre><code class="java">import android.widget.NumberPicker;
+import android.widget.TextView;
+</code></pre>
+
+<p>... and we can bring in three fields into the class:</p>
+<pre><code class="java">  private Button       createActivityButton;
+  private TextView     activityType;
+  private TextView     activityLoction;
+  private NumberPicker distancePicker;
+</code></pre>
+
+<p>We can also open up three pages of documentation - which we can reverse engineer from the package/class names:</p>
+<ul>
+<li><a href="http://developer.android.com/reference/android/widget/RadioGroup.html">http://developer.android.com/reference/android/widget/RadioGroup.html</a></li>
+<li><a href="http://developer.android.com/reference/android/widget/ProgressBar.html">http://developer.android.com/reference/android/widget/ProgressBar.html</a></li>
+<li><a href="http://developer.android.com/reference/android/widget/NumberPicker.html">http://developer.android.com/reference/android/widget/NumberPicker.html</a></li>
+</ul>
+<p>Note this time we have gone to the Activity class before actually creating the controls. We should do this now - and remember to use the same names (for the IDs) as we create the controls.</p>
+<p><img alt="" src="img/x19.png">
+<img alt="" src="img/x20.png"></p>
+<p>Getting the layout +id names as shown above may take some practice. However, it is an essential skill to get on top of, even it it takes a lot of trial and error.</p>
+<p>For reference purposes (try to do it your self), these are the relevant generated xml files:</p>
+<pre><code class="xml">&lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:tools=&quot;http://schemas.android.com/tools&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;
+    android:paddingBottom=&quot;@dimen/activity_vertical_margin&quot;
+    android:paddingLeft=&quot;@dimen/activity_horizontal_margin&quot;
+    android:paddingRight=&quot;@dimen/activity_horizontal_margin&quot;
+    android:paddingTop=&quot;@dimen/activity_vertical_margin&quot;
+    tools:context=&quot;.CreateActivity&quot; &gt;
+
+    &lt;TextView
+        android:id=&quot;@+id/createActivityTitle&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_alignParentLeft=&quot;true&quot;
+        android:layout_alignParentRight=&quot;true&quot;
+        android:layout_alignParentTop=&quot;true&quot;
+        android:text=&quot;@string/createActivityTitle&quot;
+        android:textAppearance=&quot;?android:attr/textAppearanceLarge&quot; /&gt;
+
+    &lt;Button
+        android:id=&quot;@+id/createActivityButton&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_alignParentBottom=&quot;true&quot;
+        android:layout_centerHorizontal=&quot;true&quot;
+        android:layout_marginBottom=&quot;22dp&quot;
+        android:text=&quot;@string/createActivityButton&quot; 
+        android:onClick=&quot;createActivityButtonPressed&quot;/&gt;
+
+    &lt;EditText
+        android:id=&quot;@+id/activityType&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_alignLeft=&quot;@+id/createActivityTitle&quot;
+        android:layout_alignParentRight=&quot;true&quot;
+        android:layout_below=&quot;@+id/createActivityTitle&quot;
+        android:layout_marginTop=&quot;27dp&quot;
+        android:ems=&quot;10&quot;
+        android:hint=&quot;@string/activityTypeHint&quot; &gt;
+
+        &lt;requestFocus /&gt;
+    &lt;/EditText&gt;
+
+    &lt;EditText
+        android:id=&quot;@+id/activityLocation&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_alignLeft=&quot;@+id/activityType&quot;
+        android:layout_alignParentRight=&quot;true&quot;
+        android:layout_below=&quot;@+id/activityType&quot;
+        android:layout_marginTop=&quot;20dp&quot;
+        android:ems=&quot;10&quot;
+        android:hint=&quot;@string/activityLocationHint&quot; /&gt;
+
+    &lt;NumberPicker
+        android:id=&quot;@+id/distancePicker&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_alignRight=&quot;@+id/activityLocation&quot;
+        android:layout_below=&quot;@+id/activityLocation&quot;
+        android:layout_marginRight=&quot;40dp&quot;
+        android:layout_marginTop=&quot;22dp&quot; /&gt;
+
+    &lt;TextView
+        android:id=&quot;@+id/distanceLabel&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_alignLeft=&quot;@+id/activityLocation&quot;
+        android:layout_alignTop=&quot;@+id/distancePicker&quot;
+        android:layout_marginLeft=&quot;30dp&quot;
+        android:layout_marginTop=&quot;50dp&quot;
+        android:layout_toLeftOf=&quot;@+id/distancePicker&quot;
+        android:text=&quot;@string/distanceLabel&quot;
+        android:textAppearance=&quot;?android:attr/textAppearanceMedium&quot; /&gt;
+
+&lt;/RelativeLayout&gt;
+</code></pre>
+
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;resources&gt;
+
+    &lt;string name=&quot;app_name&quot;&gt;pacemaker&lt;/string&gt;
+    &lt;string name=&quot;action_settings&quot;&gt;Settings&lt;/string&gt;
+    &lt;string name=&quot;createActivityTitle&quot;&gt;Enter Activity Details&lt;/string&gt;
+    &lt;string name=&quot;createActivityButton&quot;&gt;Create Activity&lt;/string&gt;
+    &lt;string name=&quot;activityTypeHint&quot;&gt;Enter Activity type...&lt;/string&gt;
+    &lt;string name=&quot;activityLocationHint&quot;&gt;Enter Location...&lt;/string&gt;
+    &lt;string name=&quot;distanceLabel&quot;&gt;Distance&lt;/string&gt;
+
+&lt;/resources&gt;
+</code></pre>
+
+<p>If we have our naming conventions right - then we can bind to these new controls in onCreate:</p>
+<pre><code class="java">    createActivityButton = (Button)       findViewById(R.id.createActivityButton);
+    activityType         = (TextView)     findViewById(R.id.activityType);
+    activityLocation     = (TextView)     findViewById(R.id.activityLocation);
+    distancePicker       = (NumberPicker) findViewById(R.id.distancePicker);
+</code></pre>
+
+<p>This is the complete Donate class:</p>
+<pre><code class="java">package org.pacemaker;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.View;
+import android.widget.Button;
+import android.widget.NumberPicker;
+import android.widget.TextView;
+
+public class CreateActivity extends Activity
+{
+  private Button       createActivityButton;
+  private TextView     activityType;
+  private TextView     activityLocation;
+  private NumberPicker distancePicker;
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState)
+  {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_create);
+
+    createActivityButton = (Button)       findViewById(R.id.createActivityButton);
+    activityType         = (TextView)     findViewById(R.id.activityType);
+    activityLocation     = (TextView)     findViewById(R.id.activityLocation);
+    distancePicker       = (NumberPicker) findViewById(R.id.distancePicker);
+  }
+
+  public void createActivityButtonPressed (View view) 
+  {
+    Log.v(&quot;Pacemaker&quot;, &quot;CreateActivity Button Pressed!&quot;);
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu)
+  {
+    // Inflate the menu; this adds items to the action bar if it is present.
+    getMenuInflater().inflate(R.menu.create, menu);
+    return true;
+  }
+}
+</code></pre>
+	  </section>
+	  <section data-tab="06" class="ui tab stacked clarity-book segment">
+	     <h1>NumberPicker</h1>
+<p>This is our reference documentation:</p>
+<ul>
+<li><a href="http://developer.android.com/reference/android/widget/NumberPicker.html">http://developer.android.com/reference/android/widget/NumberPicker.html</a></li>
+</ul>
+<p>which is a little overwhelming. Back in the guides:</p>
+<ul>
+<li><a href="http://developer.android.com/guide/components/index.html">http://developer.android.com/guide/components/index.html</a></li>
+</ul>
+<p>we might find some useful tutorial type introduction to this control - under 'User Interface' - 'Input Controls'</p>
+<ul>
+<li><a href="http://developer.android.com/guide/topics/ui/controls.html">http://developer.android.com/guide/topics/ui/controls.html</a></li>
+</ul>
+<p>.. and this is the page on 'pickers'</p>
+<ul>
+<li><a href="http://developer.android.com/guide/topics/ui/controls/pickers.html">http://developer.android.com/guide/topics/ui/controls/pickers.html</a></li>
+</ul>
+<p>This documentation is concerned with Fragments - a concept that may be difficult to grasp initially, and also explores the usage of date and time pickers. </p>
+<p>We can get up and running without this much fuss. Returning to the documentation, these three methods should be sufficient initially:</p>
+<ul>
+<li><a href="http://developer.android.com/reference/android/widget/NumberPicker.html#setMaxValue(int)">http://developer.android.com/reference/android/widget/NumberPicker.html#setMaxValue(int)</a></li>
+<li><a href="http://developer.android.com/reference/android/widget/NumberPicker.html#setMinValue(int)">http://developer.android.com/reference/android/widget/NumberPicker.html#setMinValue(int)</a></li>
+<li><a href="http://developer.android.com/reference/android/widget/NumberPicker.html#getValue()">http://developer.android.com/reference/android/widget/NumberPicker.html#getValue()</a></li>
+</ul>
+<p>In onCreate, initialise the values: </p>
+<pre><code class="java">
+    distancePicker.setMinValue(0);
+    distancePicker.setMaxValue(20);
+</code></pre>
+
+<p>And in createActivityButtonPressed:</p>
+<pre><code class="java">  public void createActivityButtonPressed (View view) 
+  {
+    int distance = distancePicker.getValue();
+    Log.v(&quot;Pacemaker&quot;, &quot;CreateActivity Button Pressed with &quot; + distance);
+  }
+</code></pre>
+
+<p>Run this now - and verify that it operates as expected (see the actual amounts in the log view).</p>
+	  </section>
+	  <section data-tab="07" class="ui tab stacked clarity-book segment">
+	     <h1>List Activities</h1>
+<p>We would like to display the activities we have just created, mirroring the approach taken by the web application:</p>
+<p><img alt="" src="img/x24.png"></p>
+<p>Select the package containing the CreateActivity class, and create a new activity using the wizard (New-&gt;Android-&gt;Android Activity:</p>
+<p><img alt="" src="img/x23.png"></p>
+<p>Accept all the defaults, and call the activity ActivitiesList:</p>
+<p><img alt="" src="img/x25.png"></p>
+<p>In the designer, place a Large Text Field + a ListView (from the Composite panel) directly on to the canvas like this:</p>
+<p><img alt="" src="img/x26.png"></p>
+<p>Note the names used for the IDs in the Outline view.</p>
+	  </section>
+	  <section data-tab="08" class="ui tab stacked clarity-book segment">
+	     <h1>Activities Model</h1>
+<p>Create a new package called 'org.pacemaker.models' - and incorporate a new class to represent Activities:</p>
+<pre><code class="java">package org.pacemaker.models;
+
+import static com.google.common.base.Objects.toStringHelper;
+import com.google.common.base.Objects;
+
+public class Activity 
+{ 
+  public Long   id;
+  public String type;
+  public String location;
+  public double distance;
+
+  public Activity()
+  {
+  }
+
+  public Activity(String type, String location, double distance)
+  {
+    this.type      = type;
+    this.location  = location;
+    this.distance  = distance;
+  }
+
+  @Override
+  public String toString()
+  {
+    return toStringHelper(this).addValue(id)
+                               .addValue(type)
+                               .addValue(location)
+                               .addValue(distance)
+                               .toString();
+  }
+
+  @Override
+  public boolean equals(final Object obj)
+  {
+    if (obj instanceof Activity)
+    {
+      final Activity other = (Activity) obj;
+      return Objects.equal(type, other.type) 
+          &amp;&amp; Objects.equal(location,  other.location)
+          &amp;&amp; Objects.equal(distance,  other.distance);    
+    }
+    else
+    {
+      return false;
+    }
+  }
+
+  @Override  
+  public int hashCode()  
+  {  
+     return Objects.hashCode(this.id, this.type, this.location, this.distance);  
+  }
+}
+</code></pre>
+
+<p>This use the guava library for utility support:</p>
+<ul>
+<li><a href="https://code.google.com/p/guava-libraries/">https://code.google.com/p/guava-libraries/</a></li>
+</ul>
+<p>You will need to download the latest version, copy it into the 'lib' folder of the project, and place it on the path (right clink on the jar file and select 'build path-&gt;add to build path')</p>
+<p>Back in the CreateActivity, we might create a list to store the activities:</p>
+<pre><code class="java">  private List&lt;Activity&gt; activities = new ArrayList&lt;Activity&gt;();
+</code></pre>
+
+<p>...and populate this list in createActivityButtonPressed:</p>
+<pre><code class="java">  public void createActivityButtonPressed (View view) 
+  {  
+    double distance = distancePicker.getValue();
+    Activity activity = new Activity (activityType.getText().toString(), activityLocation.getText().toString(), distance);
+
+    activities.add(activity);
+    Log.v(&quot;Pacemaker&quot;, &quot;CreateActivity Button Pressed with &quot; + distance);
+  }
+</code></pre>
+	  </section>
+	  <section data-tab="09" class="ui tab stacked clarity-book segment">
+	     <h1>Rendering the Activities</h1>
+<p>Place a new button on the CreateAvtivity panel to trigger the display of the activities list:</p>
+<p><img alt="" src="img/x27.png"></p>
+<p>... and install an event handler for this button:</p>
+<pre><code class="java">  public void listActivityButtonPressed (View view) 
+  {
+    Log.v(&quot;Pacemaker&quot;, &quot;List Activities Button Pressed&quot;);
+  }
+</code></pre>
+
+<p>Manually 'wire-up' the event handler by inserting the appropriate entry in the layout file:</p>
+<pre><code class="xml">    &lt;Button
+        android:id=&quot;@+id/avtivitiesListButton&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_alignLeft=&quot;@+id/createActivityButton&quot;
+        android:layout_alignParentBottom=&quot;true&quot;
+        android:layout_alignRight=&quot;@+id/createActivityButton&quot;
+        android:layout_marginBottom=&quot;16dp&quot;
+        android:onClick=&quot;listActivityButtonPressed&quot;
+        android:text=&quot;@string/activities_list&quot; /&gt;
+</code></pre>
+
+<p>(second last entry)</p>
+<p>To switch views, we start a new activity with the correct intent:</p>
+<pre><code>  public void listActivityButtonPressed (View view) 
+  {
+    Log.v(&quot;Pacemaker&quot;, &quot;List Activityies Button Pressed&quot;);
+    Intent intent = new Intent(this, ActivitiesList.class);
+    startActivity (intent);
+  }
+</code></pre>
+	  </section>
+	  <section data-tab="Exercises" class="ui tab stacked clarity-book segment">
+	     <h1>Exercises</h1>
+<p>Archive of lab so far:</p>
+<ul>
+<li><a href="./archives/pacemaker-android-v1.zip">pacemaker-android-v1.zip</a></li>
+</ul>
+<h2>Exercise 1:</h2>
+<p>We have a list of activities in the CreateActivity class:</p>
+<pre><code class="java">  private ArrayList&lt;Activity&gt; activities = new ArrayList&lt;Activity&gt;();
+</code></pre>
+
+<p>Which is populated in the button event handler:</p>
+<pre><code class="java">  public void createActivityButtonPressed (View view) 
+  {  
+    double distance = distancePicker.getValue();
+    Activity activity = new Activity (activityType.getText().toString(), activityLocation.getText().toString(), distance);
+
+    activities.add(activity);
+    Log.v(&quot;Pacemaker&quot;, &quot;CreateActivity Button Pressed with &quot; + distance);
+  }
+</code></pre>
+
+<p>How do we display this in the ActivityList?</p>
+<pre><code class="java">public class ActivitiesList extends Activity
+{
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState)
+  {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activities_list);
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu)
+  {
+  / Inflate the menu; this adds items to the action bar if it is present.
+    getMenuInflater().inflate(R.menu.activities_list, menu);
+    return true;
+  }
+}
+</code></pre>
+
+<p>To populate the array - you will need to use an adapter:</p>
+<ul>
+<li><htt/stackoverflow.cquestio50708populating-a-listview-using-arraylist></li>
+</ul>
+<p>This is a example of the adapter pattern:</p>
+<ul>
+<li><htt/sourcemaking.cdesign_patteradapter></li>
+</ul>
+<p>But you will need to find a way of getting the arraylist of activities to the view. One technique is based on the memento pattern:</p>
+<ul>
+<li><htt/sourcemaking.cdesign_pattermemento></li>
+</ul>
+<p>In android, this technique is implemented using the Parcelable class:</p>
+<ul>
+<li><htt/developer.android.creferenandroParcelable.html></li>
+</ul>
+<p>See if you can have the list of activities displayed in the ActivitiesList view. We will present a solution to this in next weeks lab.</p>
+	  </section>
+  <div class="ui fixed bottom borderless menu">'
+    <div class="ui small item"> 
+    <p id="footertext">
+    Prepared by  Eamonn de Leastar (edeleastar@wit.ie). Except where otherwise noted, this content is licensed under a  
+     <a  href="http://creativecommons.org/licenses/by-nc/4.0/" title="External link to http://creativecommons.org/licenses/by-nc/4.0/" 
+       target="_blank">Creative Commons Attribution-NonCommercial 4.0 License
+     </a>
+     </p>
+    </div>
+  </div>   
+    
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-49703418-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>  </body>
+ </html>
