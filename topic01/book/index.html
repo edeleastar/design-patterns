@@ -1,0 +1,426 @@
+ <!DOCTYPE html>
+ <html>
+   <head>
+     <meta charset="utf-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+   
+     <title> Lab-01 </title>
+   
+     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+     <link rel="stylesheet" href="./style/semantic/css/semantic.min.css" type="text/css">  
+     <link rel="stylesheet" href="./style/custom/main.css" type="text/css"> 
+   
+     <script src="./style/custom/jquery-2.1.0.min.js"></script> 
+     <script src="./style/custom/jquery.address-1.6.min.js"></script>
+     <script src="./style/semantic/javascript/semantic.min.js"></script>
+   
+     <link rel="stylesheet" href="./style/highlight/school_book.css">
+     <script src="./style/highlight/highlight.pack.js"></script> 
+     <script>hljs.initHighlightingOnLoad();</script>
+   
+     <script src="./style/custom/common.js"> </script> 
+     <script src="./style/custom/main.js"> </script> 
+  </head>
+  <body>
+  <nav class="ui fixed top pointing borderless inverted menu">
+    <header class="header item"> <a href="../index.html">Design Pattens Context
+</a></header>
+    <div class="right tab-menu menu">
+          <a class="item" data-tab="Lab-01"> Lab-01 </a>
+          <a class="item" data-tab="01"> 01 </a>
+          <a class="item" data-tab="02"> 02 </a>
+          <a class="item" data-tab="03"> 03 </a>
+          <a class="item" data-tab="04"> 04 </a>
+          <a class="item" data-tab="Exercises"> Exercises </a>
+    </div>
+  </nav>
+
+  <br>
+
+	  <section data-tab="Lab-01" class="ui tab stacked clarity-book segment">
+	     <h1>Objectives</h1>
+<ul>
+<li>Prepare an suitable version of Eclipse for the forthcoming labs</li>
+<li>Download and become familiar with the pacemaker-console project</li>
+<li>Explore the Strategy pattern in this context.</li>
+</ul>
+	  </section>
+	  <section data-tab="01" class="ui tab stacked clarity-book segment">
+	     <h1>Tools</h1>
+<p>Download and install the following:</p>
+<h2>Eclipse - Scala</h2>
+<p>From this site:</p>
+<ul>
+<li><a href="http://scala-ide.org/">http://scala-ide.org/</a></li>
+</ul>
+<p>Download the appropriate bundle for your workstation. Make sure it launches successfully.</p>
+<h2>Xtend:</h2>
+<p>In eclipse, select 'Install new Software' and use the following update site:</p>
+<ul>
+<li><a href="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases">http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases</a></li>
+</ul>
+<p>Select 'Xtend-2.5.0'</p>
+<h2>Play Framework:</h2>
+<p>From this site:</p>
+<ul>
+<li><a href="http://www.playframework.com/">http://www.playframework.com/</a></li>
+</ul>
+<p>Download and install the latest version of the Play framework</p>
+<h2>Android</h2>
+<p>From this site:</p>
+<ul>
+<li><a href="https://developer.android.com/sdk/index.html">https://developer.android.com/sdk/index.html</a></li>
+</ul>
+<p>Download an install the latest Android bundle</p>
+<h2>Updating Eclipse</h2>
+<p>When this is installed, you will have two versions of Eclipse installed. You can use them separately (for android and play development), or you can select one of them, and install the tools from the other as a plugin.</p>
+<p>For instance, selecting the Scala version of eclipse, include the android tools as a plugin using these instructions here:</p>
+<ul>
+<li><a href="https://developer.android.com/sdk/installing/installing-adt.html">https://developer.android.com/sdk/installing/installing-adt.html</a></li>
+</ul>
+<p>Now you can use a single IDE, the Scala variant, for both android and play experiments. This can be risky, however, and prone to updates that mighe destabilize either version.</p>
+	  </section>
+	  <section data-tab="02" class="ui tab stacked clarity-book segment">
+	     <h1>Pacemaker</h1>
+<p>Download and import this project into your eclipse workspace:</p>
+<ul>
+<li><a href="./archives/pacemaker-console-lab01.zip">pacemaker-console-lab01.zip</a></li>
+</ul>
+<p>This is a java version of the pacemaker project you may be familiar with.</p>
+<p>The valid commands are documented here:</p>
+<ul>
+<li><a href="./archives/d-pacemaker-console.pdf">pacemaker-console.pdf</a></li>
+</ul>
+<p>In addition the above commands, entering '!la' will list all of the commands:</p>
+<pre><code>!la
+
+abbrev  name    params
+!el !enable-logging (fileName)
+!dl !disable-logging    ()
+!rs !run-script (filename)
+!gle    !get-last-exception ()
+!sdt    !set-display-time   (do-display-time)
+?l  ?list   (startsWith)
+?l  ?list   ()
+?h  ?help   (command-name)
+?h  ?help   ()
+?la ?list-all   ()
+?ghh    ?generate-HTML-help (file-name, include-prefixed)
+l   load    ()
+s   store   ()
+lu  list-users  ()
+cu  create-user (first name, last name, email, password)
+lu  list-user   (email)
+lius    list-user   (id)
+la  list-activities (user id)
+du  delete-user (id)
+aa  add-activity    (user-id, type, location, distance, datetime, duration)
+al  add-location    (activity-id, latitude, longitude)
+pm&gt; 
+</code></pre>
+
+<p>and the <code>!rs</code> command will run a specific script. So, if we have a script like this is <code>test.script</code>:</p>
+<pre><code>cu homer simpsom homer@simpson.com secret
+cu marge simpson marge@simpson.com secret
+aa 1 walk  fridge .001  &quot;11:12:2013 11:20:00&quot; 01:20:12
+aa 1 walk  bar     1.0  &quot;13:12:2013 02:20:00&quot; 00:00:00
+aa 1 run   work    2.2  &quot;14:12:2013 03:20:00&quot; 01:10:00
+aa 2 walk  shop    2.5  &quot;15:12:2013 10:20:00&quot; 02:03:00
+aa 2 cycle shop    4.5  &quot;16:12:2013 08:20:00&quot; 03:03:00
+al 3 23.3 32.3
+al 3 23.3 32.5
+al 3 23.3 32.6
+</code></pre>
+
+<p>and we execute:</p>
+<pre><code>!rs test.script
+</code></pre>
+
+<p>then the above users/activities/locations will be added.</p>
+<p>If you then enter:</p>
+<pre><code>save
+</code></pre>
+
+<p>.. and refresh the eclipse workspace, it should reveal 'datastore.xml' containing the above entries.</p>
+<p>If reatart the program and enter </p>
+<pre><code>load
+</code></pre>
+
+<p>it should restore the entries. Experiment with this now until you are happy it functions as expected.</p>
+	  </section>
+	  <section data-tab="03" class="ui tab stacked clarity-book segment">
+	     <h1>XMLSerializer</h1>
+<p>The serialization has been centralised into this class:</p>
+<pre><code>public class XMLSerializer
+{
+  private Deque&lt;Object&gt; stack = new ArrayDeque&lt;&gt;();
+  private File file;
+
+  public XMLSerializer(String filename)
+  {
+    this.file = new File(filename + &quot;.xml&quot;);
+  }
+
+  public void push(Object o)
+  {
+    stack.push(o);
+  }
+
+  public Object pop()
+  {
+    return stack.pop(); 
+  }
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  public void read() throws Exception
+  {
+    ObjectInputStream is = null;
+
+    try
+    {
+      XStream xstream = new XStream(new DomDriver());
+      is = xstream.createObjectInputStream(new FileReader(file));
+      stack = ( Deque&lt;Object&gt;) is.readObject();
+    }
+    finally
+    {
+      if (is != null)
+      {
+        is.close();
+      }
+    }
+  }
+
+  public void write() throws Exception
+  {
+    ObjectOutputStream os = null;
+
+    try
+    {
+      XStream xstream = new XStream(new DomDriver());
+      os = xstream.createObjectOutputStream(new FileWriter(file));
+      os.writeObject(stack);
+    }
+    finally
+    {
+      if (os != null)
+      {
+        os.close();
+      }
+    }
+  }
+}
+</code></pre>
+
+<p>This is engaged by the PacemakerAPI load/store methods:</p>
+<pre><code>  @SuppressWarnings(&quot;unchecked&quot;)
+  public void load() throws Exception
+  {
+    serializer.read();
+    activityIndex = (Long) serializer.pop();
+    userIndex     = (Long) serializer.pop();
+    activityMap   = (Map&lt;Long, Activity&gt;) serializer.pop();
+    userEmailMap  = (Map&lt;String, User&gt;) serializer.pop();
+    userMap       = (Map&lt;Long, User&gt;) serializer.pop();
+    users         = userMap.values();
+  }
+
+  public void store() throws Exception
+  {
+    serializer.push(userMap);
+    serializer.push(userEmailMap);
+    serializer.push(activityMap);
+    serializer.push(userIndex);
+    serializer.push(activityIndex);
+    serializer.write();
+  }
+</code></pre>
+
+<p>Which are in turn invoked from PacemakerShell:</p>
+<pre><code>  @Command(description=&quot;Load activities persistent store&quot;)
+  public void load () throws Exception
+  {
+    paceApi.load();
+  }
+
+  @Command(description=&quot;Store activities persistent store&quot;)
+  public void store () throws Exception
+  {
+    paceApi.store();
+  }
+</code></pre>
+
+<p>Make sure you understand the above mechanisms. Perhaps debug into the running program and inspect the program state as you go.</p>
+	  </section>
+	  <section data-tab="04" class="ui tab stacked clarity-book segment">
+	     <h1>Change File Format Command</h1>
+<p>We would like to support a new command - <code>cff</code> - short for change file format. This command is to permit xml or json serialisation format.</p>
+<p>To save in xml format:</p>
+<pre><code>cff xml
+save
+</code></pre>
+
+<p>to save in json:</p>
+<pre><code>cff json
+save
+</code></pre>
+
+<p>to load from either:</p>
+<pre><code>cff json
+load
+</code></pre>
+
+<pre><code>cff xml
+load
+</code></pre>
+
+<p>This is the implementation of the command in the shell class:</p>
+<pre><code class="java">  @Command(description=&quot;Set file format&quot;)
+  public void changeFileFormat (@Param(name=&quot;file format: xml, json&quot;) String fileFormat)
+  {
+    if (fileFormat.equals(&quot;xml&quot;))
+      paceApi.serializer = xmlSerializer;
+    else if (fileFormat.equals(&quot;json&quot;))
+      paceApi.serializer = jsonSerializer; 
+  }
+</code></pre>
+
+<p>Here is an implementation of a JSON serializer :</p>
+<pre><code class="java">package utils;
+
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.Deque;
+import java.util.ArrayDeque;
+
+
+public class JSONSerializer
+{
+  private Deque&lt;Object&gt; stack = new ArrayDeque&lt;&gt;();
+  private File file;
+
+  public JSONSerializer (String filename)
+  {
+    this.file = new File(filename + &quot;.json&quot;);
+  }
+
+  @Override
+  public void push(Object o)
+  {
+    stack.push(o);
+  }
+
+  @Override
+  public Object pop()
+  {
+    return stack.pop();
+  }
+
+  @SuppressWarnings(&quot;unchecked&quot;)
+  @Override
+  public void read() throws Exception
+  {
+    ObjectInputStream is = null;
+
+    try
+    {
+      XStream xstream = new XStream(new JettisonMappedXmlDriver());
+      is = xstream.createObjectInputStream(new FileReader(file));
+      stack = ( Deque&lt;Object&gt;) is.readObject();
+    }
+    finally
+    {
+      if (is != null)
+      {
+        is.close();
+      }
+    }
+  }
+
+  public void write() throws Exception
+  {
+    ObjectOutputStream os = null;
+
+    try
+    {
+      XStream xstream = new XStream(new JettisonMappedXmlDriver());
+      os = xstream.createObjectOutputStream(new FileWriter(file));
+      os.writeObject(stack);
+    }
+    finally
+    {
+      if (os != null)
+      {
+        os.close();
+      }
+    }
+  }
+} 
+</code></pre>
+
+<p>Incorporate this class + the above command into your project.</p>
+<p>It will have errors. Using your understanding of the Strategy pattern, see if you can complete the implementation such that the <code>cff</code> command works as expected.</p>
+	  </section>
+	  <section data-tab="Exercises" class="ui tab stacked clarity-book segment">
+	     <h1>Exercises</h1>
+<h2>Solution:</h2>
+<p>This is a solution:</p>
+<ul>
+<li><a href="./archives/pacemaker-console-lab01-solution.zip">pacemaker-console-lab01-solution.zip</a></li>
+</ul>
+<p>Verify that this is equivalent to your solution.</p>
+<h2>Exercise:</h2>
+<p>Consider introducing a new serializer to support the YAML file format:</p>
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/YAML">http://en.wikipedia.org/wiki/YAML</a></li>
+</ul>
+<p>This is a prominent java YAML library:</p>
+<ul>
+<li><a href="http://www.snakeyaml.org">http://www.snakeyaml.org</a></li>
+</ul>
+<p>Here is a version of a <code>write</code> method that will serialize our stack data structure:</p>
+<pre><code class="java">  public void write() throws Exception
+  {
+    Yaml yaml = new Yaml();
+    FileWriter writer = new FileWriter(file);
+    for (Object o : stack)
+    {
+      yaml.dump (stack.pop(), writer);
+    }
+    writer.close();
+  }
+</code></pre>
+
+<p>Try this out and explore the generated output.</p>
+<p>Is it possible to seamlessly integrate this into pacemaker as another serializer?</p>
+	  </section>
+  <div class="ui fixed bottom borderless menu">'
+    <div class="ui small item"> 
+    <p id="footertext">
+    Prepared by  Eamonn de Leastar (edeleastar@wit.ie). Except where otherwise noted, this content is licensed under a  
+     <a  href="http://creativecommons.org/licenses/by-nc/4.0/" title="External link to http://creativecommons.org/licenses/by-nc/4.0/" 
+       target="_blank">Creative Commons Attribution-NonCommercial 4.0 License
+     </a>
+     </p>
+    </div>
+  </div>   
+    
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-49703418-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>  </body>
+ </html>
