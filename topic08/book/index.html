@@ -1,0 +1,717 @@
+ <!DOCTYPE html>
+ <html>
+   <head>
+     <meta charset="utf-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+   
+     <title> Lab-08 </title>
+   
+     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+     <link rel="stylesheet" href="./style/semantic/css/semantic.min.css" type="text/css">  
+     <link rel="stylesheet" href="./style/custom/main.css" type="text/css"> 
+   
+     <script src="./style/custom/jquery-2.1.0.min.js"></script> 
+     <script src="./style/custom/jquery.address-1.6.min.js"></script>
+     <script src="./style/semantic/javascript/semantic.min.js"></script>
+   
+     <link rel="stylesheet" href="./style/highlight/school_book.css">
+     <script src="./style/highlight/highlight.pack.js"></script> 
+     <script>hljs.initHighlightingOnLoad();</script>
+   
+     <script src="./style/custom/common.js"> </script> 
+     <script src="./style/custom/main.js"> </script> 
+  </head>
+  <body>
+  <nav class="ui fixed top pointing borderless inverted menu">
+    <header class="header item"> <a href="../index.html">Architecture
+</a></header>
+    <div class="right tab-menu menu">
+          <a class="item" data-tab="Lab-08"> Lab-08 </a>
+          <a class="item" data-tab="01"> 01 </a>
+          <a class="item" data-tab="02"> 02 </a>
+          <a class="item" data-tab="03"> 03 </a>
+          <a class="item" data-tab="04"> 04 </a>
+          <a class="item" data-tab="05"> 05 </a>
+          <a class="item" data-tab="06"> 06 </a>
+          <a class="item" data-tab="07"> 07 </a>
+          <a class="item" data-tab="08"> 08 </a>
+          <a class="item" data-tab="Exercises"> Exercises </a>
+    </div>
+  </nav>
+
+  <br>
+
+	  <section data-tab="Lab-08" class="ui tab stacked clarity-book segment">
+	     <h1>Objectives</h1>
+<ul>
+<li>Build a set of views to support signup/login and navigation</li>
+<li>Incorporate suitable models</li>
+<li>Explore how flow-synchronisation works in this context.</li>
+</ul>
+	  </section>
+	  <section data-tab="01" class="ui tab stacked clarity-book segment">
+	     <h1>Setup</h1>
+<p>This is v2 of the pacemaker-android project from the last android lab:</p>
+<ul>
+<li><a href="./archives/pacemaker-android-v2.zip">pacemaker-android-v2.zip</a></li>
+</ul>
+<p>You can import this for reference purposes, or keep working with your own version.</p>
+	  </section>
+	  <section data-tab="02" class="ui tab stacked clarity-book segment">
+	     <h1>Welcome View</h1>
+<p>Design a new activity to look like this:</p>
+<p><img alt="" src="img/00.png"></p>
+<p>You may end up with new entries in the strings.xml file:</p>
+<h2>res/values/strings.xml</h2>
+<pre><code>    &lt;string name=&quot;title_activity_welcome&quot;&gt;Pacemaker&lt;/string&gt;
+    &lt;string name=&quot;welcomeLogin&quot;&gt;Login&lt;/string&gt;
+    &lt;string name=&quot;welcomeSignup&quot;&gt;Sign up&lt;/string&gt;
+</code></pre>
+
+<p>And this layout:</p>
+<h2>res/layout/activity_welcome.xml</h2>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    android:id=&quot;@+id/RelativeLayout&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;
+    android:orientation=&quot;vertical&quot; &gt;
+
+    &lt;Button
+        android:id=&quot;@+id/welcomeLogin&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_alignParentTop=&quot;true&quot;
+        android:layout_centerHorizontal=&quot;true&quot;
+        android:layout_marginTop=&quot;102dp&quot;
+        android:onClick=&quot;loginPressed&quot;
+        android:text=&quot;@string/welcomeLogin&quot; /&gt;
+
+    &lt;Button
+        android:id=&quot;@+id/welcomeSignup&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_centerHorizontal=&quot;true&quot;
+        android:layout_centerVertical=&quot;true&quot;
+        android:onClick=&quot;signupPressed&quot;
+        android:text=&quot;@string/welcomeSignup&quot; /&gt;
+
+&lt;/RelativeLayout&gt;
+</code></pre>
+	  </section>
+	  <section data-tab="03" class="ui tab stacked clarity-book segment">
+	     <h1>Signup View</h1>
+<p>Design a new activity to look like this:</p>
+<p><img alt="" src="img/01.png"></p>
+<p>You may end up with new entries in the strings.xml file:</p>
+<h2>res/values/strings.xml</h2>
+<pre><code>    &lt;string name=&quot;title_activity_signup&quot;&gt;Signup&lt;/string&gt;
+    &lt;string name=&quot;signupTitle&quot;&gt;Sign up for the Pacemaker&lt;/string&gt;
+    &lt;string name=&quot;signupSubtitle&quot;&gt;Enter details below&lt;/string&gt;
+    &lt;string name=&quot;signupFirstname&quot;&gt;First name&lt;/string&gt;
+    &lt;string name=&quot;signupLastName&quot;&gt;Last Name&lt;/string&gt;
+    &lt;string name=&quot;signupEmail&quot;&gt;Email&lt;/string&gt;
+    &lt;string name=&quot;signupPassword&quot;&gt;Password&lt;/string&gt;
+    &lt;string name=&quot;signupRegister&quot;&gt;Register&lt;/string&gt;
+</code></pre>
+
+<p>And this layout:</p>
+<h2>res/layout/activity_signup.xml</h2>
+<pre><code class="xml">&lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:tools=&quot;http://schemas.android.com/tools&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;
+    android:paddingBottom=&quot;@dimen/activity_vertical_margin&quot;
+    android:paddingLeft=&quot;@dimen/activity_horizontal_margin&quot;
+    android:paddingRight=&quot;@dimen/activity_horizontal_margin&quot;
+    android:paddingTop=&quot;@dimen/activity_vertical_margin&quot;
+    tools:context=&quot;.Signup&quot; &gt;
+
+    &lt;TextView
+        android:id=&quot;@+id/signupTitle&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_alignParentLeft=&quot;true&quot;
+        android:layout_alignParentTop=&quot;true&quot;
+        android:layout_marginLeft=&quot;32dp&quot;
+        android:layout_marginTop=&quot;28dp&quot;
+        android:text=&quot;@string/signupTitle&quot;
+        android:textAppearance=&quot;?android:attr/textAppearanceMedium&quot; /&gt;
+
+    &lt;TextView
+        android:id=&quot;@+id/signupSubtitle&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_alignLeft=&quot;@+id/signupTitle&quot;
+        android:layout_below=&quot;@+id/signupTitle&quot;
+        android:layout_marginLeft=&quot;55dp&quot;
+        android:layout_marginTop=&quot;30dp&quot;
+        android:text=&quot;@string/signupSubtitle&quot;
+        android:textAppearance=&quot;?android:attr/textAppearanceSmall&quot; /&gt;
+
+    &lt;EditText
+        android:id=&quot;@+id/firstName&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_alignParentLeft=&quot;true&quot;
+        android:layout_alignParentRight=&quot;true&quot;
+        android:layout_below=&quot;@+id/signupSubtitle&quot;
+        android:layout_marginTop=&quot;40dp&quot;
+        android:ems=&quot;10&quot;
+        android:hint=&quot;@string/signupFirstname&quot;
+        android:inputType=&quot;textPersonName&quot;/&gt;
+
+        &lt;requestFocus /&gt;
+
+    &lt;EditText
+        android:id=&quot;@+id/lastName&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_alignLeft=&quot;@+id/firstName&quot;
+        android:layout_alignParentRight=&quot;true&quot;
+        android:layout_below=&quot;@+id/firstName&quot;
+        android:ems=&quot;10&quot;
+        android:hint=&quot;@string/signupLastName&quot;
+        android:inputType=&quot;textPersonName&quot; &gt;
+
+    &lt;/EditText&gt;
+
+    &lt;EditText
+        android:id=&quot;@+id/Email&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_alignLeft=&quot;@+id/lastName&quot;
+        android:layout_alignParentRight=&quot;true&quot;
+        android:layout_below=&quot;@+id/lastName&quot;
+        android:ems=&quot;10&quot;
+        android:hint=&quot;@string/signupEmail&quot;
+        android:inputType=&quot;textEmailAddress&quot; /&gt;
+
+    &lt;EditText
+        android:id=&quot;@+id/Password&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_alignLeft=&quot;@+id/Email&quot;
+        android:layout_alignParentRight=&quot;true&quot;
+        android:layout_below=&quot;@+id/Email&quot;
+        android:ems=&quot;10&quot;
+        android:hint=&quot;@string/signupPassword&quot;
+        android:inputType=&quot;textPassword&quot; /&gt;
+
+    &lt;Button
+        android:id=&quot;@+id/register&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_alignParentBottom=&quot;true&quot;
+        android:layout_centerHorizontal=&quot;true&quot;
+        android:layout_marginBottom=&quot;28dp&quot;
+        android:onClick=&quot;registerPressed&quot;
+        android:text=&quot;@string/signupRegister&quot; /&gt;
+
+&lt;/RelativeLayout&gt;
+</code></pre>
+	  </section>
+	  <section data-tab="04" class="ui tab stacked clarity-book segment">
+	     <h1>Login View</h1>
+<p>Design a new activity to look like this:</p>
+<p><img alt="" src="img/02.png"></p>
+<p>You may end up with new entries in the strings.xml file:</p>
+<h2>res/values/strings.xml</h2>
+<pre><code>    &lt;string name=&quot;title_activity_login&quot;&gt;Login&lt;/string&gt;
+    &lt;string name=&quot;loginTitle&quot;&gt;Login to Donation&lt;/string&gt;
+    &lt;string name=&quot;loginSubtitle&quot;&gt;You must be reigstered&lt;/string&gt;
+    &lt;string name=&quot;loginSignin&quot;&gt;Sign in&lt;/string&gt;
+    &lt;string name=&quot;loginEmail&quot;&gt;Email&lt;/string&gt;
+    &lt;string name=&quot;loginPassword&quot;&gt;Password&lt;/string&gt;
+</code></pre>
+
+<p>And this layout:</p>
+<h2>res/layout/activity_login.xml</h2>
+<pre><code class="xml">&lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:tools=&quot;http://schemas.android.com/tools&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;
+    android:paddingBottom=&quot;@dimen/activity_vertical_margin&quot;
+    android:paddingLeft=&quot;@dimen/activity_horizontal_margin&quot;
+    android:paddingRight=&quot;@dimen/activity_horizontal_margin&quot;
+    android:paddingTop=&quot;@dimen/activity_vertical_margin&quot;
+    tools:context=&quot;.Login&quot; &gt;
+
+    &lt;TextView
+        android:id=&quot;@+id/loginTitle&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_alignParentLeft=&quot;true&quot;
+        android:layout_alignParentRight=&quot;true&quot;
+        android:layout_alignParentTop=&quot;true&quot;
+        android:layout_marginTop=&quot;18dp&quot;
+        android:text=&quot;@string/loginTitle&quot;
+        android:textAppearance=&quot;?android:attr/textAppearanceMedium&quot; /&gt;
+
+    &lt;TextView
+        android:id=&quot;@+id/loginSubtitle&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_alignLeft=&quot;@+id/loginTitle&quot;
+        android:layout_alignParentRight=&quot;true&quot;
+        android:layout_below=&quot;@+id/loginTitle&quot;
+        android:text=&quot;@string/loginSubtitle&quot;
+        android:textAppearance=&quot;?android:attr/textAppearanceSmall&quot; /&gt;
+
+    &lt;EditText
+        android:id=&quot;@+id/loginEmail&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_alignLeft=&quot;@+id/loginSubtitle&quot;
+        android:layout_alignRight=&quot;@+id/loginSubtitle&quot;
+        android:layout_below=&quot;@+id/loginSubtitle&quot;
+        android:layout_marginTop=&quot;17dp&quot;
+        android:ems=&quot;10&quot;
+        android:hint=&quot;@string/loginEmail&quot;
+        android:inputType=&quot;textEmailAddress&quot; &gt;
+
+        &lt;requestFocus /&gt;
+    &lt;/EditText&gt;
+
+    &lt;EditText
+        android:id=&quot;@+id/loginPassword&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_alignLeft=&quot;@+id/loginEmail&quot;
+        android:layout_alignRight=&quot;@+id/loginEmail&quot;
+        android:layout_below=&quot;@+id/loginEmail&quot;
+        android:ems=&quot;10&quot;
+        android:hint=&quot;@string/loginPassword&quot;
+        android:inputType=&quot;textPassword&quot; /&gt;
+
+    &lt;Button
+        android:id=&quot;@+id/login&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_centerHorizontal=&quot;true&quot;
+        android:layout_centerVertical=&quot;true&quot;
+        android:onClick=&quot;signinPressed&quot;        
+        android:text=&quot;@string/loginSignin&quot; /&gt;
+
+&lt;/RelativeLayout&gt;
+</code></pre>
+	  </section>
+	  <section data-tab="05" class="ui tab stacked clarity-book segment">
+	     <h1>Activity Classes</h1>
+<p>These three classes will load the views we have just created. Place them in the <code>org.pacemaker.conrollers</code> package:</p>
+<h2>Welcome.java</h2>
+<pre><code>package org.pacemaker.controllers;
+
+import org.pacemaker.R;
+import org.pacemaker.main.PacemakerApp;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+
+public class Welcome extends Activity
+{
+  PacemakerApp app;
+
+  @Override
+  public void onCreate(Bundle savedInstanceState)
+  {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_welcome);
+    app = (PacemakerApp) getApplication();
+  }
+
+  public void loginPressed (View view) 
+  {
+    startActivity (new Intent(this, Login.class));
+  }
+  public void signupPressed (View view) 
+  {
+    startActivity (new Intent(this, Signup.class));
+  }
+}
+</code></pre>
+
+<h2>Signup.java</h2>
+<pre><code>package org.pacemaker.controllers;
+
+import org.pacemaker.R;
+import org.pacemaker.main.PacemakerApp;
+import android.os.Bundle;
+import android.app.Activity;
+import android.content.Intent;
+import android.view.View;
+import android.widget.TextView;
+
+public class Signup extends Activity 
+{
+  private PacemakerApp app;
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState)
+  {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_signup);
+    app = (PacemakerApp) getApplication();
+  }
+
+  public void registerPressed (View view) 
+  {
+    TextView firstName = (TextView)  findViewById(R.id.firstName);
+    TextView lastName  = (TextView)  findViewById(R.id.lastName);
+    TextView email     = (TextView)  findViewById(R.id.Email);
+    TextView password  = (TextView)  findViewById(R.id.Password);
+
+    startActivity (new Intent(this, Login.class));
+  }
+}
+</code></pre>
+
+<h2>Login.java</h2>
+<pre><code>package org.pacemaker.controllers;
+
+import org.pacemaker.R;
+import org.pacemaker.main.PacemakerApp;
+import android.os.Bundle;
+import android.app.Activity;
+import android.content.Intent;
+import android.view.View;
+import android.widget.TextView;
+
+public class Login extends Activity
+{
+  PacemakerApp app;
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState)
+  {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_login);
+  }
+
+  public void signinPressed (View view) 
+  {
+    app = (PacemakerApp) getApplication();
+
+    TextView email     = (TextView)  findViewById(R.id.loginEmail);
+    TextView password  = (TextView)  findViewById(R.id.loginPassword);
+
+    startActivity (new Intent(this, CreateActivity.class));
+  }
+}
+</code></pre>
+	  </section>
+	  <section data-tab="06" class="ui tab stacked clarity-book segment">
+	     <h1>Manifest</h1>
+<p>These new activities must be registered in the AndroidManifest.xml:</p>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    package=&quot;org.pacemaker&quot;
+    android:versionCode=&quot;1&quot;
+    android:versionName=&quot;1.0&quot; &gt;
+
+    &lt;uses-sdk
+        android:minSdkVersion=&quot;18&quot;
+        android:targetSdkVersion=&quot;18&quot; /&gt;
+
+    &lt;application
+        android:name=&quot;org.pacemaker.main.PacemakerApp&quot;
+        android:allowBackup=&quot;true&quot;
+        android:icon=&quot;@drawable/ic_launcher&quot;
+        android:label=&quot;@string/app_name&quot;
+        android:theme=&quot;@style/AppTheme&quot; &gt;
+
+        &lt;activity
+            android:name=&quot;org.pacemaker.controllers.Welcome&quot;
+            android:label=&quot;@string/title_activity_welcome&quot; &gt;
+            &lt;intent-filter&gt;
+                &lt;action android:name=&quot;android.intent.action.MAIN&quot; /&gt;
+                &lt;category android:name=&quot;android.intent.category.LAUNCHER&quot; /&gt;
+            &lt;/intent-filter&gt;
+        &lt;/activity&gt;
+        &lt;activity
+            android:name=&quot;org.pacemaker.controllers.Signup&quot;
+            android:label=&quot;@string/title_activity_signup&quot; &gt;
+        &lt;/activity&gt;
+        &lt;activity
+            android:name=&quot;org.pacemaker.controllers.Login&quot;
+            android:label=&quot;@string/title_activity_login&quot;&gt;
+            android:windowSoftInputMode=&quot;adjustResize|stateVisible&quot; &gt;
+        &lt;/activity&gt;        
+        &lt;activity
+            android:name=&quot;org.pacemaker.controllers.CreateActivity&quot;
+            android:label=&quot;@string/app_name&quot; &gt;
+        &lt;/activity&gt;
+        &lt;activity
+            android:name=&quot;org.pacemaker.controllers.ActivitiesList&quot;
+            android:label=&quot;@string/title_activity_activities_list&quot; &gt;
+        &lt;/activity&gt;
+    &lt;/application&gt;
+&lt;/manifest&gt;
+</code></pre>
+
+<p>Note that we have marked the <code>Welcome</code> activity as the on with the <code>intent-filter</code> MAIN</p>
+<p>Run the application now. You should be able to navigate from view to view.</p>
+	  </section>
+	  <section data-tab="07" class="ui tab stacked clarity-book segment">
+	     <h1>Models</h1>
+<p>We can simplify the Activity Model class to just this version:</p>
+<pre><code class="java">{
+  public Long id;
+  public String type;
+  public String location;
+  public double distance;
+
+  public Activity()
+  {}
+
+  public Activity(String type, String location, double distance)
+  {
+    this.type      = type;
+    this.location  = location;
+    this.distance  = distance;
+  }
+}
+</code></pre>
+
+<p>... and introduce a new User class, also kept very simple:</p>
+<pre><code class="java">package org.pacemaker.models;
+
+public class User 
+{
+  public Long   id;
+  public String firstname;
+  public String lastname;
+  public String email;
+  public String password;
+
+  public User()
+  {}
+
+  public User(String firstname, String lastname, String email, String password)
+  {
+    this.firstname = firstname;
+    this.lastname = lastname;
+    this.email = email;
+    this.password = password;
+  } 
+}
+</code></pre>
+
+<p>We already have a list of activities in the PacemakerApp class - we can introduce a map of users alongside it:</p>
+<pre><code class="java">  public List&lt;Activity&gt;    actvities = new ArrayList&lt;Activity&gt;();
+  public Map&lt;String, User&gt; users     = new HashMap&lt;String, User&gt;();
+</code></pre>
+
+<p>In Signup, we can create a new entry in this map :</p>
+<pre><code class="java">  public void registerPressed (View view) 
+  {
+    TextView firstName = (TextView)  findViewById(R.id.firstName);
+    TextView lastName  = (TextView)  findViewById(R.id.lastName);
+    TextView email     = (TextView)  findViewById(R.id.Email);
+    TextView password  = (TextView)  findViewById(R.id.Password);
+
+    User user = new User (firstName.getText().toString(), lastName.getText().toString(), email.getText().toString(), password.getText().toString());
+    app.users.put(user.email, user);
+
+    startActivity (new Intent(this, Login.class));
+  }
+</code></pre>
+
+<p>... and in Login we can validate the user against these entries:</p>
+<pre><code class="java">  public void signinPressed (View view) 
+  {
+    app = (PacemakerApp) getApplication();
+
+    TextView email     = (TextView)  findViewById(R.id.loginEmail);
+    TextView password  = (TextView)  findViewById(R.id.loginPassword);
+
+    String emailStr    = email.getText().toString();
+    String passwordStr = password.getText().toString();
+
+    User user = app.users.get(emailStr);
+    if (user != null &amp;&amp; user.password.equals(passwordStr))
+    {
+      startActivity (new Intent(this, CreateActivity.class));
+    }
+    else
+    {
+      Toast toast = Toast.makeText(this, &quot;Invalid Credentials&quot;, Toast.LENGTH_SHORT);
+      toast.show();
+    }
+  }
+</code></pre>
+
+<p>We should be able to register and log in now. And if we provide invalid credentials, we should be kept out.</p>
+	  </section>
+	  <section data-tab="08" class="ui tab stacked clarity-book segment">
+	     <h1>Facade</h1>
+<p>There are, of course, some serious problems with our app. The list of activities is not associated with any specific user, the user and activities themselves are not persisted.</p>
+<p>These issues could be tackled piecemeal - in each of the respective views for instance, but we might be more advised strengthen some of the abstractions around user/activity management first.</p>
+<p>This pattern here may be appropriate:</p>
+<ul>
+<li><a href="http://sourcemaking.com/design_patterns/facade">http://sourcemaking.com/design_patterns/facade</a></li>
+</ul>
+<p>Instead of a very exposed set of data structures in PacemakerApp:</p>
+<pre><code class="java">public class PacemakerApp extends Application
+{
+  public List&lt;Activity&gt;    actvities = new ArrayList&lt;Activity&gt;();
+  public Map&lt;String, User&gt; users     = new HashMap&lt;String, User&gt;();
+
+  @Override
+  public void onCreate()
+  {
+    super.onCreate();
+    Log.v(&quot;Pacemaker&quot;, &quot;Pacemaker App Started&quot;);
+  }
+}
+</code></pre>
+
+<p>We could remodel this class to provide a encapsulated perspective - a Facade - to the these models:</p>
+<pre><code class="java">public class PacemakerApp extends Application
+{
+  private List&lt;Activity&gt;    activities = new ArrayList&lt;Activity&gt;();
+  private Map&lt;String, User&gt; users      = new HashMap&lt;String, User&gt;();
+  private User              loggedInUser;
+
+  public void registerUser(User user)
+  {
+    users.put(user.email, user);
+  }
+
+  public boolean loginUser(String email, String password)
+  {
+    loggedInUser = users.get(email);
+    if (loggedInUser != null &amp;&amp; !loggedInUser.password.equals(password))
+    {
+      loggedInUser = null;
+    }
+    return loggedInUser != null;
+  }
+
+  public void createActivity (Activity activity)
+  {
+    activities.add(activity);
+  }
+
+  public List&lt;Activity&gt; getActivities()
+  {
+    return activities;
+  }
+
+  @Override
+  public void onCreate()
+  {
+    super.onCreate();
+    Log.v(&quot;Pacemaker&quot;, &quot;Pacemaker App Started&quot;);
+  }
+}
+</code></pre>
+
+<p>This will require a refactoring of most of the controllers:</p>
+<h2>Signup</h2>
+<pre><code class="java">  public void registerPressed (View view) 
+  {
+    TextView firstName = (TextView)  findViewById(R.id.firstName);
+    TextView lastName  = (TextView)  findViewById(R.id.lastName);
+    TextView email     = (TextView)  findViewById(R.id.Email);
+    TextView password  = (TextView)  findViewById(R.id.Password);
+
+    User user = new User (firstName.getText().toString(), lastName.getText().toString(), email.getText().toString(), password.getText().toString());
+    app.registerUser(user);
+
+    startActivity (new Intent(this, Login.class));
+  }
+</code></pre>
+
+<h2>Login</h2>
+<pre><code class="java">  public void signinPressed (View view) 
+  {
+    app = (PacemakerApp) getApplication();
+
+    TextView email     = (TextView)  findViewById(R.id.loginEmail);
+    TextView password  = (TextView)  findViewById(R.id.loginPassword);
+
+    boolean loggedIn = app.loginUser(email.getText().toString(), password.getText().toString());
+    if (loggedIn)
+    {
+      startActivity (new Intent(this, CreateActivity.class));
+    }
+    else
+    {
+      Toast toast = Toast.makeText(this, &quot;Invalid Credentials&quot;, Toast.LENGTH_SHORT);
+      toast.show();
+    }
+  }
+</code></pre>
+
+<h2>CreateActivity</h2>
+<p>~~java
+  public void createActivityButtonPressed (View view) 
+  {<br>
+    double distance = distancePicker.getValue();
+    Activity activity = new Activity (activityType.getText().toString(), activityLocation.getText().toString(), distance);</p>
+<pre><code>app.createActivity(activity);
+</code></pre>
+<p>}</p>
+<pre><code>
+##ActivitiesList
+
+~~java
+  protected void onCreate(Bundle savedInstanceState)
+  {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activities_list);
+
+    app = (PacemakerApp) getApplication();
+
+    activitiesListView = (ListView) findViewById(R.id.activitiesListView);
+
+    List&lt;Activity&gt; activities  = app.getActivities();
+
+    ActivityAdapter activitiesAdapter = new ActivityAdapter(this,  activities);
+    activitiesListView.setAdapter(activitiesAdapter);
+    activitiesAdapter.notifyDataSetChanged();
+  }
+</code></pre>
+
+<p>This should work now as expected.</p>
+	  </section>
+	  <section data-tab="Exercises" class="ui tab stacked clarity-book segment">
+	     <h1>Archive</h1>
+<p>..of the app so far:</p>
+<ul>
+<li><a href="./archives/pacemaker-android-v3.zip">pacemaker-android-v3.zip</a></li>
+</ul>
+<h1>Exercises</h1>
+<h2>Exercise 1:</h2>
+<p>Currenty, once logged in, there is no way for a user to log out again. Introduce this facility.</p>
+<h2>Exercise 2:</h2>
+<p>There is only a single activities list - and all activities are inserted into this list. Refactor such that we are seeing the activities associated with the logged in user.</p>
+<p>As we are using a Facade, this should not require extensive changes on any of the controllers.</p>
+	  </section>
+  <div class="ui fixed bottom borderless menu">'
+    <div class="ui small item"> 
+    <p id="footertext">
+    Prepared by  Eamonn de Leastar (edeleastar@wit.ie). Except where otherwise noted, this content is licensed under a  
+     <a  href="http://creativecommons.org/licenses/by-nc/4.0/" title="External link to http://creativecommons.org/licenses/by-nc/4.0/" 
+       target="_blank">Creative Commons Attribution-NonCommercial 4.0 License
+     </a>
+     </p>
+    </div>
+  </div>   
+    
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-49703418-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>  </body>
+ </html>

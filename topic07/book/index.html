@@ -1,0 +1,911 @@
+ <!DOCTYPE html>
+ <html>
+   <head>
+     <meta charset="utf-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+   
+     <title> Lab-07 </title>
+   
+     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+     <link rel="stylesheet" href="./style/semantic/css/semantic.min.css" type="text/css">  
+     <link rel="stylesheet" href="./style/custom/main.css" type="text/css"> 
+   
+     <script src="./style/custom/jquery-2.1.0.min.js"></script> 
+     <script src="./style/custom/jquery.address-1.6.min.js"></script>
+     <script src="./style/semantic/javascript/semantic.min.js"></script>
+   
+     <link rel="stylesheet" href="./style/highlight/school_book.css">
+     <script src="./style/highlight/highlight.pack.js"></script> 
+     <script>hljs.initHighlightingOnLoad();</script>
+   
+     <script src="./style/custom/common.js"> </script> 
+     <script src="./style/custom/main.js"> </script> 
+  </head>
+  <body>
+  <nav class="ui fixed top pointing borderless inverted menu">
+    <header class="header item"> <a href="../index.html">Enterprise Patterns I
+</a></header>
+    <div class="right tab-menu menu">
+          <a class="item" data-tab="Lab-07"> Lab-07 </a>
+          <a class="item" data-tab="01"> 01 </a>
+          <a class="item" data-tab="02"> 02 </a>
+          <a class="item" data-tab="03"> 03 </a>
+          <a class="item" data-tab="04"> 04 </a>
+          <a class="item" data-tab="05"> 05 </a>
+          <a class="item" data-tab="06"> 06 </a>
+          <a class="item" data-tab="07"> 07 </a>
+          <a class="item" data-tab="08"> 08 </a>
+          <a class="item" data-tab="09"> 09 </a>
+          <a class="item" data-tab="10"> 10 </a>
+          <a class="item" data-tab="Exercises"> Exercises </a>
+    </div>
+  </nav>
+
+  <br>
+
+	  <section data-tab="Lab-07" class="ui tab stacked clarity-book segment">
+	     <h1>Objectives</h1>
+<ul>
+<li>Create a new version of pacemaker using the play framework</li>
+</ul>
+	  </section>
+	  <section data-tab="01" class="ui tab stacked clarity-book segment">
+	     <h1>Install Play</h1>
+<p>For this lab, the most stable version of eclipse maybe this one:</p>
+<ul>
+<li><a href="http://scala-ide.org/download/sdk.html">http://scala-ide.org/download/sdk.html</a></li>
+</ul>
+<p>Which bundles support for the Play Framework.</p>
+<p>Once you have installed it, run 'check for updates' form the Help menu to make sure you have the latest version.</p>
+<p>Download and install the latest version of the Play Framework (currently 2.2.1)</p>
+<ul>
+<li><a href="http://www.playframework.com">http://www.playframework.com</a></li>
+</ul>
+<p>This will involve simply unzipping the archive, and placing the unzipped folder on the path.</p>
+<p>NB: Please check your version of play! Play 2.1 (the earlier release) has a slightly different layout - so if you have this version please upgrade.</p>
+<pre><code>play new pacemakerplay
+</code></pre>
+
+<pre><code>       _
+ _ __ | | __ _ _  _
+| '_ \| |/ _' | || |
+|  __/|_|\____|\__ /
+|_|            |__/
+
+play 2.2.1 built with Scala 2.10.2 (running Java 1.7.0_40), http://www.playframework.com
+
+The new application will be created in /Users/edeleastar/repos/modules/agile/pacemaker/pacemaker-1.0/pacemakerplay
+
+What is the application name? [pacemakerplay]
+&gt;
+
+Which template do you want to use for this new application?
+
+  1             - Create a simple Scala application
+  2             - Create a simple Java application
+
+&gt; 2
+OK, application pacemakerplay is created.
+
+Have fun!
+</code></pre>
+
+<ul>
+<li>select 'Simple Java application'</li>
+</ul>
+<p>Back in the console, change into the new project folder (pacemakerplay) and run the play command:</p>
+<pre><code>cd pacemakerplay
+play
+</code></pre>
+
+<p>this will respond with something like this:</p>
+<pre><code>...
+       _
+ _ __ | | __ _ _  _
+| '_ \| |/ _' | || |
+|  __/|_|\____|\__ /
+|_|            |__/
+
+play 2.2.1 built with Scala 2.10.2 (running Java 1.7.0_40), http://www.playframework.com
+
+&gt; Type &quot;help play&quot; or &quot;license&quot; for more information.
+&gt; Type &quot;exit&quot; or use Ctrl+D to leave this console.
+
+[pacemakerplay] $
+</code></pre>
+
+<pre><code>eclipse
+</code></pre>
+
+<pre><code>[info] About to create Eclipse project files for your project(s).
+[info] Updating {file:/Users/edeleastar/repos/modules/agile/pacemaker/pacemaker-1.0/pacemakerplay/}pacemakerplay...
+[info] Resolving org.fusesource.jansi#jansi;1.4 ...
+[info] Done updating.
+[info] Compiling 4 Scala sources and 2 Java sources to /Users/edeleastar/repos/modules/agile/pacemaker/pacemaker-1.0/pacemakerplay/target/scala-2.10/classes...
+[info] Successfully created Eclipse project files for project(s):
+[info] pacemakerplay
+[pacemakerplay] $
+</code></pre>
+
+<p>Import this project into eclipse - it should look something like this:</p>
+<p><img alt="" src="img/00.png"></p>
+<p>In the play console, enter </p>
+<pre><code>run
+</code></pre>
+
+<p>which should display:</p>
+<pre><code>--- (Running the application from SBT, auto-reloading is enabled) ---
+
+[info] play - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
+
+(Server started, use Ctrl+D to stop and go back to the console...)
+</code></pre>
+
+<p>Browse to :</p>
+<ul>
+<li><a href="http://localhost:9000">http://localhost:9000</a></li>
+</ul>
+<p>It should display a standard greeting page.</p>
+	  </section>
+	  <section data-tab="02" class="ui tab stacked clarity-book segment">
+	     <h1>Models</h1>
+<p>Create a new package in <code>app</code> called 'models'. Introduce this version of the Activity class into this package:</p>
+<pre><code>package models;
+
+import static com.google.common.base.Objects.toStringHelper;
+import com.google.common.base.Objects;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import play.db.ebean.Model;
+
+@SuppressWarnings(&quot;serial&quot;)
+@Entity
+public class Activity extends Model
+{
+  @Id
+  @GeneratedValue
+  public Long   id;
+  public String kind;
+  public String location;
+  public double distance;
+
+  public Activity()
+  {
+  }
+
+  public Activity(String type, String location, double distance)
+  {
+    this.kind      = type;
+    this.location  = location;
+    this.distance  = distance;
+  }
+
+  @Override
+  public String toString()
+  {
+    return toStringHelper(this).addValue(id)
+                               .addValue(kind)
+                               .addValue(location)
+                               .addValue(distance)
+                               .toString();
+  }
+
+  @Override
+  public boolean equals(final Object obj)
+  {
+    if (obj instanceof Activity)
+    {
+      final Activity other = (Activity) obj;
+      return Objects.equal(kind, other.kind) 
+          &amp;&amp; Objects.equal(location,  other.location)
+          &amp;&amp; Objects.equal(distance,  other.distance) ; 
+    }
+    else
+    {
+      return false;
+    }
+  }
+
+  @Override  
+  public int hashCode()  
+  {  
+     return Objects.hashCode(this.id, this.kind, this.location, this.distance);  
+  } 
+
+  public static Activity findById(Long id)
+  {
+    return find.where().eq(&quot;id&quot;, id).findUnique();
+  }
+  public static Model.Finder&lt;String, Activity&gt; find = new Model.Finder&lt;String, Activity&gt;(String.class, Activity.class);
+}
+</code></pre>
+
+<p>And also bring in this version of the User class:</p>
+<pre><code class="java">package models;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.*;
+import play.db.ebean.*;
+
+import com.google.common.base.Objects;
+
+@SuppressWarnings(&quot;serial&quot;)
+@Entity
+@Table(name=&quot;my_user&quot;)
+public class User extends Model
+{
+  @Id
+  @GeneratedValue
+  public Long   id;
+  public String firstname;
+  public String lastname;
+  public String email;
+  public String password;
+
+  @OneToMany(cascade=CascadeType.ALL)
+  public List&lt;Activity&gt; activities = new ArrayList&lt;Activity&gt;();
+
+  public User()
+  {
+  }
+
+  public User(String firstname, String lastname, String email, String password)
+  {
+    this.firstname = firstname;
+    this.lastname  = lastname;
+    this.email     = email;
+    this.password  = password;
+  }
+
+  public void update (User user)
+  {
+    this.firstname = user.firstname;
+    this.lastname  = user.lastname;
+    this.email     = user.email;
+    this.password  = user.password;
+  }
+
+  public String toString()
+  {
+    return Objects.toStringHelper(this)
+        .add(&quot;Id&quot;, id)
+        .add(&quot;Firstname&quot;, firstname)
+        .add(&quot;Lastname&quot;, lastname)
+        .add(&quot;Email&quot;, email)
+        .add(&quot;Passwrod&quot;, password).toString();
+  }
+
+  @Override
+  public boolean equals(final Object obj)
+  {
+    if (obj instanceof User)
+    {
+      final User other = (User) obj;
+      return Objects.equal(firstname, other.firstname) 
+          &amp;&amp; Objects.equal(lastname, other.lastname)
+          &amp;&amp; Objects.equal(email, other.email);
+    }
+    else
+    {
+      return false;
+    }
+  }
+
+  public static User findByEmail(String email)
+  {
+    return  User.find.where().eq(&quot;email&quot;, email).findUnique();
+  }
+
+  public static User findById(Long id)
+  {
+    return find.where().eq(&quot;id&quot;, id).findUnique();
+  }
+
+  public static List&lt;User&gt; findAll()
+  {
+    return find.all();
+  }
+
+  public static void deleteAll()
+  {
+    for (User user: User.findAll())
+    {
+      user.delete();
+    }
+  } 
+
+  public static Model.Finder&lt;String, User&gt; find = new Model.Finder&lt;String, User&gt;(String.class, User.class);
+}
+</code></pre>
+	  </section>
+	  <section data-tab="03" class="ui tab stacked clarity-book segment">
+	     <h1>Initial Data</h1>
+<p>Edit <code>conf/application.conf</code>, locate and uncomment the following lines:</p>
+<pre><code>db.default.driver=org.h2.Driver
+db.default.url=&quot;jdbc:h2:mem:play&quot;
+db.default.user=sa
+db.default.password=&quot;&quot;
+
+
+ebean.default=&quot;models.*&quot;
+</code></pre>
+
+<p>Also, find a suitable place for this new entry:</p>
+<pre><code>applyEvolutions.default=true
+</code></pre>
+
+<p>Now create a new file called 'initial-data.yml' in the conf folder. Incorporate the following data:</p>
+<pre><code># Users
+users:
+
+    - !!models.User
+        email:      homer@simpson.com
+        firstname:  homer
+        lastname:   simpson        
+        password:   secret
+
+    - !!models.User
+        email:      bart@simpson.com
+        firstname:  bart
+        lastname:   simpson        
+        password:   secret
+
+    - !!models.User
+        email:      marge@simpson.com
+        firstname:  marge
+        lastname:   simpson        
+        password:   secret   
+
+    - !!models.User
+        email:      lisa@simpson.com
+        firstname:  lisa
+        lastname:   simpson        
+        password:   secret                     
+</code></pre>
+
+<p>In the app folder (not in any package), introduce this class:</p>
+<pre><code class="java">import play.*;
+import play.libs.*;
+import java.util.*;
+import com.avaje.ebean.*;
+
+import models.*;
+@SuppressWarnings(&quot;unchecked&quot;)
+public class Global extends GlobalSettings
+{
+  public void onStart(Application app)
+  {
+    InitialData.insert(app);
+  }
+
+  static class InitialData
+  {
+    public static void insert(Application app)
+    {
+      if (Ebean.find(User.class).findRowCount() == 0)
+      {
+        Map&lt;String, List&lt;User&gt;&gt; all = (Map&lt;String, List&lt;User&gt;&gt;) Yaml.load(&quot;initial-data.yml&quot;);
+        Ebean.save(all.get(&quot;users&quot;));
+      }
+    }
+  }
+}
+</code></pre>
+
+<p>If the app is running, stop it (Ctrl-D). Enter the following command on the play console:</p>
+<pre><code>h2-browser
+</code></pre>
+
+<p>This will launch a simple database viewer. Now run the app in the usual way:</p>
+<pre><code>run
+</code></pre>
+
+<p>Browse to :</p>
+<ul>
+<li><a href="http://localhost:9000">http://localhost:9000</a></li>
+</ul>
+<p>Verify that, once the app is launched, the user table is populated with the above values. the h2-browser should look something like this:</p>
+<p><img alt="" src="img/06.png"></p>
+	  </section>
+	  <section data-tab="04" class="ui tab stacked clarity-book segment">
+	     <h1>Semantic UI</h1>
+<p>Visit Semantic UI :</p>
+<ul>
+<li><a href="http://semantic-ui.com/">http://semantic-ui.com/</a></li>
+</ul>
+<p>and download the zip archive prominent on the home page. Expand the archive, which should look like this:</p>
+<p><img alt="" src="img/01.png"></p>
+<p>Open the pacemakerplay project in eclipse, and expand the 'public' folder:</p>
+<p><img alt="" src="img/02.png"></p>
+<p>Now drag and drop the 'packaged' folder from the semantic ui download, and drop it into the public folder. On the way you will get this dialog:</p>
+<p><img alt="" src="img/03.png"></p>
+<p>Make sure to select 'copy' as shown. Once it is copied over, rename the 'packaged' folder to 'semantic'</p>
+<p><img alt="" src="img/04.png"></p>
+<p>We can now include the semantic css into our ui by changing <code>views/main.scala.html</code> as follows:</p>
+<pre><code class="html">@(title: String)(content: Html)
+
+&lt;!DOCTYPE html&gt;
+
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;@title&lt;/title&gt;
+        &lt;link rel=&quot;stylesheet&quot; media=&quot;screen&quot; href=&quot;@routes.Assets.at(&quot;semantic/css/semantic.css&quot;)&quot;&gt;
+        &lt;link rel=&quot;stylesheet&quot; media=&quot;screen&quot; href=&quot;@routes.Assets.at(&quot;stylesheets/main.css&quot;)&quot;&gt;
+        &lt;link rel=&quot;shortcut icon&quot; type=&quot;image/png&quot; href=&quot;@routes.Assets.at(&quot;images/favicon.png&quot;)&quot;&gt;
+        &lt;script src=&quot;@routes.Assets.at(&quot;javascripts/jquery-1.9.0.min.js&quot;)&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+        &lt;script src=&quot;@routes.Assets.at(&quot;semantic/javascript/semantic.min.js&quot;)&quot;&gt;&lt;/script&gt; 
+    &lt;/head&gt;
+    &lt;body&gt;
+      @content
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>We have just entered two extra lines above - a new stylesheet included before the existing one and a javascript after the jquery include.</p>
+<p>To test this, we will change the index file <code>views/index.scala</code> as follows:</p>
+<pre><code class="xml">@(message: String)
+
+@main(&quot;Welcome to Pacemaker&quot;) {
+
+  &lt;div class=&quot;ui segment&quot;&gt;
+    &lt;p&gt; @message &lt;/p&gt;
+  &lt;/div&gt;
+
+}
+</code></pre>
+
+<p>This should display the greeting in a simple segment:</p>
+<p><img alt="" src="img/05.png"></p>
+<p>Introduction to segments here:</p>
+<ul>
+<li><a href="http://semantic-ui.com/elements/segment.html">http://semantic-ui.com/elements/segment.html</a></li>
+</ul>
+<p>The above page is rendered in response to <code>/</code> request as mapped in the routes file:</p>
+<pre><code>GET     /                                          controllers.Application.index()
+</code></pre>
+
+<p>... this is the controller itself:</p>
+<pre><code class="java">public class Application extends Controller
+{
+  public static Result index()
+  {
+    return ok(index.render(&quot;Your new application is ready.&quot;));
+  }
+}
+</code></pre>
+
+<p>See if you can follow the logic of the page creation - particularly the relationship between:</p>
+<ul>
+<li>Application.java</li>
+<li>index.scala.html</li>
+<li>main.scala.html</li>
+</ul>
+	  </section>
+	  <section data-tab="05" class="ui tab stacked clarity-book segment">
+	     <h1>Passing Parameters to the View</h1>
+<p>Instead of passing a string in the Application controller:</p>
+<pre><code class="java">    return ok(index.render(&quot;Your new application is ready.&quot;));
+</code></pre>
+
+<p>We could send the list of users:</p>
+<pre><code class="java">    List&lt;User&gt; users = User.findAll();
+    return ok(index.render(users));
+</code></pre>
+
+<p>This will generate a syntax error - as the template is expecting a string:</p>
+<pre><code class="xml">@(message: String)
+
+@main(&quot;Welcome to Pacemaker&quot;) {
+
+  &lt;div class=&quot;ui segment&quot;&gt;
+    &lt;p&gt; @message &lt;/p&gt;
+  &lt;/div&gt;
+
+}
+</code></pre>
+
+<p>Change this to expect a list:</p>
+<pre><code class="xml">@(users: List[User])
+
+@main(&quot;Welcome to Play&quot;) {
+
+  &lt;div class=&quot;ui segment&quot;&gt;
+    &lt;p&gt; &lt;/p&gt;
+  &lt;/div&gt;
+
+}
+</code></pre>
+
+<p>These changes will not be fully reflected in eclipse until you manually trigger a compile, and then refresh eclipse. To do this, in the play console enter <code>compile</code>:</p>
+<pre><code>[pacemakerplay] $ compile
+[info] Compiling 1 Scala source and 1 Java source to /Users/edeleastar/repos/modules/agile/pacemaker/pacemaker-1.0/pacemakerplay/target/scala-2.10/classes...
+[success] Total time: 2 s, completed 21-Nov-2013 11:30:38
+[pacemakerplay] $
+</code></pre>
+
+<p>and then in eclipse select the project and in the context menu select <code>refresh</code>.</p>
+<p>There will still be one error however, in the test:</p>
+<pre><code class="java">    public void renderTemplate() {
+        Content html = views.html.index.render(&quot;Your new application is ready.&quot;);
+        assertThat(contentType(html)).isEqualTo(&quot;text/html&quot;);
+        assertThat(contentAsString(html)).contains(&quot;Your new application is ready.&quot;);
+    }
+</code></pre>
+
+<p>Comment this out for the moment.</p>
+<p>Run the application and verify there are no errors.</p>
+	  </section>
+	  <section data-tab="06" class="ui tab stacked clarity-book segment">
+	     <h1>Displaying the Users List</h1>
+<p>The templating language - used to generate the actual html pages - is a very simple subset of Scala.</p>
+<ul>
+<li><a href="http://www.playframework.com/documentation/2.2.1/ScalaTemplates">http://www.playframework.com/documentation/2.2.1/ScalaTemplates</a></li>
+</ul>
+<p>The above guide - just a single page of documentation - is probably all you need to know.</p>
+<p>Here is a revised version of index.scala.html to generate a list of users as a <code>&lt;ul&gt;</code>:</p>
+<pre><code class="xml">@(users: List[User])
+
+@main(&quot;Welcome to Play&quot;) {
+
+  &lt;div class=&quot;ui segment&quot;&gt;
+  &lt;ul&gt;
+    @for(i &lt;- 0 until users.size) {
+      &lt;li&gt; 
+        @users(i).firstname @users(i).lastname &lt;/a&gt; 
+      &lt;/li&gt;
+    }
+  &lt;/ul&gt;
+  &lt;/div&gt;
+}
+</code></pre>
+
+<p>Run the app now, and we should see the list:</p>
+<p><img alt="" src="img/07.png"></p>
+<p>or we can display this as an elegant table using semantic ui:</p>
+<ul>
+<li><a href="http://semantic-ui.com/collections/table.html">http://semantic-ui.com/collections/table.html</a></li>
+</ul>
+<p>Here is a revised layout using a table:</p>
+<pre><code class="xml">@(users: List[User])
+
+@main(&quot;Welcome to Play&quot;) {
+
+    &lt;table class=&quot;ui table segment&quot;&gt;
+      &lt;thead&gt;
+        &lt;tr&gt;
+          &lt;th&gt;First Name&lt;/th&gt;
+          &lt;th&gt;Last Name&lt;/th&gt;
+        &lt;/tr&gt;
+      &lt;/thead&gt;
+      &lt;tbody&gt;
+        @for(i &lt;- 0 until users.size) {
+          &lt;tr&gt;
+            &lt;td&gt; @users(i).firstname&lt;/td&gt; &lt;td&gt; @users(i).lastname &lt;/td&gt; 
+          &lt;/tr&gt;
+        }
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+}
+</code></pre>
+
+<p><img alt="" src="img/08.png"></p>
+	  </section>
+	  <section data-tab="07" class="ui tab stacked clarity-book segment">
+	     <h1>Routing to a New View</h1>
+<p>This is a revised version of index.scala.html:</p>
+<pre><code class="xml">@(users: List[User])
+
+@main(&quot;Welcome to Pacemaker&quot;) {
+
+  &lt;h1 class=&quot;ui header&quot;&gt;Pacemaker&lt;/h1&gt;
+
+  &lt;table class=&quot;ui table segment&quot;&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;
+        &lt;th&gt;First Name&lt;/th&gt;
+        &lt;th&gt;Last Name&lt;/th&gt;
+      &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      @for(i &lt;- 0 until users.size) {
+        &lt;tr&gt;
+          &lt;td&gt; @users(i).firstname&lt;/td&gt; &lt;td&gt; @users(i).lastname &lt;/td&gt; 
+        &lt;/tr&gt;
+      }
+    &lt;/tbody&gt;
+
+    &lt;tfoot&gt;
+      &lt;tr&gt;
+        &lt;th colspan=&quot;2&quot;&gt;
+          &lt;a class=&quot;ui blue labeled icon button&quot; href=&quot;&quot;&gt;
+            &lt;i class=&quot;user icon&quot;&gt;&lt;/i&gt; 
+             Add User
+          &lt;/a&gt;
+        &lt;/th&gt;
+      &lt;/tr&gt;
+    &lt;/tfoot&gt;  
+  &lt;/table&gt;
+}
+</code></pre>
+
+<p>It includes a header:</p>
+<ul>
+<li><a href="http://semantic-ui.com/elements/header.html">http://semantic-ui.com/elements/header.html</a></li>
+</ul>
+<p>and a button:</p>
+<ul>
+<li><a href="http://semantic-ui.com/elements/button.html">http://semantic-ui.com/elements/button.html</a></li>
+</ul>
+<p>which is positioned at the last row:</p>
+<ul>
+<li><a href="http://semantic-ui.com/collections/table.html">http://semantic-ui.com/collections/table.html</a></li>
+</ul>
+<p>The href in the button is blank, so we can suggest a new route:</p>
+<pre><code class="xml">          &lt;a class=&quot;ui blue labeled icon button&quot; href=&quot;/users/adduser&quot;&gt;
+</code></pre>
+
+<p>We can specify a matching route + controller action in conf/routes:</p>
+<pre><code class="xml">GET     /users/adduser                             controllers.Application.addUser()
+</code></pre>
+
+<p>To wire this up, we need a new method in the Application controller:</p>
+<pre><code class="java">  public static Result addUser()
+  {
+    return ok(adduser.render());
+  }
+</code></pre>
+
+<p>and this is a new view called <code>adduser.scala.html</code>:</p>
+<pre><code class="xml">@()
+
+@main(&quot;Add User&quot;) {
+
+  &lt;p&gt; Add User Form &lt;/p&gt;
+
+}
+</code></pre>
+
+<p>As you have made changes to the view - you will need to compile the project manually ('compile' command in play console), and then refresh the project in eclipse.</p>
+<p>When you run the app the new view should be displayed.</p>
+	  </section>
+	  <section data-tab="08" class="ui tab stacked clarity-book segment">
+	     <h1>Form Design</h1>
+<p>Forms can be assembled cleanly in Semantic UI:</p>
+<ul>
+<li><a href="http://semantic-ui.com/collections/form.html">http://semantic-ui.com/collections/form.html</a></li>
+</ul>
+<p>Here is a replacement for adduser.scala.html:</p>
+<pre><code class="xml">@()
+
+@main(&quot;Add User&quot;) {
+
+  &lt;div class=&quot;ui form segment&quot;&gt;
+    &lt;div class=&quot;two fields&quot;&gt;
+      &lt;div class=&quot;field&quot;&gt;
+        &lt;label&gt;First Name&lt;/label&gt;
+        &lt;input placeholder=&quot;First Name&quot; type=&quot;text&quot; name=&quot;firstname&quot;&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;field&quot;&gt;
+        &lt;label&gt;Last Name&lt;/label&gt;
+        &lt;input placeholder=&quot;Last Name&quot; type=&quot;text&quot; name=&quot;lastname&quot;&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;field&quot;&gt;
+      &lt;label&gt;Email&lt;/label&gt;
+      &lt;input placeholder=&quot;email&quot; type=&quot;text&quot; name=&quot;email&quot;&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;field&quot;&gt;
+      &lt;label&gt;Password&lt;/label&gt;
+      &lt;input type=&quot;password&quot; name=&quot;password&quot;&gt;
+    &lt;/div&gt;
+    &lt;input type=&quot;submit&quot; class=&quot;ui blue submit button&quot; value=&quot;Submit&quot;&gt;
+  &lt;/div&gt;
+}
+</code></pre>
+
+<p><img alt="" src="img/09.png"></p>
+<p>In order to send this to our application, we would need to encapsulate it on a standard <code>&lt;form&gt;</code> element, and define associated action and method attributes:</p>
+<pre><code class="xml">  &lt;form action=&quot;/users/submituser&quot; method=&quot;POST&quot;&gt;
+    ...
+  &lt;/form&gt; 
+</code></pre>
+
+<p>Place the above around our outer div.</p>
+<p>For this to work, we will need a route:</p>
+<pre><code>POST    /users/submituser                          controllers.Application.submitUser()
+</code></pre>
+
+<p>and a corresponding action:</p>
+<pre><code class="java">  public static Result submitUser()
+  {
+    return redirect (&quot;/&quot;);
+  }
+</code></pre>
+
+<p>This should work - and pressing the submit button should take us back to the users list page.</p>
+	  </section>
+	  <section data-tab="09" class="ui tab stacked clarity-book segment">
+	     <h1>Form Input</h1>
+<p>Form handling in Play is well supported, and does not require significant boilerplate code. </p>
+<p>In the Application controller, define a new static attribute:</p>
+<pre><code class="java">  private static final Form&lt;User&gt; userForm = Form.form(User.class);
+</code></pre>
+
+<p>This will be used to read data and populate a User object. Now we can finalise the submitUser() method:</p>
+<pre><code class="java">  public static Result submitUser()
+  {
+    Form&lt;User&gt; boundForm = userForm.bindFromRequest();
+    User user = boundForm.get();
+    user.save();
+    return redirect (&quot;/&quot;);
+  }
+</code></pre>
+
+<p>This method recovers the user entered data, reads it into a new User object, which we then save. The only requirement is that we keep the names of the user members directly aligned with the 'name' attributes in the <code>&lt;input&gt;</code> elements in the form:</p>
+<pre><code class="java">public class User extends Model
+{
+  //...
+  public String firstname;
+  public String lastname;
+  public String email;
+  public String password;
+  //...
+}
+</code></pre>
+
+<pre><code class="xml">  //...
+  &lt;input placeholder=&quot;First Name&quot; type=&quot;text&quot; name=&quot;firstname&quot;&gt;
+  //...
+  &lt;input placeholder=&quot;Last Name&quot;  type=&quot;text&quot; name=&quot;lastname&quot;&gt;
+  //...
+  &lt;input placeholder=&quot;email&quot;      type=&quot;text&quot; name=&quot;email&quot;&gt;
+  //...
+  &lt;input type=&quot;password&quot;                      name=&quot;password&quot;&gt;
+  //...
+</code></pre>
+
+<p>This is already the in place, so we should now have a simple UI, listing out the users. If we press the "Add User" button, then we should see a form which, if filled out, will take us back to the user page - to now include a new user.</p>
+	  </section>
+	  <section data-tab="10" class="ui tab stacked clarity-book segment">
+	     <h1>Links</h1>
+<p>Our list of users could be extended to include links so we can inspect each users details.</p>
+<p>First introduce a new supporting route:</p>
+<pre><code>GET     /users/showuser/:id                        controllers.Application.showUser(id : Long)
+</code></pre>
+
+<p>Then the template, call <code>showuser.scala.html</code>:</p>
+<pre><code class="xml">@(user : User)
+
+@main(&quot;user&quot;) {
+
+}
+</code></pre>
+
+<p>and finally the matching controller action:</p>
+<pre><code class="java">  public static Result showUser(Long id)
+  {
+    User user =  User.findById(id);
+    return ok(showuser.render(user));
+  }
+</code></pre>
+
+<p>This is an example of a paramaterised route (it take an id) which serves an html page. We can now enable the user list page such that each user is a link (with the correct id) to this route.</p>
+<p>Edit index.scala.html - and rework the for loop as follows:</p>
+<pre><code class="xml">        @for(i &lt;- 0 until users.size) {
+          &lt;tr&gt;
+            &lt;td&gt; &lt;a href=&quot;/users/showuser/@users(i).id&quot;&gt; @users(i).firstname &lt;/a&gt; &lt;/td&gt;  
+            &lt;td&gt; @users(i).lastname  &lt;/td&gt; 
+          &lt;/tr&gt;
+        }
+</code></pre>
+
+<p>Notice how we embedding the users first name in an<code>&lt;a&gt;</code> tag - with the correct route.</p>
+<p>Run this now - and the first names of each user should be a link, taking us to a blank page. Here is a version of showuser.scala.html` that renders some of a user details:</p>
+<pre><code class="xml">@(user : User)
+
+@main(&quot;user&quot;) {
+    &lt;div class=&quot;ui form segment&quot;&gt;
+      &lt;div class=&quot;two fields&quot;&gt;
+        &lt;div class=&quot;field&quot;&gt;
+          &lt;label&gt;First Name&lt;/label&gt;
+          &lt;input value= @user.firstname type=&quot;text&quot; name=&quot;firstname&quot; readonly&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;field&quot;&gt;
+          &lt;label&gt;Last Name&lt;/label&gt;
+          &lt;input value= @user.lastname type=&quot;text&quot; name=&quot;lastname&quot; readonly&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;field&quot;&gt;
+        &lt;label&gt;Email&lt;/label&gt;
+        &lt;input value= @user.email type=&quot;text&quot; name=&quot;email&quot; readonly&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+}
+</code></pre>
+
+<p>This should work now as expected.</p>
+	  </section>
+	  <section data-tab="Exercises" class="ui tab stacked clarity-book segment">
+	     <h1>Solution so far</h1>
+<p>This is an archive of the project as we have built it so for:</p>
+<ul>
+<li><a href="./archives/pacemakerplay_v1.zip">pacemakerplay_v1.zip</a></li>
+</ul>
+<h1>Enhanced UI Version</h1>
+<p>This is anarchive can replace the version you may have been developing during this lab:</p>
+<ul>
+<li><a href="./archives/pacemakerplay_v2.zip">pacemakerplay_v2.zip</a></li>
+</ul>
+<p>To build it, download and expand, and from the expanded folder run:</p>
+<ul>
+<li>play</li>
+<li>compile</li>
+<li>eclipse</li>
+<li>h2-browser</li>
+<li>run</li>
+</ul>
+<p>And browse to :</p>
+<ul>
+<li><a href="http://localhost:9000">http://localhost:9000</a></li>
+</ul>
+<p>Expect to see an UI like this:</p>
+<p><img alt="" src="img/11.png">
+<img alt="" src="img/10.png">
+<img alt="" src="img/12.png">
+<img alt="" src="img/13.png"></p>
+<h1>Explore</h1>
+<p>Explore the source in more detail. It exhibits puts to use the techniques we have explored in this lab.</p>
+<p>Focus on these sources here:</p>
+<h2>Routes:</h2>
+<ul>
+<li>conf/routes</li>
+</ul>
+<h2>Models</h2>
+<ul>
+<li>models/User.java</li>
+<li>models/Activity.java</li>
+</ul>
+<h2>Controllers:</h2>
+<ul>
+<li>app/controllers/Accounts.java</li>
+<li>app/controllers/Dashboard.java</li>
+</ul>
+<h2>Views</h2>
+<ul>
+<li>views/accounts_login.scala.html</li>
+<li>views/accounts_signup.scala.html</li>
+<li>views/dashboard_main.scala.html</li>
+<li>views/dashboard_uploadactivity.scala.html</li>
+<li>views/main.scala.html</li>
+<li>views/welcome_main.scala.html</li>
+<li>views/welcome_menu.scala.html</li>
+</ul>
+	  </section>
+  <div class="ui fixed bottom borderless menu">'
+    <div class="ui small item"> 
+    <p id="footertext">
+    Prepared by  Eamonn de Leastar (edeleastar@wit.ie). Except where otherwise noted, this content is licensed under a  
+     <a  href="http://creativecommons.org/licenses/by-nc/4.0/" title="External link to http://creativecommons.org/licenses/by-nc/4.0/" 
+       target="_blank">Creative Commons Attribution-NonCommercial 4.0 License
+     </a>
+     </p>
+    </div>
+  </div>   
+    
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-49703418-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>  </body>
+ </html>
