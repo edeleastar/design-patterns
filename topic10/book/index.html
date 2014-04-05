@@ -1,0 +1,751 @@
+ <!DOCTYPE html>
+ <html>
+   <head>
+     <meta charset="utf-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+   
+     <title> Lab-10 </title>
+   
+     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+     <link rel="stylesheet" href="./style/semantic/css/semantic.min.css" type="text/css">  
+     <link rel="stylesheet" href="./style/custom/main.css" type="text/css"> 
+   
+     <script src="./style/custom/jquery-2.1.0.min.js"></script> 
+     <script src="./style/custom/jquery.address-1.6.min.js"></script>
+     <script src="./style/semantic/javascript/semantic.min.js"></script>
+   
+     <link rel="stylesheet" href="./style/highlight/school_book.css">
+     <script src="./style/highlight/highlight.pack.js"></script> 
+     <script>hljs.initHighlightingOnLoad();</script>
+   
+     <script src="./style/custom/common.js"> </script> 
+     <script src="./style/custom/main.js"> </script> 
+  </head>
+  <body>
+  <nav class="ui fixed top pointing borderless inverted menu">
+    <header class="header item"> <a href="../index.html">Mediator
+</a></header>
+    <div class="right tab-menu menu">
+          <a class="item" data-tab="Lab-10"> Lab-10 </a>
+          <a class="item" data-tab="01"> 01 </a>
+          <a class="item" data-tab="02"> 02 </a>
+          <a class="item" data-tab="03"> 03 </a>
+          <a class="item" data-tab="04"> 04 </a>
+          <a class="item" data-tab="05"> 05 </a>
+          <a class="item" data-tab="06"> 06 </a>
+          <a class="item" data-tab="07"> 07 </a>
+          <a class="item" data-tab="Exercises"> Exercises </a>
+    </div>
+  </nav>
+
+  <br>
+
+	  <section data-tab="Lab-10" class="ui tab stacked clarity-book segment">
+	     <h1>Objectives</h1>
+<ul>
+<li>Complete the android application to include activity sync support</li>
+</ul>
+	  </section>
+	  <section data-tab="01" class="ui tab stacked clarity-book segment">
+	     <h1>Setup</h1>
+<p>This is v4 of the pacemaker-android project from the last android lab:</p>
+<ul>
+<li><a href="./archives/pacemaker-android-v4.zip">pacemaker-android-v4.zip</a></li>
+</ul>
+<p>You can import this for reference purposes, or keep working with your own version.</p>
+	  </section>
+	  <section data-tab="02" class="ui tab stacked clarity-book segment">
+	     <h1>Registering new Users</h1>
+<p>We need re-orient how we connect to the service, initiating contact with the service form the welcome activity:</p>
+<h2>Welcome</h2>
+<pre><code class="java">  public void onCreate(Bundle savedInstanceState)
+  {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_welcome);
+    app = (PacemakerApp) getApplication();
+    app.connectToPacemakerAPI(this);
+  }
+</code></pre>
+
+<p>This approach requires these methods in PacemakerApp:</p>
+<pre><code class="java">  public void connectToPacemakerAPI(Context context)
+  {
+    PacemakerAPI.getUsers(context, this, &quot;Retrieving list of users&quot;);
+  }
+
+  public void registerUser(Context context, User user)
+  {
+    PacemakerAPI.createUser(context, this, &quot;Registering new user&quot;, user);
+  }
+
+  @Override
+  public void setResponse(User user)
+  {
+    connected = true;
+    users.put(user.email, user);
+    activities.put(user.email, new ArrayList&lt;Activity&gt;());
+  }
+</code></pre>
+
+<p>In addition, the Sigup controller is also using the application object:</p>
+<h2>Signup</h2>
+<pre><code class="java">    app.registerUser(this, user);
+</code></pre>
+	  </section>
+	  <section data-tab="03" class="ui tab stacked clarity-book segment">
+	     <h1>Creating Activities</h1>
+<p>Extend PacemakerAPI to support activities:</p>
+<h2>PacemakerAPI</h2>
+<pre><code class="java">public class PacemakerAPI
+{
+  //...
+  public static void getActivities(Context context, User user, Response&lt;Activity&gt; response, String dialogMesssage)
+  {
+    new GetActivities(context, user, response, dialogMesssage).execute();
+  }
+
+  public static void createActivity(Context context, User user, Response&lt;Activity&gt; response, String dialogMesssage, Activity donation)
+  {
+    new CreateActivity(context, user, response, dialogMesssage).execute(donation);
+  }
+}
+
+//...
+
+class GetActivities extends Request
+{
+  private User user;
+
+  public GetActivities(Context context, User user, Response&lt;Activity&gt; callback, String message)
+  {
+    super(context, callback, message);
+    this.user = user;
+  }
+
+  @Override
+  protected List&lt;Activity&gt; doRequest(Object... params) throws Exception
+  {
+    String response =  Rest.get(&quot;/api/users/&quot; + user.id + &quot;/activities&quot;);
+    List&lt;Activity&gt; ActivityList = JsonParser.json2Activities(response);
+    return ActivityList;
+  }
+}
+
+class CreateActivity extends Request
+{
+  private User user;
+
+  public CreateActivity(Context context, User user, Response&lt;Activity&gt; callback, String message)
+  {
+    super(context, callback, message);
+    this.user = user;
+  }
+
+  @Override
+  protected Activity doRequest(Object... params) throws Exception
+  {
+    String response = Rest.post (&quot;/api/users/&quot; + user.id + &quot;/activities&quot;, JsonParser.activity2Json(params[0]));
+    return JsonParser.json2Activity(response);
+  }
+}
+</code></pre>
+
+<p>We now encapsulate access to this feature in the application class:</p>
+<h2>PacemakerApp</h2>
+<pre><code class="java">  public void createActivity (Context context, Activity activity, Response&lt;Activity&gt; responder)
+  {
+    if (loggedInUser != null)
+    {
+      PacemakerAPI.createActivity(context, loggedInUser, responder, &quot;Creating activity...&quot;, activity);
+    }
+  }
+
+  public void getActivities(Context context, Response&lt;Activity&gt; responder)
+  {
+    PacemakerAPI.getActivities(context, loggedInUser, responder, &quot;Retrieving Activities...&quot;);
+  }
+</code></pre>
+	  </section>
+	  <section data-tab="04" class="ui tab stacked clarity-book segment">
+	     <h1>Controllers</h1>
+<p>The activities list controller can now retrieve/update activities from the service</p>
+<h2>ActivitiesList</h2>
+<pre><code class="java">public class ActivitiesList extends  android.app.Activity implements Response &lt;Activity&gt;
+{
+  private PacemakerApp     app;
+  private ListView         activitiesListView;
+  private ActivityAdapter  activitiesAdapter;
+  private List&lt;Activity&gt;   activities = new ArrayList&lt;Activity&gt;();
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState)
+  {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activities_list);
+
+    app = (PacemakerApp) getApplication();
+
+    activitiesListView = (ListView) findViewById(R.id.activitiesListView);
+    activitiesAdapter = new ActivityAdapter(this,  activities);
+    activitiesListView.setAdapter(activitiesAdapter);
+
+    app.getActivities(this, this);
+  }
+
+
+  @Override
+  public void setResponse(List&lt;Activity&gt; aList)
+  {
+    activitiesAdapter.activities = aList;
+    activitiesAdapter.notifyDataSetChanged();
+  }
+
+  @Override
+  public void setResponse(Activity anObject)
+  {
+  }
+
+  @Override
+  public void errorOccurred(Exception e)
+  {
+    Toast toast = Toast.makeText(this, &quot;Error Retrieving Activities...&quot;, Toast.LENGTH_SHORT);
+    toast.show();
+  }
+  //...
+}
+</code></pre>
+
+<p>Similiarly, we can create an activity using the new features on the app class:</p>
+<h2>CreateActivity</h2>
+<pre><code class="java">public class CreateActivity extends android.app.Activity implements Response &lt;Activity&gt;
+{
+  //...
+  //...
+
+  public void createActivityButtonPressed (View view)
+  {  
+    double distance = distancePicker.getValue();
+    Activity activity = new Activity (activityType.getText().toString(), activityLocation.getText().toString(), distance);
+
+    app.createActivity(this, activity, this);
+  }
+
+  @Override
+  public void setResponse(List&lt;Activity&gt; aList)
+  {}
+
+  @Override
+  public void setResponse(Activity anObject)
+  {}
+
+  @Override
+  public void errorOccurred(Exception e)
+  {
+    Toast toast = Toast.makeText(this, &quot;Failed to create Activity&quot;, Toast.LENGTH_SHORT);
+    toast.show();
+  }
+</code></pre>
+
+<p>This will fail due to mismatch in names used n Activity model. Rename <code>type</code> to <code>kind</code> :</p>
+<pre><code class="java">public class Activity
+{
+  public Long id;
+  public String kind;
+  public String location;
+  public double distance;
+  //...
+}
+</code></pre>
+
+<p>Type is a valid Scala reserved word, and is disturbing the scala templates compilation process.</p>
+<p>Test this now and verify that web and android are in sync. Make sure you can follow the flow of information to/from the service.</p>
+	  </section>
+	  <section data-tab="05" class="ui tab stacked clarity-book segment">
+	     <h1>Mediator</h1>
+<p>We could attempt to rationalise the syncing - by introducing a <code>mediator</code> to encapsulate thte sync behaviour.</p>
+<p>First, introduce a new interface to encapsulate more generic sync events:</p>
+<pre><code class="java">package org.pacemaker.main;
+
+public interface SyncUpdate
+{
+  void userSyncComplete();
+  void activitiesSyncComplete();
+  void syncError (Exception e);
+}
+</code></pre>
+
+<p>Then we introduce a Mediator class to hide access to the API:</p>
+<pre><code class="java">package org.pacemaker.main;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.pacemaker.http.Response;
+import org.pacemaker.models.Activity;
+import org.pacemaker.models.User;
+
+import android.content.Context;
+import android.widget.Toast;
+
+public class PacemakerMediator
+{
+  Context                     context;
+  SyncUpdate                  syncUpdate;
+  Map&lt;String, User&gt;           users             = new HashMap&lt;String, User&gt;();
+  Map&lt;String, List&lt;Activity&gt;&gt; activities        = new HashMap&lt;String, List&lt;Activity&gt;&gt;();
+  UserResponder               userResponder     = new UserResponder(this);
+  ActivityResponder           activityResponder = new ActivityResponder(this);  
+
+  public User getUser(String email)
+  {
+    return users.get(email);
+  }
+
+  public List&lt;Activity&gt; getActivities(User user)
+  {
+    return activities.get(user.email);
+  }
+
+  public void registerUser(Context context, User user, SyncUpdate syncUpdate)
+  {
+    this.syncUpdate = syncUpdate;
+    PacemakerAPI.createUser(context, userResponder, &quot;Creating new User...&quot;, user);
+  }
+
+  public void createActivity(User user, Activity activity, SyncUpdate syncUpdate)
+  {
+    this.syncUpdate = syncUpdate;
+    PacemakerAPI.createActivity(context, user, activityResponder, &quot;Creating new Activity...&quot;, activity);
+  }
+
+  void syncUsers(Context context, SyncUpdate syncUpdate)
+  {
+    this.context    = context;
+    this.syncUpdate = syncUpdate;
+    PacemakerAPI.getUsers(context, userResponder, &quot;Syncing Users&quot;);
+  }
+
+  void syncActivities(User user, SyncUpdate syncUpdate)
+  {
+    this.syncUpdate = syncUpdate;
+    activityResponder.user = user;
+    PacemakerAPI.getActivities(context, user, activityResponder, &quot;Syncing Activities&quot;);
+  }
+
+  void error(Exception e)
+  {
+    Toast toast = Toast.makeText(context, &quot;Error in communicating with Pacemaker&quot;, Toast.LENGTH_SHORT);
+    toast.show();
+  }
+}
+
+class UserResponder implements Response&lt;User&gt;
+{
+  PacemakerMediator mediator;
+
+  UserResponder (PacemakerMediator pacemakerMediator)
+  {
+    this.mediator = pacemakerMediator;
+  }
+
+  @Override
+  public void setResponse(List&lt;User&gt; users)
+  {
+    for (User user : users)
+    {
+      mediator.users.put(user.email, user);
+    }
+    mediator.syncUpdate.userSyncComplete();
+  }
+
+  @Override
+  public void setResponse(User user)
+  {
+    mediator.users.put(user.email, user);
+    mediator.activities.put(user.email, new ArrayList&lt;Activity&gt;());
+    mediator.syncUpdate.userSyncComplete();
+  }
+
+  @Override
+  public void errorOccurred(Exception e)
+  {
+    mediator.error(e);
+  }
+}
+
+class ActivityResponder implements Response&lt;Activity&gt;
+{
+  PacemakerMediator mediator;
+  User              user;
+
+  ActivityResponder (PacemakerMediator mediator)
+  {
+    this.mediator = mediator;
+  }
+
+  @Override
+  public void setResponse(List&lt;Activity&gt; activities)
+  {
+    mediator.activities.put(user.email, activities);
+    mediator.syncUpdate.activitiesSyncComplete();
+  }
+
+  @Override
+  public void setResponse(Activity activity)
+  {
+    mediator.activities.get(user.email).add(activity);
+    mediator.syncUpdate.activitiesSyncComplete();
+  }
+
+  @Override
+  public void errorOccurred(Exception e)
+  {
+    mediator.error(e);
+  }
+}
+</code></pre>
+	  </section>
+	  <section data-tab="06" class="ui tab stacked clarity-book segment">
+	     <h1>PacemakerApp</h1>
+<p>With the mediator in place, refactor PacemakerApp to use the mediator:</p>
+<pre><code class="java">package org.pacemaker.main;
+
+import java.util.List;
+import org.pacemaker.models.Activity;
+import org.pacemaker.models.User;
+import android.app.Application;
+import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
+
+public class PacemakerApp extends Application implements  SyncUpdate
+{
+  private User              loggedInUser;
+  private PacemakerMediator mediator = new PacemakerMediator();
+
+  public void syncUsers(Context context)
+  {
+     mediator.syncUsers(context, this);
+  }
+
+  public void registerUser(User user, Context context)
+  {
+    mediator.registerUser(context, user, this);
+  }
+
+  public List&lt;Activity&gt; getActivities()
+  {
+    return mediator.getActivities(loggedInUser);
+  }
+
+  public boolean loginUser(String email, String password)
+  {
+    loggedInUser = mediator.getUser(email);
+    if (loggedInUser != null &amp;&amp; !loggedInUser.password.equals(password))
+    {
+      loggedInUser = null;
+    }
+    mediator.syncActivities(loggedInUser, this);
+    return loggedInUser != null;
+  }
+
+  public void logout()
+  {
+    loggedInUser = null;
+  }
+
+  public void createActivity (Context context, Activity activity, SyncUpdate syncUpdate)
+  {
+    if (loggedInUser != null)
+    {
+      mediator.createActivity(loggedInUser, activity, syncUpdate);
+    }
+  }
+
+  @Override
+  public void userSyncComplete()
+  {
+    Toast toast = Toast.makeText(this, &quot;Pacemaker Sync Successful&quot;, Toast.LENGTH_SHORT);
+    toast.show();
+  }
+
+  @Override
+  public void activitiesSyncComplete()
+  {  
+    Toast toast = Toast.makeText(this, &quot;Pacemaker Sync Successful&quot;, Toast.LENGTH_SHORT);
+    toast.show();
+  }
+
+  @Override
+  public void syncError(Exception e)
+  {
+    Toast toast = Toast.makeText(this, &quot;Failed to connect to Pacemaker Service&quot;, Toast.LENGTH_SHORT);
+    toast.show();
+  }
+
+  @Override
+  public void onCreate()
+  {
+    super.onCreate();
+    Log.v(&quot;Pacemaker&quot;, &quot;Pacemaker App Started&quot;);
+  }
+}
+</code></pre>
+	  </section>
+	  <section data-tab="07" class="ui tab stacked clarity-book segment">
+	     <h1>Controllers</h1>
+<p>The controllers can now be relieved for responsibility for accessing the API in a fine grained manner, and use the Mediator we have just introduced:</p>
+<h2>Welcome</h2>
+<pre><code class="java">  public void onCreate(Bundle savedInstanceState)
+  {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_welcome);
+    app = (PacemakerApp) getApplication();
+    app.syncUsers(this);
+  }
+</code></pre>
+
+<h2>Signup</h2>
+<pre><code class="java">  public void registerPressed (View view)
+  {
+    TextView firstName = (TextView)  findViewById(R.id.firstName);
+    TextView lastName  = (TextView)  findViewById(R.id.lastName);
+    TextView email     = (TextView)  findViewById(R.id.Email);
+    TextView password  = (TextView)  findViewById(R.id.Password);
+
+    User user = new User (firstName.getText().toString(), lastName.getText().toString(), email.getText().toString(), password.getText().toString());
+    app.registerUser(user, this);
+    startActivity (new Intent(this, Login.class));
+  }
+</code></pre>
+
+<h2>CreateActivity</h2>
+<pre><code class="java">package org.pacemaker.controllers;
+
+import org.pacemaker.R;
+import org.pacemaker.main.PacemakerApp;
+import org.pacemaker.main.SyncUpdate;
+import org.pacemaker.models.Activity;
+
+import android.os.Bundle;
+import android.content.Intent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.NumberPicker;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class CreateActivity extends android.app.Activity implements SyncUpdate
+{
+  private PacemakerApp   app;
+  private Button         createActivityButton;
+  private TextView       activityType;
+  private TextView       activityLocation;
+  private NumberPicker   distancePicker;
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState)
+  {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_create);
+
+    app = (PacemakerApp) getApplication();
+
+    createActivityButton = (Button)       findViewById(R.id.createActivityButton);
+    activityType         = (TextView)     findViewById(R.id.activityType);
+    activityLocation     = (TextView)     findViewById(R.id.activityLocation);
+    distancePicker       = (NumberPicker) findViewById(R.id.distancePicker);
+
+    distancePicker.setMinValue(0);
+    distancePicker.setMaxValue(20);
+  }
+
+  public void createActivityButtonPressed (View view)
+  {  
+    double distance = distancePicker.getValue();
+    Activity activity = new Activity (activityType.getText().toString(), activityLocation.getText().toString(), distance);
+
+    app.createActivity(this, activity, this);
+  }
+
+  @Override
+  public void userSyncComplete()
+  { }
+
+  @Override
+  public void activitiesSyncComplete()
+  {
+    Toast toast = Toast.makeText(this, &quot;Activity Created&quot;, Toast.LENGTH_SHORT);
+    toast.show();
+  }
+
+  @Override
+  public void syncError(Exception e)
+  {
+    Toast toast = Toast.makeText(this, &quot;Failed to create Activity&quot;, Toast.LENGTH_SHORT);
+    toast.show();
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu)
+  {
+    getMenuInflater().inflate(R.menu.activities_create, menu);
+    return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item)
+  {
+    switch (item.getItemId())
+    {
+      case R.id.action_list_actvities : startActivity (new Intent(this, ActivitiesList.class));
+                                        break;
+      case R.id.action_logout         : startActivity (new Intent(this, Welcome.class));
+                                        break;
+    }
+    return true;
+  }
+}
+</code></pre>
+
+<h2>ActivitiesList</h2>
+<pre><code class="java">package org.pacemaker.controllers;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.pacemaker.R;
+import org.pacemaker.main.PacemakerApp;
+import org.pacemaker.main.SyncUpdate;
+import org.pacemaker.models.Activity;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class ActivitiesList extends  android.app.Activity implements SyncUpdate
+{
+  private PacemakerApp     app;
+  private ListView         activitiesListView;
+  private ActivityAdapter  activitiesAdapter;
+  private List&lt;Activity&gt;   activities = new ArrayList&lt;Activity&gt;();
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState)
+  {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activities_list);
+
+    app = (PacemakerApp) getApplication();
+
+    activitiesListView = (ListView) findViewById(R.id.activitiesListView);
+    activitiesAdapter = new ActivityAdapter(this,  activities);
+    activitiesListView.setAdapter(activitiesAdapter);
+    activitiesAdapter.activities = app.getActivities();
+    activitiesAdapter.notifyDataSetChanged();
+  }
+
+  @Override
+  public void userSyncComplete()
+  { }
+
+  @Override
+  public void activitiesSyncComplete()
+  {
+    activitiesAdapter.activities = app.getActivities();
+    activitiesAdapter.notifyDataSetChanged();
+  }
+
+  @Override
+  public void syncError(Exception e)
+  {
+    Toast toast = Toast.makeText(this, &quot;Error Retrieving Activities...&quot;, Toast.LENGTH_SHORT);
+    toast.show();
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu)
+  {
+    getMenuInflater().inflate(R.menu.activities_list, menu);
+    return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item)
+  {
+    switch (item.getItemId())
+    {
+      case R.id.action_create_actvities : startActivity (new Intent(this, CreateActivity.class));
+                                          break;
+      case R.id.action_logout           : startActivity (new Intent(this, Welcome.class));
+                                          break;
+    }
+    return true;
+  }
+}
+
+// Adapter unchanged
+</code></pre>
+	  </section>
+	  <section data-tab="Exercises" class="ui tab stacked clarity-book segment">
+	     <h1>Exercises</h1>
+<p>Archive of the app so far:</p>
+<ul>
+<li><a href="./archives/pacemaker-android-v5.zip">pacemaker-android-v5.zip</a></li>
+</ul>
+<p>This lab has introduce the Mediator pattern in an attempt to intorduce a generic 'sync' feature. There are a range of features in the Andorid SDK which could be exploited by the Mediator implementation - or which could replace the mediator completely, implementing a more reobust sync facility. These are concepts that can usefully implemented in your assiignment. Among these are:</p>
+<h2><a href="http://developer.android.com/guide/components/services.html">Services</a></h2>
+<blockquote>
+<p>A Service is an application component that can perform long-running operations in the background and does not provide a user interface. Another application component can start a service and it will continue to run in the background even if the user switches to another application</p>
+</blockquote>
+<p>Currently, for every command a new thread is being created vie the <code>AsyncTask</code> execute method:</p>
+<pre><code class="java">    new GetActivities(context, user, response, dialogMesssage).execute();
+</code></pre>
+
+<p>(Note the '.execute' above). Unless we specifically initiate a command like this from the andrid client, we will not revieve any updates. We could initiatie a service on application launch, which would periodically reach out to the service and download any updates. In this way, if a user updated activities using the web app, then should appear on the android client in due course.</p>
+<h2><a href="http://developer.android.com/reference/android/content/BroadcastReceiver.html">BroadcastRecievers</a></h2>
+<p>If you implement the services above, then your activities will need to be updated periodically if a change is noticed. BroadcastRecievers are one way of achieving this. It may even be possible for multiple applications to 'register' for activity updates using this mechanism</p>
+<h2><a href="http://developer.android.com/training/sync-adapters/creating-sync-adapter.html">SyncAdapter</a></h2>
+<blockquote>
+<p>The sync adapter component in your app encapsulates the code for the tasks that transfer data between the device and a server. Based on the scheduling and triggers you provide in your app, the sync adapter framework runs the code in the sync adapter component.</p>
+</blockquote>
+<p>Supplimenting the above, the SyncAdapter framework introduces a more comprehensive solution to sync issues:</p>
+	  </section>
+  <div class="ui fixed bottom borderless menu">'
+    <div class="ui small item"> 
+    <p id="footertext">
+    Prepared by  Eamonn de Leastar (edeleastar@wit.ie). Except where otherwise noted, this content is licensed under a  
+     <a  href="http://creativecommons.org/licenses/by-nc/4.0/" title="External link to http://creativecommons.org/licenses/by-nc/4.0/" 
+       target="_blank">Creative Commons Attribution-NonCommercial 4.0 License
+     </a>
+     </p>
+    </div>
+  </div>   
+    
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-49703418-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>  </body>
+ </html>
