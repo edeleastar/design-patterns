@@ -39,7 +39,7 @@
 
   <br>
 
-	  <section data-tab="lab-04" class="ui tab stacked clarity-book segment">
+	  <section data-tab="lab-04" class="ui tab stacked moodle-book segment">
 	     <h1>Objectives</h1>
 <ul>
 <li>Explore some deficiencies in the pacemaker command pattern implementation</li>
@@ -47,7 +47,7 @@
 <li>Experiment and debug</li>
 </ul>
 	  </section>
-	  <section data-tab="01" class="ui tab stacked clarity-book segment">
+	  <section data-tab="01" class="ui tab stacked moodle-book segment">
 	     <h1>Setup</h1>
 <p>This the the simplified pacemaker as we left it last week:</p>
 <ul>
@@ -81,7 +81,7 @@ pm&gt;
 <li><a href="http://sourcemaking.om/design_patterns/prototype">http://sourcemaking.om/design_patterns/prototype</a></li>
 </ul>
 	  </section>
-	  <section data-tab="02" class="ui tab stacked clarity-book segment">
+	  <section data-tab="02" class="ui tab stacked moodle-book segment">
 	     <h1>Prototype in Command</h1>
 <p>Extend the Command abstract class to include a new method:</p>
 <pre><code class="java">  public Command copy()
@@ -111,7 +111,7 @@ pm&gt;
 
 <p>We can leave ListUsersCommand untouched, as we do not consider it 'undable'.</p>
 	  </section>
-	  <section data-tab="03" class="ui tab stacked clarity-book segment">
+	  <section data-tab="03" class="ui tab stacked moodle-book segment">
 	     <h1>CommandDispatcher</h1>
 <p>We can now refactor the CommandDispatcher to make use of the prototype pattern:</p>
 <pre><code class="java">  public boolean dispatchCommand(String commandName, Object [] parameters) throws Exception
@@ -197,7 +197,7 @@ pm&gt;
 
 <p>The service should behave as expected..</p>
 	  </section>
-	  <section data-tab="04" class="ui tab stacked clarity-book segment">
+	  <section data-tab="04" class="ui tab stacked moodle-book segment">
 	     <h1>Another problem..</h1>
 <p>Try this script here:</p>
 <pre><code>Welcome to pacemaker-console - ?help for instructions
@@ -217,7 +217,7 @@ pm&gt;
 
 <p>Why are we getting the error above? See if you can find the error by debugging the service.</p>
 	  </section>
-	  <section data-tab="05" class="ui tab stacked clarity-book segment">
+	  <section data-tab="05" class="ui tab stacked moodle-book segment">
 	     <h1>Resolution</h1>
 <p>The problem is that our redo for CreateUserCommand is not correctly implemented:</p>
 <pre><code>  public void redoCommand() throws Exception
@@ -257,7 +257,7 @@ pm&gt;
   }
 </code></pre>
 	  </section>
-	  <section data-tab="06" class="ui tab stacked clarity-book segment">
+	  <section data-tab="06" class="ui tab stacked moodle-book segment">
 	     <h1>Yet Another Problem(!)</h1>
 <p>This transcript here (discussed in class) is counter intuitive to the user:</p>
 <pre><code>Welcome to pacemaker-console - ?help for instructions
@@ -344,7 +344,7 @@ pm&gt;
 
 <p>Try the above transcript again and see if the behavior is more intuitive.</p>
 	  </section>
-	  <section data-tab="Exercses" class="ui tab stacked clarity-book segment">
+	  <section data-tab="Exercses" class="ui tab stacked moodle-book segment">
 	     <h1>Archive</h1>
 <p>This is the lab as implemented so far:</p>
 <ul>

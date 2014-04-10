@@ -39,7 +39,7 @@
 
   <br>
 
-	  <section data-tab="Lab-05" class="ui tab stacked clarity-book segment">
+	  <section data-tab="Lab-05" class="ui tab stacked moodle-book segment">
 	     <h1>Objectives</h1>
 <ul>
 <li>Extend the pacemaker-android app to enable activities to be listed</li>
@@ -51,7 +51,7 @@
 </li>
 </ul>
 	  </section>
-	  <section data-tab="01" class="ui tab stacked clarity-book segment">
+	  <section data-tab="01" class="ui tab stacked moodle-book segment">
 	     <h1>Setup</h1>
 <p>This is v1 of the pacemaker-android project from the last lab:</p>
 <ul>
@@ -59,7 +59,7 @@
 </ul>
 <p>You can import this for reference purposes, or keep working with your own version.</p>
 	  </section>
-	  <section data-tab="02" class="ui tab stacked clarity-book segment">
+	  <section data-tab="02" class="ui tab stacked moodle-book segment">
 	     <h1>Memento I</h1>
 <p>Currently, your createActitivyButtonPressed method in the CreateActivity class looks like this:</p>
 <pre><code class="java">  public void createActivityButtonPressed (View view) 
@@ -184,7 +184,7 @@
   }
 </code></pre>
 	  </section>
-	  <section data-tab="03" class="ui tab stacked clarity-book segment">
+	  <section data-tab="03" class="ui tab stacked moodle-book segment">
 	     <h1>Memento II</h1>
 <p>In the ActivitiesList class, we can recover the list from the bundle. This can be done in onCreate:</p>
 <pre><code class="java">    Bundle extras = getIntent().getExtras();  
@@ -206,7 +206,7 @@
   }
 </code></pre>
 	  </section>
-	  <section data-tab="04" class="ui tab stacked clarity-book segment">
+	  <section data-tab="04" class="ui tab stacked moodle-book segment">
 	     <h1>Adapter I</h1>
 <p>Just sending the list to the log will not suffice. We should attempt to render them to the list view directly.</p>
 <p>Make sure we have the activitiesListView to hand:</p>
@@ -240,7 +240,7 @@
 <li><a href="http://stackoverflow.com/questions/3663745/what-is-android-r-layout-simple-list-item-1">http://stackoverflow.com/questions/3663745/what-is-android-r-layout-simple-list-item-1</a></li>
 </ul>
 	  </section>
-	  <section data-tab="05" class="ui tab stacked clarity-book segment">
+	  <section data-tab="05" class="ui tab stacked moodle-book segment">
 	     <h1>Singleton</h1>
 <p>We can introduce an <code>Application</code> object, guaranteed to be a singleton - and accessible to all activities in our application.</p>
 <ul>
@@ -335,7 +335,7 @@ public class PacemakerApp extends Application
 
 <p>This should now work as before. We can also remove the Parcelable methods from the Activity model as we are no longer using them.</p>
 	  </section>
-	  <section data-tab="06" class="ui tab stacked clarity-book segment">
+	  <section data-tab="06" class="ui tab stacked moodle-book segment">
 	     <h1>Adapter II</h1>
 <p>The existing adapter we are using in the ActivitiesList class is a stock adapter from the SDK:</p>
 <ul>
@@ -385,7 +385,7 @@ public class PacemakerApp extends Application
 
 <p>This should now work as expected.</p>
 	  </section>
-	  <section data-tab="Exercises" class="ui tab stacked clarity-book segment">
+	  <section data-tab="Exercises" class="ui tab stacked moodle-book segment">
 	     <h1>Exercises</h1>
 <h2>Exercise 1:</h2>
 <p>In the last lab, you inserted a new button onto the activities view to allow navigation to the list view:</p>

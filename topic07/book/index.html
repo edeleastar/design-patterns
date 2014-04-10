@@ -43,13 +43,13 @@
 
   <br>
 
-	  <section data-tab="Lab-07" class="ui tab stacked clarity-book segment">
+	  <section data-tab="Lab-07" class="ui tab stacked moodle-book segment">
 	     <h1>Objectives</h1>
 <ul>
 <li>Create a new version of pacemaker using the play framework</li>
 </ul>
 	  </section>
-	  <section data-tab="01" class="ui tab stacked clarity-book segment">
+	  <section data-tab="01" class="ui tab stacked moodle-book segment">
 	     <h1>Install Play</h1>
 <p>For this lab, the most stable version of eclipse maybe this one:</p>
 <ul>
@@ -147,7 +147,7 @@ play 2.2.1 built with Scala 2.10.2 (running Java 1.7.0_40), http://www.playframe
 </ul>
 <p>It should display a standard greeting page.</p>
 	  </section>
-	  <section data-tab="02" class="ui tab stacked clarity-book segment">
+	  <section data-tab="02" class="ui tab stacked moodle-book segment">
 	     <h1>Models</h1>
 <p>Create a new package in <code>app</code> called 'models'. Introduce this version of the Activity class into this package:</p>
 <pre><code>package models;
@@ -321,7 +321,7 @@ public class User extends Model
 }
 </code></pre>
 	  </section>
-	  <section data-tab="03" class="ui tab stacked clarity-book segment">
+	  <section data-tab="03" class="ui tab stacked moodle-book segment">
 	     <h1>Initial Data</h1>
 <p>Edit <code>conf/application.conf</code>, locate and uncomment the following lines:</p>
 <pre><code>db.default.driver=org.h2.Driver
@@ -410,7 +410,7 @@ public class Global extends GlobalSettings
 <p>Verify that, once the app is launched, the user table is populated with the above values. the h2-browser should look something like this:</p>
 <p><img alt="" src="img/06.png"></p>
 	  </section>
-	  <section data-tab="04" class="ui tab stacked clarity-book segment">
+	  <section data-tab="04" class="ui tab stacked moodle-book segment">
 	     <h1>Semantic UI</h1>
 <p>Visit Semantic UI :</p>
 <ul>
@@ -484,7 +484,7 @@ public class Global extends GlobalSettings
 <li>main.scala.html</li>
 </ul>
 	  </section>
-	  <section data-tab="05" class="ui tab stacked clarity-book segment">
+	  <section data-tab="05" class="ui tab stacked moodle-book segment">
 	     <h1>Passing Parameters to the View</h1>
 <p>Instead of passing a string in the Application controller:</p>
 <pre><code class="java">    return ok(index.render(&quot;Your new application is ready.&quot;));
@@ -538,7 +538,7 @@ public class Global extends GlobalSettings
 <p>Comment this out for the moment.</p>
 <p>Run the application and verify there are no errors.</p>
 	  </section>
-	  <section data-tab="06" class="ui tab stacked clarity-book segment">
+	  <section data-tab="06" class="ui tab stacked moodle-book segment">
 	     <h1>Displaying the Users List</h1>
 <p>The templating language - used to generate the actual html pages - is a very simple subset of Scala.</p>
 <ul>
@@ -593,7 +593,7 @@ public class Global extends GlobalSettings
 
 <p><img alt="" src="img/08.png"></p>
 	  </section>
-	  <section data-tab="07" class="ui tab stacked clarity-book segment">
+	  <section data-tab="07" class="ui tab stacked moodle-book segment">
 	     <h1>Routing to a New View</h1>
 <p>This is a revised version of index.scala.html:</p>
 <pre><code class="xml">@(users: List[User])
@@ -671,7 +671,7 @@ public class Global extends GlobalSettings
 <p>As you have made changes to the view - you will need to compile the project manually ('compile' command in play console), and then refresh the project in eclipse.</p>
 <p>When you run the app the new view should be displayed.</p>
 	  </section>
-	  <section data-tab="08" class="ui tab stacked clarity-book segment">
+	  <section data-tab="08" class="ui tab stacked moodle-book segment">
 	     <h1>Form Design</h1>
 <p>Forms can be assembled cleanly in Semantic UI:</p>
 <ul>
@@ -727,7 +727,7 @@ public class Global extends GlobalSettings
 
 <p>This should work - and pressing the submit button should take us back to the users list page.</p>
 	  </section>
-	  <section data-tab="09" class="ui tab stacked clarity-book segment">
+	  <section data-tab="09" class="ui tab stacked moodle-book segment">
 	     <h1>Form Input</h1>
 <p>Form handling in Play is well supported, and does not require significant boilerplate code. </p>
 <p>In the Application controller, define a new static attribute:</p>
@@ -769,7 +769,7 @@ public class Global extends GlobalSettings
 
 <p>This is already the in place, so we should now have a simple UI, listing out the users. If we press the "Add User" button, then we should see a form which, if filled out, will take us back to the user page - to now include a new user.</p>
 	  </section>
-	  <section data-tab="10" class="ui tab stacked clarity-book segment">
+	  <section data-tab="10" class="ui tab stacked moodle-book segment">
 	     <h1>Links</h1>
 <p>Our list of users could be extended to include links so we can inspect each users details.</p>
 <p>First introduce a new supporting route:</p>
@@ -828,7 +828,7 @@ public class Global extends GlobalSettings
 
 <p>This should work now as expected.</p>
 	  </section>
-	  <section data-tab="Exercises" class="ui tab stacked clarity-book segment">
+	  <section data-tab="Exercises" class="ui tab stacked moodle-book segment">
 	     <h1>Solution so far</h1>
 <p>This is an archive of the project as we have built it so for:</p>
 <ul>

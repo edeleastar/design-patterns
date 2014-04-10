@@ -41,7 +41,7 @@
 
   <br>
 
-	  <section data-tab="Lab-08" class="ui tab stacked clarity-book segment">
+	  <section data-tab="Lab-08" class="ui tab stacked moodle-book segment">
 	     <h1>Objectives</h1>
 <ul>
 <li>Build a set of views to support signup/login and navigation</li>
@@ -49,7 +49,7 @@
 <li>Explore how flow-synchronisation works in this context.</li>
 </ul>
 	  </section>
-	  <section data-tab="01" class="ui tab stacked clarity-book segment">
+	  <section data-tab="01" class="ui tab stacked moodle-book segment">
 	     <h1>Setup</h1>
 <p>This is v2 of the pacemaker-android project from the last android lab:</p>
 <ul>
@@ -57,7 +57,7 @@
 </ul>
 <p>You can import this for reference purposes, or keep working with your own version.</p>
 	  </section>
-	  <section data-tab="02" class="ui tab stacked clarity-book segment">
+	  <section data-tab="02" class="ui tab stacked moodle-book segment">
 	     <h1>Welcome View</h1>
 <p>Design a new activity to look like this:</p>
 <p><img alt="" src="img/00.png"></p>
@@ -99,7 +99,7 @@
 &lt;/RelativeLayout&gt;
 </code></pre>
 	  </section>
-	  <section data-tab="03" class="ui tab stacked clarity-book segment">
+	  <section data-tab="03" class="ui tab stacked moodle-book segment">
 	     <h1>Signup View</h1>
 <p>Design a new activity to look like this:</p>
 <p><img alt="" src="img/01.png"></p>
@@ -211,7 +211,7 @@
 &lt;/RelativeLayout&gt;
 </code></pre>
 	  </section>
-	  <section data-tab="04" class="ui tab stacked clarity-book segment">
+	  <section data-tab="04" class="ui tab stacked moodle-book segment">
 	     <h1>Login View</h1>
 <p>Design a new activity to look like this:</p>
 <p><img alt="" src="img/02.png"></p>
@@ -296,7 +296,7 @@
 &lt;/RelativeLayout&gt;
 </code></pre>
 	  </section>
-	  <section data-tab="05" class="ui tab stacked clarity-book segment">
+	  <section data-tab="05" class="ui tab stacked moodle-book segment">
 	     <h1>Activity Classes</h1>
 <p>These three classes will load the views we have just created. Place them in the <code>org.pacemaker.conrollers</code> package:</p>
 <h2>Welcome.java</h2>
@@ -401,7 +401,7 @@ public class Login extends Activity
 }
 </code></pre>
 	  </section>
-	  <section data-tab="06" class="ui tab stacked clarity-book segment">
+	  <section data-tab="06" class="ui tab stacked moodle-book segment">
 	     <h1>Manifest</h1>
 <p>These new activities must be registered in the AndroidManifest.xml:</p>
 <pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
@@ -453,7 +453,7 @@ public class Login extends Activity
 <p>Note that we have marked the <code>Welcome</code> activity as the on with the <code>intent-filter</code> MAIN</p>
 <p>Run the application now. You should be able to navigate from view to view.</p>
 	  </section>
-	  <section data-tab="07" class="ui tab stacked clarity-book segment">
+	  <section data-tab="07" class="ui tab stacked moodle-book segment">
 	     <h1>Models</h1>
 <p>We can simplify the Activity Model class to just this version:</p>
 <pre><code class="java">{
@@ -544,7 +544,7 @@ public class User
 
 <p>We should be able to register and log in now. And if we provide invalid credentials, we should be kept out.</p>
 	  </section>
-	  <section data-tab="08" class="ui tab stacked clarity-book segment">
+	  <section data-tab="08" class="ui tab stacked moodle-book segment">
 	     <h1>Facade</h1>
 <p>There are, of course, some serious problems with our app. The list of activities is not associated with any specific user, the user and activities themselves are not persisted.</p>
 <p>These issues could be tackled piecemeal - in each of the respective views for instance, but we might be more advised strengthen some of the abstractions around user/activity management first.</p>
@@ -677,7 +677,7 @@ public class User
 
 <p>This should work now as expected.</p>
 	  </section>
-	  <section data-tab="Exercises" class="ui tab stacked clarity-book segment">
+	  <section data-tab="Exercises" class="ui tab stacked moodle-book segment">
 	     <h1>Archive</h1>
 <p>..of the app so far:</p>
 <ul>

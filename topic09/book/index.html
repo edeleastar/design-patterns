@@ -41,14 +41,14 @@
 
   <br>
 
-	  <section data-tab="Lab-09" class="ui tab stacked clarity-book segment">
+	  <section data-tab="Lab-09" class="ui tab stacked moodle-book segment">
 	     <h1>Objectives</h1>
 <ul>
 <li>Extend the pacemaker-service application to incorporate service layer</li>
 <li>Utilize the layer in the pacemaker-android to retrieve a list of current users</li>
 </ul>
 	  </section>
-	  <section data-tab="01" class="ui tab stacked clarity-book segment">
+	  <section data-tab="01" class="ui tab stacked moodle-book segment">
 	     <h1>Setup</h1>
 <p>This is v3 of the pacemaker-android project from the last android lab:</p>
 <ul>
@@ -153,7 +153,7 @@
   }
 </code></pre>
 	  </section>
-	  <section data-tab="02" class="ui tab stacked clarity-book segment">
+	  <section data-tab="02" class="ui tab stacked moodle-book segment">
 	     <h1>Seperated Activities by User</h1>
 <p>Currently a single list of activities is maintained, regardless of which user is logged on. We can easily refactor this by altering the data structure as follows:</p>
 <h2>PacemakerApp</h2>
@@ -188,7 +188,7 @@
   }
 </code></pre>
 	  </section>
-	  <section data-tab="03" class="ui tab stacked clarity-book segment">
+	  <section data-tab="03" class="ui tab stacked moodle-book segment">
 	     <h1>JSON Parser Library</h1>
 <p>If we wish to build a service layer into pacemaker-service, then we need an agreed data format for exchanging objects. JSON is the accepted format for the style of interface we are proposing.</p>
 <p>We need to extend the pacemaker-service project as follows:</p>
@@ -272,7 +272,7 @@ public class JsonParser
 }
 </code></pre>
 	  </section>
-	  <section data-tab="04" class="ui tab stacked clarity-book segment">
+	  <section data-tab="04" class="ui tab stacked moodle-book segment">
 	     <h1>pacemakerplay API</h1>
 <p>We now define the API proper in pacemaker-service"</p>
 <h2>Routes</h2>
@@ -444,7 +444,7 @@ public class PacemakerAPI extends Controller
 }
 </code></pre>
 	  </section>
-	  <section data-tab="05" class="ui tab stacked clarity-book segment">
+	  <section data-tab="05" class="ui tab stacked moodle-book segment">
 	     <h1>Testing pacemakerplay API</h1>
 <h1>Testing</h1>
 <p>Make sure the app is running, and browse to :</p>
@@ -482,7 +482,7 @@ public class PacemakerAPI extends Controller
 </ul>
 <p>Also, examine the database via the h2-console, and see if you can verify if the 'my_users' table is being updated.</p>
 	  </section>
-	  <section data-tab="06" class="ui tab stacked clarity-book segment">
+	  <section data-tab="06" class="ui tab stacked moodle-book segment">
 	     <h1>pacemaker-android HTTP package</h1>
 <p>We need new package of classes in the android application to converse with the pacemaker-service app:</p>
 <p>Create a new package called 'org.pacemaker.http', and incorporate these classes:</p>
@@ -653,7 +653,7 @@ public class Rest
 }
 </code></pre>
 	  </section>
-	  <section data-tab="07" class="ui tab stacked clarity-book segment">
+	  <section data-tab="07" class="ui tab stacked moodle-book segment">
 	     <h1>PacemakerAPI Client</h1>
 <p>Create a new class in the 'org.pacemaker.main' package to encapsulate API access:</p>
 <pre><code class="java">package org.pacemaker.main;
@@ -711,7 +711,7 @@ class CreateUser extends Request
 }
 </code></pre>
 	  </section>
-	  <section data-tab="08" class="ui tab stacked clarity-book segment">
+	  <section data-tab="08" class="ui tab stacked moodle-book segment">
 	     <h1>Connect</h1>
 <p>In order to use network access from android, you will need to specifically enable it in the android manifest:</p>
 <h2>AndroidManifest.xml</h2>
@@ -763,7 +763,7 @@ class CreateUser extends Request
   }
 </code></pre>
 	  </section>
-	  <section data-tab="Exercises" class="ui tab stacked clarity-book segment">
+	  <section data-tab="Exercises" class="ui tab stacked moodle-book segment">
 	     <h1>Exercises</h1>
 <p>Archive of the app so far:</p>
 <ul>

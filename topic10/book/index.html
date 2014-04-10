@@ -23,7 +23,7 @@
   </head>
   <body>
   <nav class="ui fixed top pointing borderless inverted menu">
-    <header class="header item"> <a href="../index.html">Mediator
+    <header class="header item"> <a href="../index.html">Half Sync/Half Async
 </a></header>
     <div class="right tab-menu menu">
           <a class="item" data-tab="Lab-10"> Lab-10 </a>
@@ -40,13 +40,13 @@
 
   <br>
 
-	  <section data-tab="Lab-10" class="ui tab stacked clarity-book segment">
+	  <section data-tab="Lab-10" class="ui tab stacked moodle-book segment">
 	     <h1>Objectives</h1>
 <ul>
 <li>Complete the android application to include activity sync support</li>
 </ul>
 	  </section>
-	  <section data-tab="01" class="ui tab stacked clarity-book segment">
+	  <section data-tab="01" class="ui tab stacked moodle-book segment">
 	     <h1>Setup</h1>
 <p>This is v4 of the pacemaker-android project from the last android lab:</p>
 <ul>
@@ -54,7 +54,7 @@
 </ul>
 <p>You can import this for reference purposes, or keep working with your own version.</p>
 	  </section>
-	  <section data-tab="02" class="ui tab stacked clarity-book segment">
+	  <section data-tab="02" class="ui tab stacked moodle-book segment">
 	     <h1>Registering new Users</h1>
 <p>We need re-orient how we connect to the service, initiating contact with the service form the welcome activity:</p>
 <h2>Welcome</h2>
@@ -92,7 +92,7 @@
 <pre><code class="java">    app.registerUser(this, user);
 </code></pre>
 	  </section>
-	  <section data-tab="03" class="ui tab stacked clarity-book segment">
+	  <section data-tab="03" class="ui tab stacked moodle-book segment">
 	     <h1>Creating Activities</h1>
 <p>Extend PacemakerAPI to support activities:</p>
 <h2>PacemakerAPI</h2>
@@ -166,7 +166,7 @@ class CreateActivity extends Request
   }
 </code></pre>
 	  </section>
-	  <section data-tab="04" class="ui tab stacked clarity-book segment">
+	  <section data-tab="04" class="ui tab stacked moodle-book segment">
 	     <h1>Controllers</h1>
 <p>The activities list controller can now retrieve/update activities from the service</p>
 <h2>ActivitiesList</h2>
@@ -260,7 +260,7 @@ class CreateActivity extends Request
 <p>Type is a valid Scala reserved word, and is disturbing the scala templates compilation process.</p>
 <p>Test this now and verify that web and android are in sync. Make sure you can follow the flow of information to/from the service.</p>
 	  </section>
-	  <section data-tab="05" class="ui tab stacked clarity-book segment">
+	  <section data-tab="05" class="ui tab stacked moodle-book segment">
 	     <h1>Mediator</h1>
 <p>We could attempt to rationalise the syncing - by introducing a <code>mediator</code> to encapsulate thte sync behaviour.</p>
 <p>First, introduce a new interface to encapsulate more generic sync events:</p>
@@ -407,7 +407,7 @@ class ActivityResponder implements Response&lt;Activity&gt;
 }
 </code></pre>
 	  </section>
-	  <section data-tab="06" class="ui tab stacked clarity-book segment">
+	  <section data-tab="06" class="ui tab stacked moodle-book segment">
 	     <h1>PacemakerApp</h1>
 <p>With the mediator in place, refactor PacemakerApp to use the mediator:</p>
 <pre><code class="java">package org.pacemaker.main;
@@ -494,7 +494,7 @@ public class PacemakerApp extends Application implements  SyncUpdate
 }
 </code></pre>
 	  </section>
-	  <section data-tab="07" class="ui tab stacked clarity-book segment">
+	  <section data-tab="07" class="ui tab stacked moodle-book segment">
 	     <h1>Controllers</h1>
 <p>The controllers can now be relieved for responsibility for accessing the API in a fine grained manner, and use the Mediator we have just introduced:</p>
 <h2>Welcome</h2>
@@ -700,7 +700,7 @@ public class ActivitiesList extends  android.app.Activity implements SyncUpdate
 // Adapter unchanged
 </code></pre>
 	  </section>
-	  <section data-tab="Exercises" class="ui tab stacked clarity-book segment">
+	  <section data-tab="Exercises" class="ui tab stacked moodle-book segment">
 	     <h1>Exercises</h1>
 <p>Archive of the app so far:</p>
 <ul>

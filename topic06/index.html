@@ -23,92 +23,80 @@
      <script src="./style/custom/main.js"> </script> 
   </head>
   <body>
-    <header class="ui middle aligned two column raised grid segment"> 
-    <div class="row">
-      <div class="column">
-       <h1> <a href="../index.html"> Design Patterns
+<header class="ui middle aligned two column raised grid segment">
+  <div class="row">
+    <div class="column">
+      <h1><a href="../index.html"> Design Patterns
  </a></h1>
-       <h3> </h3>
-      </div>
-      <div class="column">
-        <img class="ui medium image floated right" src="./style/custom/logo.png"/>
-      </div> 
+      <h3> </h3>
     </div>
-  </header>
+    <div class="column">
+      <img class="ui medium image floated right" src="./style/custom/logo.png"/>
+    </div>
+  </div>
+</header>
+
+<section class="ui grid">
   
-  <section class="ui grid">
-    <section class="ui four column wide">
-      <nav class="ui vertical fluid pointing menu">
-        <div class="menu">
-              <a class="item" href=" ../topic01/index.html">  Design Pattens Context
+  <section class="ui four column wide">
+    <nav class="ui vertical fluid pointing menu">
+      <div class="menu">
+        <a class="item" href=" ../topic01/index.html"> Design Pattens Context
  </a>
-              <a class="item" href=" ../topic02/index.html">  Template Method & Strategy
+        <a class="item" href=" ../topic02/index.html"> Template Method & Strategy
  </a>
-              <a class="item" href=" ../topic03/index.html">  Command
+        <a class="item" href=" ../topic03/index.html"> Command
  </a>
-              <a class="item" href=" ../topic04/index.html">  Prototype
+        <a class="item" href=" ../topic04/index.html"> Prototype
  </a>
-              <a class="item" href=" ../topic05/index.html">  GoF Patterns
+        <a class="item" href=" ../topic05/index.html"> GoF Patterns
  </a>
-              <a class="active item" href=" ../topic06/index.html">  Adapter, Singleton, Memento
+        <a class="active item" href=" ../topic06/index.html"> Adapter, Singleton, Memento
  </a>
-              <a class="item" href=" ../topic07/index.html">  Enterprise Patterns I
+        <a class="item" href=" ../topic07/index.html"> Enterprise Patterns I
  </a>
-              <a class="item" href=" ../topic08/index.html">  Architecture
+        <a class="item" href=" ../topic08/index.html"> Architecture
  </a>
-              <a class="item" href=" ../topic09/index.html">  Enterprise Patterns II
+        <a class="item" href=" ../topic09/index.html"> Enterprise Patterns II
  </a>
-              <a class="item" href=" ../topic10/index.html">  Mediator
+        <a class="item" href=" ../topic10/index.html"> Half Sync/Half Async
  </a>
-        </div>
-      </nav>            
-    </section>
-        
-    <section class="ui twelve column wide">
-      <section class="ui stacked segment">   
-            
-        <div class="ui celled grid">
-          <div class="ten column wide">                   
-             <h1>Adapter, Singleton, Memento</h1>
+      </div>
+    </nav>
+  </section>
+
+  <section class="ui twelve column wide">
+    <section class="ui stacked segment">
+      <div class="ui celled grid">
+        <div class="ten column wide">
+          <h1>Adapter, Singleton, Memento</h1>
 <ul>
 <li>Review the adapter, memento and singleton patterns</li>
 <li>Investigate how these patterns surface in Android</li>
 <li>Explore the landscape UI Patterns in general</li>
 </ul>
+        </div>
+
+        <div class="six vertical column wide">
+          <h1> Slides </h1>
+          <div class="ui list">
+            <a class="item" href="./pdf/a-adapter.pdf"> a-adapter.pdf <i class="right triangle icon"> </i> </a>
+            <a class="item" href="./pdf/b-singleton.pdf"> b-singleton.pdf <i class="right triangle icon"> </i> </a>
+            <a class="item" href="./pdf/c-memento.pdf"> c-memento.pdf <i class="right triangle icon"> </i> </a>
+            <a class="item" href="./pdf/d-pacemaker-android-patterns.pdf"> d-pacemaker-android-patterns.pdf <i class="right triangle icon"> </i> </a>
+            <a class="item" href="./pdf/e-gui-patterns.pdf"> e-gui-patterns.pdf <i class="right triangle icon"> </i> </a>
+            <a class="item" href="./pdf/f-gui-synchronsisation.pdf"> f-gui-synchronsisation.pdf <i class="right triangle icon"> </i> </a>
           </div>
-          
-          <div class="six vertical column wide">   
-            <h1> Slides </h1>
-             <div class="ui list">
-                <a class="item" href="./pdf/a-adapter.pdf"> a-adapter.pdf
-                  <i class="right triangle icon"> </i>
-                </a>
-                <a class="item" href="./pdf/b-singleton.pdf"> b-singleton.pdf
-                  <i class="right triangle icon"> </i>
-                </a>
-                <a class="item" href="./pdf/c-memento.pdf"> c-memento.pdf
-                  <i class="right triangle icon"> </i>
-                </a>
-                <a class="item" href="./pdf/d-pacemaker-android-patterns.pdf"> d-pacemaker-android-patterns.pdf
-                  <i class="right triangle icon"> </i>
-                </a>
-                <a class="item" href="./pdf/e-gui-patterns.pdf"> e-gui-patterns.pdf
-                  <i class="right triangle icon"> </i>
-                </a>
-                <a class="item" href="./pdf/f-gui-synchronsisation.pdf"> f-gui-synchronsisation.pdf
-                  <i class="right triangle icon"> </i>
-                </a>
-           </div>
-          </div>
-        </div> 
-  
-         <div class="ui celled grid">
-           <div class="two six column wide">
-           <h1> Lab </h1>
-              <a class="ui primary fluid button" href="./book/index.html"> Start </a>
-           </div>
-           <div class="ten column wide">
-             <h1>Objectives</h1>
+        </div>
+      </div>
+
+      <div class="ui celled grid">
+        <div class="two six column wide">
+          <h1> Lab </h1>
+          <a class="ui primary fluid button" href="./book/index.html"> Start </a>
+        </div>
+        <div class="ten column wide">
+          <h1>Objectives</h1>
 <ul>
 <li>Extend the pacemaker-android app to enable activities to be listed</li>
 <li>Explore three patterns in this context:<ul>
@@ -118,10 +106,11 @@
 </ul>
 </li>
 </ul>
-           </div>       
-         </div>  
-      </section>        
+        </div>
+      </div>
     </section>
+  </section>
+  
 </section>
   <div class="ui fixed bottom borderless menu">'
     <div class="ui small item"> 

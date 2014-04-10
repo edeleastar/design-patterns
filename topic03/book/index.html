@@ -40,7 +40,7 @@
 
   <br>
 
-	  <section data-tab="Lab0-03" class="ui tab stacked clarity-book segment">
+	  <section data-tab="Lab0-03" class="ui tab stacked moodle-book segment">
 	     <h1>Objectives</h1>
 <ul>
 <li>Rework the cliche library, using Strategy to delegate command processing..</li>
@@ -48,7 +48,7 @@
 <li>Extend the implementation to include undo/redo capability</li>
 </ul>
 	  </section>
-	  <section data-tab="01" class="ui tab stacked clarity-book segment">
+	  <section data-tab="01" class="ui tab stacked moodle-book segment">
 	     <h1>Setup</h1>
 <h2>Cliche</h2>
 <p>Download the source of the Cliche library we have been using:</p>
@@ -73,7 +73,7 @@
 <li>Move the class PacemakerShell from 'controllers' into this package..</li>
 </ul>
 	  </section>
-	  <section data-tab="02" class="ui tab stacked clarity-book segment">
+	  <section data-tab="02" class="ui tab stacked moodle-book segment">
 	     <h1>Strategy for cliche</h1>
 <p>We would like to make a small adjustment to the cliche library, using the Strategy pattern to allow clients to 'hook into' the command processing engine..</p>
 <p>In the cliche package, introduce the following interface:</p>
@@ -153,7 +153,7 @@ public interface CommandProcessor
 <p>The overall effect of these adjustments is that we can choose to short cirtuit the command processor, and have all commands rerouted to our processor..</p>
 <p>We will make use of this shortly..</p>
 	  </section>
-	  <section data-tab="03" class="ui tab stacked clarity-book segment">
+	  <section data-tab="03" class="ui tab stacked moodle-book segment">
 	     <h1>Commands</h1>
 <p>Introduce a new package called 'command' into the pacemaker-console project.. </p>
 <p>Create a new class called <code>Command</code>:</p>
@@ -247,7 +247,7 @@ public class DeleteUserCommand extends Command
 }
 </code></pre>
 	  </section>
-	  <section data-tab="04" class="ui tab stacked clarity-book segment">
+	  <section data-tab="04" class="ui tab stacked moodle-book segment">
 	     <h1>CommandDispatcher &amp; CommandSpecifications</h1>
 <p>Also in the command package, incorporate this class:</p>
 <pre><code class="java">package command;
@@ -310,7 +310,7 @@ public class CommandSpecifications
 
 <p>Note, however, that we do not have any implementations here, as we will be using the command objects + command dispatcher to trigger the commands themselves..</p>
 	  </section>
-	  <section data-tab="05" class="ui tab stacked clarity-book segment">
+	  <section data-tab="05" class="ui tab stacked moodle-book segment">
 	     <h1>controllers</h1>
 <p>We are going to significantly simplify the project in order to explore command without too much distraction.. So, delete the 'PacemakerService'
 class from the 'controllers' package..</p>
@@ -376,7 +376,7 @@ public class PacemakerShell implements CommandProcessor
 </ul>
 <p>Experiment with them and verify the behave as expected..</p>
 	  </section>
-	  <section data-tab="06" class="ui tab stacked clarity-book segment">
+	  <section data-tab="06" class="ui tab stacked moodle-book segment">
 	     <h1>Undo</h1>
 <p>In order to support undo/redo, we can  equip the dispatcher with and undo/redo stack:</p>
 <pre><code>  private Stack&lt;Command&gt; undoBuffer;
@@ -495,7 +495,7 @@ public class RedoCommand extends Command
 }
 </code></pre>
 	  </section>
-	  <section data-tab="07" class="ui tab stacked clarity-book segment">
+	  <section data-tab="07" class="ui tab stacked moodle-book segment">
 	     <h1>Updated Dispatcher</h1>
 <p>We also need to make these commands known to cliche by putting them in the CommandDescriptor class:</p>
 <pre><code>  @Command(description=&quot;undo last command&quot;)
@@ -565,7 +565,7 @@ pm&gt; lu
 pm&gt; 
 </code></pre>
 	  </section>
-	  <section data-tab="Exerises" class="ui tab stacked clarity-book segment">
+	  <section data-tab="Exerises" class="ui tab stacked moodle-book segment">
 	     <h1>Exercises</h1>
 <h2>Solution so far:</h2>
 <ul>
