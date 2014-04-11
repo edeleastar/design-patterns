@@ -646,35 +646,33 @@ public class User
 </code></pre>
 
 <h2>CreateActivity</h2>
-<p>~~java
-  public void createActivityButtonPressed (View view) 
-  {<br>
+<pre><code class="java">  public void createActivityButtonPressed (View view) 
+  {  
     double distance = distancePicker.getValue();
-    Activity activity = new Activity (activityType.getText().toString(), activityLocation.getText().toString(), distance);</p>
-<pre><code>app.createActivity(activity);
-</code></pre>
-<p>}</p>
-<pre><code>
-##ActivitiesList
+    Activity activity = new Activity (activityType.getText().toString(), activityLocation.getText().toString(), distance);
 
-~~java
-  protected void onCreate(Bundle savedInstanceState)
-  {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activities_list);
-
-    app = (PacemakerApp) getApplication();
-
-    activitiesListView = (ListView) findViewById(R.id.activitiesListView);
-
-    List&lt;Activity&gt; activities  = app.getActivities();
-
-    ActivityAdapter activitiesAdapter = new ActivityAdapter(this,  activities);
-    activitiesListView.setAdapter(activitiesAdapter);
-    activitiesAdapter.notifyDataSetChanged();
+    app.createActivity(activity);
   }
 </code></pre>
 
+<h2>ActivitiesList</h2>
+<p>~~java
+  protected void onCreate(Bundle savedInstanceState)
+  {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activities_list);</p>
+<pre><code>app = (PacemakerApp) getApplication();
+
+activitiesListView = (ListView) findViewById(R.id.activitiesListView);
+
+List&lt;Activity&gt; activities  = app.getActivities();
+
+ActivityAdapter activitiesAdapter = new ActivityAdapter(this,  activities);
+activitiesListView.setAdapter(activitiesAdapter);
+activitiesAdapter.notifyDataSetChanged();
+</code></pre>
+<p>}
+~~~</p>
 <p>This should work now as expected.</p>
 	  </section>
 	  <section data-tab="Exercises" class="ui tab stacked moodle-book segment">
