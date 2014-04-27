@@ -1,0 +1,671 @@
+ <!DOCTYPE html>
+ <html>
+   <head>
+     <meta charset="utf-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+   
+     <title> Lab-11-A </title>
+   
+     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+     <link rel="stylesheet" href="./style/semantic/css/semantic.min.css" type="text/css">  
+     <link rel="stylesheet" href="./style/custom/main.css" type="text/css"> 
+   
+     <script src="./style/custom/jquery-2.1.0.min.js"></script> 
+     <script src="./style/custom/jquery.address-1.6.min.js"></script>
+     <script src="./style/semantic/javascript/semantic.min.js"></script>
+   
+     <link rel="stylesheet" href="./style/highlight/school_book.css">
+     <script src="./style/highlight/highlight.pack.js"></script> 
+     <script>hljs.initHighlightingOnLoad();</script>
+   
+     <script src="./style/custom/common.js"> </script> 
+     <script src="./style/custom/main.js"> </script> 
+  </head>
+  <body>
+  <nav class="ui fixed top pointing borderless inverted menu">
+    <header class="header item"> <a href="../index.html">Node, Ember & Docker</a></header>
+    <div class="right tab-menu menu">
+          <a class="item" data-tab="Lab-11-A"> Lab-11-A </a>
+          <a class="item" data-tab="01"> 01 </a>
+          <a class="item" data-tab="02"> 02 </a>
+          <a class="item" data-tab="03"> 03 </a>
+          <a class="item" data-tab="04"> 04 </a>
+          <a class="item" data-tab="05"> 05 </a>
+          <a class="item" data-tab="06"> 06 </a>
+          <a class="item" data-tab="Exercises"> Exercises </a>
+    </div>
+  </nav>
+
+  <br>
+
+	  <section data-tab="Lab-11-A" class="ui tab stacked moodle-book segment">
+	     <h1>Objectives</h1>
+<ul>
+<li>Build a version of the pacemaker-service API in node.js</li>
+</ul>
+	  </section>
+	  <section data-tab="01" class="ui tab stacked moodle-book segment">
+	     <h1>Setup</h1>
+<p>Install the latest version of node.js:</p>
+<ul>
+<li><a href="http://nodejs.org/download">http://nodejs.org/download</a></li>
+</ul>
+<p>If install successful, node should be available on the command line:</p>
+<pre><code>$ node --version
+v0.10.26
+$
+</code></pre>
+
+<p>Create a folder called <code>pacemaker-node</code> - this will contain the node.js application. </p>
+<p>Change into this folder and enter the following command:</p>
+<pre><code>$ npm init
+</code></pre>
+
+<p>This will ask series of questions, which will result in the creation of a node module in this folder. We can accept the default for almost all questions as shown below:</p>
+<pre><code>This utility will walk you through creating a package.json file.
+It only covers the most common items, and tries to guess sane defaults.
+
+See `npm help json` for definitive documentation on these fields
+and exactly what they do.
+
+Use `npm install &lt;pkg&gt; --save` afterwards to install a package and
+save it as a dependency in the package.json file.
+
+Press ^C at any time to quit.
+name: (pacemaker-node)
+version: (0.0.0)
+description: A sample node.js implementation of the Pacemaker Service
+entry point: (index.js)
+test command:
+git repository: (https://edel020@bitbucket.org/edel020/pacemaker-node.git)
+keywords:
+author:
+license: (ISC)
+About to write to /Users/edeleastar/repos/modules/active/patterns/prj/pacemaker-node/package.json:
+
+{
+  &quot;name&quot;: &quot;pacemaker-node&quot;,
+  &quot;version&quot;: &quot;0.0.0&quot;,
+  &quot;description&quot;: &quot;A sample node.js implementation of the Pacemaker Service&quot;,
+  &quot;main&quot;: &quot;index.js&quot;,
+  &quot;scripts&quot;: {
+    &quot;test&quot;: &quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;
+  },
+  &quot;repository&quot;: {
+    &quot;type&quot;: &quot;git&quot;,
+    &quot;url&quot;: &quot;https://edel020@bitbucket.org/edel020/pacemaker-node.git&quot;
+  },
+  &quot;author&quot;: &quot;&quot;,
+  &quot;license&quot;: &quot;ISC&quot;
+}
+
+
+Is this ok? (yes) yes
+</code></pre>
+
+<p>(You  may not have a git repository in your example).</p>
+	  </section>
+	  <section data-tab="02" class="ui tab stacked moodle-book segment">
+	     <h1>Modules</h1>
+<p>We will need 4 node modules to fulfill the role of the frameworks and libraries in the play application. These are:</p>
+<h2>Sequelize</h2>
+<p>A node compatible ORM library:</p>
+<ul>
+<li><a href="http://sequelizejs.com">http://sequelizejs.com</a></li>
+</ul>
+<h2>Sqlite3</h2>
+<p>A  database provider:</p>
+<ul>
+<li><a href="https://github.com/mapbox/node-sqlite3">https://github.com/mapbox/node-sqlite3</a></li>
+</ul>
+<h2>Express</h2>
+<p>A web application framework for node</p>
+<ul>
+<li><a href="http://expressjs.com">http://expressjs.com</a></li>
+</ul>
+<h2>Body Parser</h2>
+<p>We also need a parser for recovering the Json content from the HTTP requests:</p>
+<ul>
+<li><a href="https://github.com/expressjs/body-parser">https://github.com/expressjs/body-parser</a></li>
+</ul>
+<h1>Install Procedure</h1>
+<p>The most direct way of installing these modules is to combine the download of the packages with an update of the 'package.json' module descriptor as documented by the npm init commmand:</p>
+<blockquote>
+<p>Use <code>npm install &lt;pkg&gt; --save</code> afterwards to install a package and save it as a dependency in the package.json file.</p>
+</blockquote>
+<p>Here is the sequence of commands:</p>
+<pre><code>npm install sequelize --save
+npm install sqlite3 --save
+npm install express --save
+npm install body-parser --save
+</code></pre>
+
+<p>If successful, the package.json should be extended to include these dependencies:</p>
+<pre><code class="javascript">{
+  &quot;name&quot;: &quot;pacemaker-node&quot;,
+  &quot;version&quot;: &quot;0.0.0&quot;,
+  &quot;description&quot;: &quot;A sample node.js implementation of the Pacemaker Service&quot;,
+  &quot;main&quot;: &quot;index.js&quot;,
+  &quot;scripts&quot;: {
+    &quot;test&quot;: &quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;
+  },
+  &quot;repository&quot;: {
+    &quot;type&quot;: &quot;git&quot;,
+    &quot;url&quot;: &quot;https://edel020@bitbucket.org/edel020/pacemaker-node.git&quot;
+  },
+  &quot;author&quot;: &quot;&quot;,
+  &quot;license&quot;: &quot;ISC&quot;,
+  &quot;dependencies&quot;: {
+    &quot;sequelize&quot;: &quot;^2.0.0-dev11&quot;,
+    &quot;sqlite3&quot;: &quot;^2.2.3&quot;,
+    &quot;express&quot;: &quot;^4.1.0&quot;,
+    &quot;body-parser&quot;: &quot;^1.0.2&quot;
+  }
+}
+</code></pre>
+
+<p>In addition, the node_modules folder in the project should be populated with the module sources. The <code>pacemaker-node</code> folder will resemble the following:</p>
+<pre><code>├── package.json
+├── node_modules
+│   ├── body-parser ...
+│   ├── express ...
+│   ├── sequelize ...
+│   └── sqlite3 ...
+</code></pre>
+	  </section>
+	  <section data-tab="03" class="ui tab stacked moodle-book segment">
+	     <h1>Model</h1>
+<p>In the pacemaker-node folder, create another folder called 'models', which will contain an analog of the models we created in the play-service application.</p>
+<p>Incorporate the following two javascript files:</p>
+<h2>users.js</h2>
+<pre><code class="javascript">/**
+ * Created by tomwalsh on 18/04/2014.
+ */
+var S = require('sequelize');
+
+var users = function (){};
+var userDAO = {};
+
+var _userDAO = {
+  id: {type: S.INTEGER, unique: true, primaryKey: true, autoIncrement: true},
+  email: {type: S.STRING, unique: true},
+  firstName: S.STRING,
+  lastName: S.STRING,
+  password: S.STRING
+};
+
+module.exports = function (){
+  return new users ();
+};
+
+function _cleanData (data)
+{
+  if (!data || !data.dataValues)
+    return null;
+
+  return data.dataValues;
+}
+
+users.prototype.init = function init (sequelize) {
+  userDAO = sequelize.define ('users', _userDAO, {tableName: 'users', timestamps: false});
+};
+
+users.prototype.loadData = function loadData (data) {
+  data.forEach (function (datum) {
+    userDAO.findOrCreate(datum, datum).success (function (dataOut, created) {
+      if (created)
+        console.log (dataOut.dataValues);
+    });
+  });
+}
+
+users.prototype.readAll = function readAll (result) {
+  userDAO.findAll ().success (function (dataOut) {
+    var ret = [];
+    for (var i = 0, len = dataOut.length; i &lt; len; i++) {
+      ret.push (dataOut[i].dataValues);
+    }
+
+    result (ret);
+  });
+};
+
+users.prototype.read = function read (userId, result) {
+  userDAO.find ({where: {id: userId}}).success (function (dataOut) {
+    result (_cleanData (dataOut));
+  });
+};
+
+users.prototype.create = function create (dataIn, result) {
+  userDAO.build (user_data).save ().success (function (dataOut) {
+    result (_cleanData (dataOut));
+  });
+};
+
+users.prototype.update = function update (userId, dataIn, result) {
+  userDAO.update (dataIn, {id: userId}).success (function (dataOut) {
+    result (_cleanData (dataOut));
+  });
+};
+
+users.prototype.delete = function del (userId, result) {
+  userDAO.destroy ({id: userId}).success (function (dataOut) {
+    result (_cleanData (dataOut));
+  });
+};
+</code></pre>
+
+<h2>activities.js</h2>
+<pre><code class="javascript">/**
+ * Created by tomwalsh on 18/04/2014.
+ */
+var S = require('sequelize');
+
+var activities = function (){};
+var activitiesDAO = {};
+
+var _activitiesDAO = {
+  id: {type: S.INTEGER, unique: true, primaryKey: true, autoIncrement: true},
+  userId: S.INTEGER,
+  kind: S.STRING,
+  location: S.STRING,
+  distance: S.FLOAT
+};
+
+
+module.exports = function () {
+  return new activities ();
+};
+
+function _cleanData (data)
+{
+  if (!data || !data.dataValues)
+    return null;
+
+  return data.dataValues;
+}
+
+activities.prototype.init = function init (sequelize) {
+  activitiesDAO = sequelize.define('activities', _activitiesDAO, {tableName: 'activities', timestamps: false});
+};
+
+activities.prototype.readAll = function readAll (usrId, result) {
+  activitiesDAO.findAll ({where: {userId: usrId}}).success (function (dataOut) {
+    var ret = [];
+    for (var i = 0, len = dataOut.length; i &lt; len; i++) {
+      ret.push (dataOut[i].dataValues);
+    }
+    result (ret);
+  });
+};
+
+activities.prototype.create = function create (usrId, dataIn, result) {
+  dataIn.userId = usrId;
+  activitiesDAO.build (dataIn).save ().success (function (dataOut) {
+    result (_cleanData (dataOut));
+  });
+};
+
+activities.prototype.read = function read (usrId, activityId, result) {
+  activitiesDAO.find ({where: {id: activityId, userId: usrId}}).success (function (dataOut) {
+    result (_cleanData (dataOut));
+  });
+};
+
+activities.prototype.update = function update (usrId, activityId, dataIn, result) {
+  activitiesDAO.update (dataIn, {id: activityId, userId: usrId}).success (function (dataOut) {
+    result (_cleanData (dataOut));
+  });
+};
+
+activities.prototype.delete = function del (usrId, activityId, result) {
+  activitiesDAO.destroy ({id: activityId, userId: usrId}).success (function (dataOut) {
+    result (_cleanData (dataOut));
+  });
+};
+</code></pre>
+
+<h2>userdata.js</h2>
+<pre><code class="javascript">/**
+ * Created by tomwalsh on 25/04/2014.
+ */
+
+module.exports = [
+  {
+    email: 'homer@simpson.com',
+    firstName: 'homer',
+    lastName: 'simpson',
+    password: 'secret'
+  },
+  {
+    email: 'bart@simpson.com',
+    firstName: 'bart',
+    lastName: 'simpson',
+    password: 'secret'
+  },
+  {
+    email: 'marge@simpson.com',
+    firstName: 'marge',
+    lastName: 'simpson',
+    password: 'secret'
+  },
+  {
+    email: 'lisae@simpson.com',
+    firstName: 'lisa',
+    lastName: 'simpson',
+    password: 'secret'
+  }
+]
+</code></pre>
+	  </section>
+	  <section data-tab="04" class="ui tab stacked moodle-book segment">
+	     <h1>Controllers</h1>
+<p>Create a folder called 'controllers', and introduce these files:</p>
+<h2>users.js</h2>
+<pre><code class="javascript">var router = require('express').Router();
+
+/* GET users listing. */
+router.get('/', function(req, res) {
+  var userDb = req.app.get('userDb');
+
+  userDb.readAll (function (data) {
+    res.send(data);
+  });
+});
+
+router.post('/', function(req, res) {
+  var userDb = req.app.get('userDb');
+
+  userDb.create(req.body, function (data) {
+    res.send(data);
+  });
+});
+
+router.get('/:userId', function(req, res) {
+  var userDb = req.app.get('userDb');
+
+  userDb.read (req.params.userId, function (user_data) {
+    activitiesDb = req.app.get('activitiesDb');
+
+    activitiesDb.readAll (req.params.userId, function (activ_data) {
+      user_data.activities = [];
+      for (var i=0,  tot=activ_data.length; i &lt; tot; i++) {
+        user_data.activities.push(activ_data[i]);
+      }
+
+      res.send(user_data);
+    });
+  });
+});
+
+router.put('/:userId', function(req, res) {
+  var userDb = req.app.get('userDb');
+
+  userDb.update (req.params.userId, req.body, function (data) {
+    res.send(data);
+  });
+});
+
+router.delete('/:userId', function(req, res) {
+  var userDb = req.app.get('userDb');
+
+  userDb.delete (req.params.userId, function (data) {
+    res.send(data);
+  });
+});
+
+module.exports = router;
+
+</code></pre>
+
+<h2>activities.js</h2>
+<pre><code class="javascript">/**
+ * Created by tomwalsh on 18/04/2014.
+ */
+var router = require('express').Router();
+
+router.get('/', function(req, res) {
+  var activitiesDb = req.app.get('activitiesDb');
+  var uId = req.app.get('activityUserId');
+
+  activitiesDb.readAll (uId, function (data) {
+    res.send(data);
+  });
+});
+
+router.post('/', function(req, res) {
+  var activitiesDb = req.app.get('activitiesDb');
+  var uId = req.app.get('activityUserId');
+
+  activitiesDb.create(uId, req.body, function (data) {
+    res.send(data);
+  });
+});
+
+router.get('/:activityId', function(req, res) {
+  var activitiesDb = req.app.get('activitiesDb');
+  var uId = req.app.get('activityUserId');
+
+  activitiesDb.read (uId, req.params.activityId, function (data) {
+    res.send(data);
+  });
+});
+
+router.put('/:activityId', function(req, res) {
+  var activitiesDb = req.app.get('activitiesDb');
+  var uId = req.app.get('activityUserId');
+
+  activitiesDb.update (uId, req.params.activityId, req.body, function (data) {
+    res.send(data);
+  });
+});
+
+router.delete('/:activityId', function(req, res) {
+  var activitiesDb = req.app.get('activitiesDb');
+  var uId = req.app.get('activityUserId');
+
+  activitiesDb.delete (uId, req.params.activityId, function (data) {
+    res.send(data);
+  });
+});
+
+module.exports = router;
+</code></pre>
+	  </section>
+	  <section data-tab="05" class="ui tab stacked moodle-book segment">
+	     <h2>Application</h2>
+<p>In the project folder - pacemaker-node - introduce the main application program:</p>
+<h2>app.js</h2>
+<pre><code>var express = require('express');
+var path = require('path');
+var Sequelize = require('sequelize');
+var bodyParser = require('body-parser');
+
+var userDb = require('./models/users')();
+var activitiesDb = require('./models/activities')();
+
+var sequelize = new Sequelize('masters_testdb', 'root', 'root', {
+  dialect: &quot;sqlite&quot;, // or 'sqlite', 'postgres', 'mariadb'
+  port:    3306 // or 5432 (for postgres)
+});
+
+sequelize.authenticate().complete(function(err) {
+  if (!!err) {
+    console.log ('Unable to connect to the database:', err);
+  } else {
+    console.log ('Database connection has been established successfully.');
+
+    userDb.init (sequelize);
+    activitiesDb.init(sequelize);
+
+    sequelize.sync ({ force: false }).complete (function (err) {
+      if (!!err) {
+        console.log ('An error occurred syncing tables:', err);
+      } else {
+        console.log ('tables synced!');
+
+        // add default data
+        var sample_data = require('./models/userdata.js');
+        userDb.loadData (sample_data);
+      }
+    });
+  }
+});
+
+var app = express ();
+
+app.use(bodyParser());
+
+app.use('/assets', express.static('public'));
+
+var users = require('./controllers/users');
+var activities = require('./controllers/activities');
+
+// hacky shortcut to get the userid for the activity route
+app.use('/api/users/:userId/activities', function (req,res,next) {
+  req.app.set('activityUserId', req.params.userId);
+  next ();
+});
+app.use('/api/users/:userId/activities', activities);
+
+app.use('/api/users', users);
+
+app.use('/', function (req, res){
+  res.sendfile('./public/pacemaker.html');
+});
+
+app.set('userDb', userDb);
+app.set('activitiesDb', activitiesDb);
+
+app.listen(8080);
+console.log (&quot;pacemaker-node app is listening on port 8080&quot;);
+</code></pre>
+
+<p>The application structure will now be laid out as follows:</p>
+<pre><code>├── app.js
+├── controllers
+│   ├── activities.js
+│   └── users.js
+├── models
+│   ├── activities.js
+│   ├── userdata.js
+│   └── users.js
+├── node_modules
+│   ├── body-parser ...
+│   ├── express ...
+│   ├── sequelize ...
+│   └── sqlite3 ...
+├── package.json
+</code></pre>
+	  </section>
+	  <section data-tab="06" class="ui tab stacked moodle-book segment">
+	     <h1>Test the API</h1>
+<p>The app can be launched now:</p>
+<pre><code>$ node app.js
+</code></pre>
+
+<p>Which should display some initialisation activity:</p>
+<pre><code>pacemaker-node app is listening on port 8080
+Executing (default): SELECT 1+1 AS result
+Database connection has been established successfully.
+tables synced!
+Executing (default): SELECT * FROM `users` AS `users` WHERE `users`.`email`='homer@simpson.com' AND `users`.`firstName`='homer' AND `users`.`lastName`='simpson' AND `users`.`password`='secret' LIMIT 1;
+Executing (default): SELECT * FROM `users` AS `users` WHERE `users`.`email`='bart@simpson.com' AND `users`.`firstName`='bart' AND `users`.`lastName`='simpson' AND `users`.`password`='secret' LIMIT 1;
+Executing (default): SELECT * FROM `users` AS `users` WHERE `users`.`email`='marge@simpson.com' AND `users`.`firstName`='marge' AND `users`.`lastName`='simpson' AND `users`.`password`='secret' LIMIT 1;
+Executing (default): SELECT * FROM `users` AS `users` WHERE `users`.`email`='lisae@simpson.com' AND `users`.`firstName`='lisa' AND `users`.`lastName`='simpson' AND `users`.`password`='secret' LIMIT 1;
+Executing (default): INSERT INTO `users` (`id`,`email`,`firstName`,`lastName`,`password`) VALUES (NULL,'homer@simpson.com','homer','simpson','secret');
+{ id: null,
+  email: 'homer@simpson.com',
+  firstName: 'homer',
+  lastName: 'simpson',
+  password: 'secret' }
+Executing (default): INSERT INTO `users` (`id`,`email`,`firstName`,`lastName`,`password`) VALUES (NULL,'bart@simpson.com','bart','simpson','secret');
+{ id: null,
+  email: 'bart@simpson.com',
+  firstName: 'bart',
+  lastName: 'simpson',
+  password: 'secret' }
+Executing (default): INSERT INTO `users` (`id`,`email`,`firstName`,`lastName`,`password`) VALUES (NULL,'marge@simpson.com','marge','simpson','secret');
+Executing (default): INSERT INTO `users` (`id`,`email`,`firstName`,`lastName`,`password`) VALUES (NULL,'lisae@simpson.com','lisa','simpson','secret');
+{ id: null,
+  email: 'marge@simpson.com',
+  firstName: 'marge',
+  lastName: 'simpson',
+  password: 'secret' }
+{ id: null,
+  email: 'lisae@simpson.com',
+  firstName: 'lisa',
+  lastName: 'simpson',
+  password: 'secret' }
+</code></pre>
+
+<p>In a browser, we can request the users list via a simple request:</p>
+<ul>
+<li><a href="http://localhost:8080/api/users">http://localhost:8080/api/users</a></li>
+</ul>
+<p>which should respond with:</p>
+<pre><code class="javascript">[{&quot;id&quot;:1,&quot;email&quot;:&quot;homer@simpson.com&quot;,&quot;firstName&quot;:&quot;homer&quot;,&quot;lastName&quot;:&quot;simpson&quot;,&quot;password&quot;:&quot;secret&quot;},
+{&quot;id&quot;:2,&quot;email&quot;:&quot;bart@simpson.com&quot;, &quot;firstName&quot;:&quot;bart&quot;,&quot;lastName&quot;:&quot;simpson&quot;,&quot;password&quot;:&quot;secret&quot;},
+{&quot;id&quot;:3,&quot;email&quot;:&quot;marge@simpson.com&quot;, &quot;firstName&quot;:&quot;marge&quot;,&quot;lastName&quot;:&quot;simpson&quot;,&quot;password&quot;:&quot;secret&quot;},
+{&quot;id&quot;:4,&quot;email&quot;:&quot;lisae@simpson.com&quot;, &quot;firstName&quot;:&quot;lisa&quot;,&quot;lastName&quot;:&quot;simpson&quot;,&quot;password&quot;:&quot;secret&quot;}]
+</code></pre>
+
+<h2>pacemaker-android</h2>
+<p>The abdroid application as we have left in the last lab:</p>
+<ul>
+<li><a href="archives/pacemaker-android-v5.zip">pacemaker-android.zip</a></li>
+</ul>
+<p>should inter-operate with pacemaker-node with just one modification to the android app:</p>
+<h2>Rest.java</h2>
+<pre><code class="java">public class Rest
+{
+  private static DefaultHttpClient httpClient = null;
+ // private static final String URL = &quot;http://10.0.2.2:9000&quot;;
+  private static final String URL = &quot;http://10.0.2.2:8080&quot;;
+</code></pre>
+
+<p>(the node app is listenting on 8080).</p>
+<p>Log in as 'homer@simpson.com', 'secret'.</p>
+<p>All features of the pacemaker-android should work as expected, including creating and listing activities.</p>
+	  </section>
+	  <section data-tab="Exercises" class="ui tab stacked moodle-book segment">
+	     <h1>Exercises</h1>
+<p>This is an archive of the pacemaker-node application so far:</p>
+<ul>
+<li><a href="archives/pacemaker-node.zip">pacemaker-node</a></li>
+</ul>
+<h1>Exercise 1: Deployment</h1>
+<p>The Cloudbees service support java and node.js applications:</p>
+<ul>
+<li><a href="http://www.cloudbees.com">http://www.cloudbees.com</a></li>
+</ul>
+<p>The easiest route to node.js deployment is most likely via the click start projects:</p>
+<ul>
+<li><a href="https://github.com/CloudBees-community/nodejs-clickstart">https://github.com/CloudBees-community/nodejs-clickstart</a></li>
+</ul>
+	  </section>
+  <div class="ui fixed bottom borderless menu">'
+    <div class="ui small item"> 
+    <p id="footertext">
+    Prepared by  Eamonn de Leastar (edeleastar@wit.ie). Except where otherwise noted, this content is licensed under a  
+     <a  href="http://creativecommons.org/licenses/by-nc/4.0/" title="External link to http://creativecommons.org/licenses/by-nc/4.0/" 
+       target="_blank">Creative Commons Attribution-NonCommercial 4.0 License
+     </a>
+     </p>
+    </div>
+  </div>   
+    
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-49703418-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>  </body>
+ </html>

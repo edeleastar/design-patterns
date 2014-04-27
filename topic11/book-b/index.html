@@ -1,0 +1,565 @@
+ <!DOCTYPE html>
+ <html>
+   <head>
+     <meta charset="utf-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+   
+     <title> Lab-11-B </title>
+   
+     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+     <link rel="stylesheet" href="./style/semantic/css/semantic.min.css" type="text/css">  
+     <link rel="stylesheet" href="./style/custom/main.css" type="text/css"> 
+   
+     <script src="./style/custom/jquery-2.1.0.min.js"></script> 
+     <script src="./style/custom/jquery.address-1.6.min.js"></script>
+     <script src="./style/semantic/javascript/semantic.min.js"></script>
+   
+     <link rel="stylesheet" href="./style/highlight/school_book.css">
+     <script src="./style/highlight/highlight.pack.js"></script> 
+     <script>hljs.initHighlightingOnLoad();</script>
+   
+     <script src="./style/custom/common.js"> </script> 
+     <script src="./style/custom/main.js"> </script> 
+  </head>
+  <body>
+  <nav class="ui fixed top pointing borderless inverted menu">
+    <header class="header item"> <a href="../index.html">Node, Ember & Docker</a></header>
+    <div class="right tab-menu menu">
+          <a class="item" data-tab="Lab-11-B"> Lab-11-B </a>
+          <a class="item" data-tab="01"> 01 </a>
+          <a class="item" data-tab="02"> 02 </a>
+          <a class="item" data-tab="03"> 03 </a>
+          <a class="item" data-tab="04"> 04 </a>
+          <a class="item" data-tab="05"> 05 </a>
+          <a class="item" data-tab="06"> 06 </a>
+          <a class="item" data-tab="Exercises"> Exercises </a>
+    </div>
+  </nav>
+
+  <br>
+
+	  <section data-tab="Lab-11-B" class="ui tab stacked moodle-book segment">
+	     <h1>Objectives</h1>
+<ul>
+<li>Build a User Interface for the pacemaker-node based on ember.js</li>
+</ul>
+	  </section>
+	  <section data-tab="01" class="ui tab stacked moodle-book segment">
+	     <h1>Assets &amp; Libraries</h1>
+<p>Create a new folder in the pacemaker-node project called <code>public</code>. Create 2 subfolders:</p>
+<ul>
+<li>images</li>
+<li>js</li>
+</ul>
+<p>Into images, save these two files:</p>
+<ul>
+<li><a href="img/favicon.png">favicon.png</a></li>
+<li><a href="img/pacemaker.jpg">pacemaker.jpg</a></li>
+</ul>
+<p>In js bring in these files:</p>
+<ul>
+<li><a href="img/jquery-1.10.2.js">jquery-1.10.2.js</a></li>
+<li><a href="img/underscore-min.js">underscore-min.js</a></li>
+<li><a href="img/handlebars-1.1.2.js">handlebars-1.1.2.js</a></li>
+<li><a href="img/ember-1.4.0.js">ember-1.4.0.js</a></li>
+</ul>
+<p>In the semantic folder, first download the Semantic UI archive:</p>
+<ul>
+<li><a href="http://semantic-ui.com">http://semantic-ui.com</a></li>
+</ul>
+<p>Extract it somewhere, and copy the <code>packaged</code> folder into public, renaming it to <code>semantic</code>.</p>
+<p>Your <code>pacemaker-node/public</code> folder should look like this:</p>
+<pre><code>├── images
+│   ├── favicon.png
+│   └── pacemaker.jpg
+├── js
+│   ├── ember-1.4.0.js
+│   ├── handlebars-1.1.2.js
+│   ├── jquery-1.10.2.js
+│   └── underscore-min.js
+└── semantic
+    ├── css
+    │   ├── semantic.css
+    │   └── semantic.min.css
+    ├── fonts
+    │   ├── basic.icons.eot
+    │   ├── basic.icons.svg
+    │   ├── basic.icons.ttf
+    │   ├── basic.icons.woff
+    │   ├── icons.eot
+    │   ├── icons.otf
+    │   ├── icons.svg
+    │   ├── icons.ttf
+    │   └── icons.woff
+    ├── images
+    │   ├── loader-large-inverted.gif
+    │   ├── loader-large.gif
+    │   ├── loader-medium-inverted.gif
+    │   ├── loader-medium.gif
+    │   ├── loader-mini-inverted.gif
+    │   ├── loader-mini.gif
+    │   ├── loader-small-inverted.gif
+    │   └── loader-small.gif
+    └── javascript
+        ├── semantic.js
+        └── semantic.min.js
+</code></pre>
+	  </section>
+	  <section data-tab="02" class="ui tab stacked moodle-book segment">
+	     <h1>Main Program</h1>
+<p>In <code>public</code>, create a new file called <code>pacemaker.html</code></p>
+<h2>pacemaker.html</h2>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;title&gt;Pacemaker Ember&lt;/title&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0, maximum-scale=1.0&quot;&gt;
+    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;/assets/semantic/css/semantic.min.css&quot;&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+
+    &lt;script src=&quot;/assets/js/jquery-1.10.2.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;/assets/js/handlebars-1.1.2.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;/assets/js/ember-1.4.0.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;/assets/js/underscore-min.js&quot;&gt;&lt;/script&gt;
+
+ &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>Now run the node application as before (from `./pacemaker-node'):</p>
+<pre><code>node app.js
+</code></pre>
+
+<p>and browse to:</p>
+<ul>
+<li><a href="http://localhost:8080">http://localhost:8080</a></li>
+</ul>
+<p>If using chrome, the page should load without errors (using the inspector):</p>
+<p><img alt="" src="img/01.png"></p>
+<p>and the source should look as expected:</p>
+<p><img alt="" src="img/02.png"></p>
+	  </section>
+	  <section data-tab="03" class="ui tab stacked moodle-book segment">
+	     <h1>app.js</h1>
+<p>Still in <code>public</code>, create a new folder called <code>app</code>, containing the following script:</p>
+<h2>app.js</h2>
+<pre><code class="javascript">var apiUrl = '/api'  
+
+App = Ember.Application.create(
+{
+  currentUser: localStorage['currentUser']  
+});
+
+App.Router.map(function()
+{
+  this.resource('start');
+  this.resource('signup');
+  this.resource('login'); 
+  this.resource('dashboard');
+});
+</code></pre>
+
+<p>In <code>public/app</code> create a folder called <code>routes</code> and introduce this script:</p>
+<h2>application_routes.js</h2>
+<pre><code class="javascript">App.IndexRoute = Ember.Route.extend(
+{
+  redirect: function() 
+  {
+    this.transitionTo('start');
+  }
+});
+</code></pre>
+
+<p>Also in <code>public/app</code>, create a folder called <code>controllers</code> containing the following:</p>
+<h2>application_controller.js</h2>
+<pre><code class="javascript">
+</code></pre>
+
+<p>We can now bring the application up. Back in <code>pacemaker.html</code>, introduce these two templates just inside the opening <code>&lt;body&gt;</code> tag:</p>
+<pre><code>    &lt;script type=&quot;text/x-handlebars&quot; data-template-name=&quot;application&quot;&gt;
+      &lt;nav class=&quot;ui inverted menu&quot;&gt;
+      &lt;header class=&quot;ui header item&quot;&gt; &lt;a href=&quot;/&quot;&gt; Pacemaker Ember &lt;/a&gt; &lt;/header&gt;
+        &lt;div class=&quot;right menu&quot;&gt;
+          {{#if userSignedIn}}
+            {{#link-to 'dashboard'   activeClass=&quot;active&quot; class='item'}} Dashboard {{/link-to}} 
+            &lt;a class=&quot;ui item&quot; href=&quot;#&quot; {{action 'signout'}}&gt; Logout &lt;/a&gt;
+          {{else}}
+            {{#link-to 'signup'  activeClass=&quot;active&quot; class='item'}}Signup{{/link-to}} 
+            {{#link-to 'login'   activeClass=&quot;active&quot; class='item'}}Login{{/link-to}}
+          {{/if}}
+        &lt;/div&gt;
+      &lt;/nav&gt;
+      {{outlet}}
+    &lt;/script&gt;
+
+    &lt;script type=&quot;text/x-handlebars&quot; data-template-name=&quot;start&quot;&gt;
+      &lt;section class=&quot;ui segment&quot;&gt;
+        &lt;div class=&quot;ui grid&quot;&gt;
+          &lt;aside class=&quot;six wide column&quot;&gt;
+            &lt;img src=&quot;/assets/images/pacemaker.jpg&quot; class=&quot;ui medium image&quot;&gt;
+          &lt;/aside&gt;
+          &lt;article class=&quot;ten wide column&quot;&gt;
+            &lt;h1 class=&quot;ui  header&quot;&gt; Sign up for Pacemaker  &lt;/h1&gt;
+            &lt;p&gt; No Bitcoins accepted! &lt;/p&gt;
+          &lt;/article&gt;
+        &lt;/div&gt;
+      &lt;/section&gt;
+    &lt;/script&gt;
+</code></pre>
+
+<p>Finally, just before the closing <code>&lt;/body&gt;</code> tag, include the two scripts defined above:</p>
+<pre><code class="html">    &lt;script src=&quot;/assets/app/app.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;/assets/app/routes/application_routes.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;/assets/app/controllers/application_controller.js&quot;&gt;&lt;/script&gt;    
+</code></pre>
+
+<p><code>pacemaker-node/public</code> should be structured as follows:</p>
+<pre><code>── app
+│   ├── app.js
+│   ├── controllers
+│   │   └── application_controller.js
+│   └── routes
+│       └── application_routes.js
+├── images
+│   ├── favicon.png
+│   └── pacemaker.jpg
+├── js
+│   ├── ember-1.4.0.js
+│   ├── handlebars-1.1.2.js
+│   ├── jquery-1.10.2.js
+│   └── underscore-min.js
+├── pacemaker.html
+└── semantic
+      ...
+</code></pre>
+
+<p>Browsing to :</p>
+<ul>
+<li><a href="http://localhost:8080">http://localhost:8080</a></li>
+</ul>
+<p>should bring up the application:</p>
+<p><img alt="" src="img/03.png"></p>
+<p>Note that we can set breakpoints, and even debug, the application.</p>
+	  </section>
+	  <section data-tab="04" class="ui tab stacked moodle-book segment">
+	     <h1>Login</h1>
+<p>Introduce a <code>login</code> template into <code>pacemaker.html</code>:</p>
+<pre><code>    &lt;script type=&quot;text/x-handlebars&quot; data-template-name=&quot;login&quot;&gt;
+      &lt;section class=&quot;ui  segment&quot;&gt;
+        &lt;div class=&quot;ui grid&quot;&gt;
+          &lt;aside class=&quot;ui six wide column&quot;&gt;
+           &lt;img src=&quot;/assets/images/pacemaker.jpg&quot;)&quot; class=&quot;ui medium image&quot;&gt;
+          &lt;/aside&gt;
+          &lt;div class=&quot;ui ten wide column fluid form&quot;&gt;
+            &lt;div class=&quot;ui stacked segment&quot;&gt;
+              &lt;h3 class=&quot;ui header&quot;&gt;Log-in&lt;/h3&gt;
+              &lt;form {{action 'login' on=&quot;submit&quot;}}&gt;
+                &lt;div class=&quot;field&quot;&gt;
+                  &lt;label&gt;Email&lt;/label&gt;     
+                  {{input id=&quot;email&quot; value=email placeholder=&quot;Enter your email address&quot;}}
+                &lt;/div&gt;
+                &lt;div class=&quot;field&quot;&gt;
+                  &lt;label&gt;Password&lt;/label&gt;     
+                  {{input id=&quot;password&quot; value=password type=&quot;password&quot; placeholder=&quot;Enter your password&quot;}}
+                &lt;/div&gt;
+                &lt;button class=&quot;ui blue button&quot; type=&quot;submit&quot;&gt; Sign in &lt;/button&gt;
+              &lt;/form&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/section&gt;
+    &lt;/script&gt;
+</code></pre>
+
+<p>For this template, we need a controller, located in <code>public/app/controllers</code>:</p>
+<h2>login_controller.js</h2>
+<pre><code class="javascript">App.LoginController = Ember.Controller.extend
+({  
+  actions: 
+  {
+    login: function() 
+    {
+      var email      = this.get('email');
+      var password   = this.get('password');
+      var controller = this;
+      $.getJSON(apiUrl + &quot;/users&quot;).then(function(users)
+      {
+        var entry = _.find(users, function(user)
+        {
+          return user.email == email 
+        });
+        if (entry == null || entry.password != password)
+        {
+          controller.transitionToRoute(&quot;start&quot;)
+        }
+        else
+        {
+          localStorage['currentUser'] = entry.id;
+          App.set('currentUser', entry.id);
+          controller.transitionToRoute(&quot;dashboard&quot;)
+        }
+      });
+    }
+  }
+});
+</code></pre>
+
+<p>This script makes use of a helper functions we can define in another script in <code>public/app</code>:</p>
+<h2>utils.js</h2>
+<pre><code class="javascript">
+function apiDelete(api)
+{
+  $.ajax(
+  {
+    url: api,
+    contentType: 'application/json',
+    type: 'DELETE',
+    data: &quot;{}&quot;,
+    processData: false,
+    dataType: 'json'
+  })
+}
+
+function apiPost(api, object, doneCallback )
+{
+  $.ajax(
+  {
+    url: api,
+    type: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify(object),
+    processData: false,
+    dataType: 'json'
+  }).done (function (data)
+  {
+    doneCallback(data);
+  });
+}
+</code></pre>
+
+<p>Engaging this view now merely including the extra scrips at the end of <code>pacemaker.html</code>:</p>
+<pre><code>    &lt;script src=&quot;/assets/app/utils.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;/assets/app/controllers/login_controller.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+
+<p>This should enable to 'login' menu option, displaying the login view:</p>
+<p><img alt="" src="img/04.png"></p>
+<p>It will be possible to set a breakpoint in the ajax request:</p>
+<p><img alt="" src="img/05.png"></p>
+<p>and inspect the returned user objects:</p>
+<p><img alt="" src="img/06.png"></p>
+	  </section>
+	  <section data-tab="05" class="ui tab stacked moodle-book segment">
+	     <h1>Dashboard</h1>
+<p>The dashboard, consisting of a list of activities + a simple form to upload them, can be composed using 1 template + 2 partials:</p>
+<pre><code>    &lt;script type=&quot;text/x-handlebars&quot; data-template-name=&quot;dashboard&quot;&gt;
+      &lt;section class=&quot;ui segment&quot;&gt;
+        &lt;div class=&quot;ui two column grid&quot;&gt;
+          &lt;div class=&quot;ui row&quot;&gt;
+            &lt;div class=&quot;ui column&quot;&gt;
+              {{partial 'activities-list'}}
+            &lt;/div&gt;
+            &lt;div class=&quot;ui column&quot;&gt;
+              {{partial 'upload-activity'}}
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/section&gt;
+    &lt;/script&gt;
+
+    &lt;script type=&quot;text/x-handlebars&quot; data-template-name=&quot;upload-activity&quot;&gt;
+     &lt;section class=&quot;ui stacked form segment&quot;&gt;
+       &lt;h3 class=&quot;ui header&quot;&gt;Enter Activity Details: &lt;/h3&gt;
+       &lt;form {{action 'upload' this on=&quot;submit&quot;}}&gt;
+         &lt;div class=&quot;field&quot;&gt;
+           &lt;label&gt;Type&lt;/label&gt;
+           {{input valueBinding='kind'  type=&quot;text&quot;}}
+         &lt;/div&gt;
+         &lt;div class=&quot;field&quot;&gt;
+           &lt;label&gt;Location&lt;/label&gt;
+           {{input valueBinding='location'  type=&quot;text&quot;}}
+         &lt;/div&gt;
+         &lt;div class=&quot;field&quot;&gt;
+           &lt;label&gt;Distance&lt;/label&gt;
+           {{input valueBinding='distance'  type=&quot;number&quot;}}
+         &lt;/div&gt;           
+         &lt;button class=&quot;ui blue button&quot;&gt; upload &lt;/button&gt;
+         &lt;button class=&quot;ui red button&quot;  {{action 'clearall' this}}&gt;  clear all &lt;/button&gt;
+       &lt;/form&gt;
+     &lt;/section&gt;
+    &lt;/script&gt;
+
+    &lt;script type=&quot;text/x-handlebars&quot; data-template-name=&quot;activities-list&quot;&gt;
+      &lt;section class=&quot;ui segment&quot;&gt;
+        &lt;h3 class=&quot;ui header&quot;&gt; Activities &lt;/h3&gt;
+        &lt;table class=&quot;ui celled table segment&quot;&gt;
+          &lt;thead&gt;
+            &lt;tr&gt;
+              &lt;th&gt;Type&lt;/th&gt;
+              &lt;th&gt;Location&lt;/th&gt;
+              &lt;th&gt;Distance&lt;/th&gt;
+              &lt;th&gt; &lt;/th&gt;
+            &lt;/tr&gt;
+          &lt;/thead&gt;
+          &lt;tbody&gt;
+            {{#each model.activities}}
+              &lt;tr&gt;
+                &lt;td&gt; {{kind}} &lt;/td&gt; &lt;td&gt; {{location}} &lt;/td&gt; &lt;td&gt; {{distance}} &lt;/td&gt; 
+               &lt;td&gt;   &lt;button class=&quot;ui icon button&quot; {{action 'remove' this}}&gt; 
+                   &lt;i class=&quot;remove icon&quot;&gt;&lt;/i&gt; &lt;/button&gt;&lt;/td&gt;
+              &lt;/tr&gt;
+            {{/each}}
+          &lt;/tbody&gt;
+        &lt;/table&gt;
+      &lt;/section&gt;
+    &lt;/script&gt;
+</code></pre>
+
+<p>Place these in <code>pacemaker.html</code></p>
+<p>This will require a matching route in <code>/pacemaker-node/public/app/routes</code>:</p>
+<h2>dashboard_routes.js</h2>
+<pre><code class="javascript">App.DashboardRoute = Ember.Route.extend
+({
+  model: function(params) 
+  { 
+    userid = localStorage['currentUser'] 
+    return $.getJSON(apiUrl + &quot;/users/&quot; + userid).then(function(userDetails)
+    {
+     return userDetails
+    });
+  }
+});
+</code></pre>
+
+<p>... and a controller in <code>/pacemaker-node/public/app/controllers</code>:</p>
+<h2>dashboard_controller.js</h2>
+<pre><code class="javascript">App.DashboardController = Ember.ObjectController.extend
+({    
+  actions: 
+  {
+    upload: function(params) 
+    {
+      var controller = this;
+      var model = this.get(&quot;model&quot;);
+      var activity = {};
+      activity.kind     = model.kind;
+      activity.location = model.location;
+      activity.distance = model.distance;
+
+      userid = localStorage['currentUser'] 
+
+      apiPost(apiUrl + &quot;/users/&quot; + userid + &quot;/activities&quot;, activity, function done(data)
+      {
+        console.log ( &quot;activity loaded: &quot; + JSON.stringify(data) );
+        model.activities.pushObject(data);
+      });
+    },
+
+    clearall: function(params)  
+    {  
+      apiDelete(apiUrl + &quot;/users/&quot; + params.id + &quot;/activities&quot;)    
+      var model = this.get(&quot;model&quot;);
+      model.activities.clear();
+    },
+
+    remove: function(params)  
+    { 
+      var model = this.get(&quot;model&quot;);
+      apiDelete(apiUrl + &quot;/users/&quot; + model.id + &quot;/activities/&quot; + params.id)      
+      var entry = _.find(model.activities, function(obj) { return obj.id == params.id })
+      model.activities.removeObject(entry);
+    }   
+
+  }
+});
+</code></pre>
+
+<p>These will need to be included in <code>pacemaker.html</code>:</p>
+<pre><code class="html">    &lt;script src=&quot;/assets/app/routes/dashboard_routes.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;/assets/app/controllers/dashboard_controller.js&quot;&gt;&lt;/script&gt; 
+</code></pre>
+
+<p>Logging in should now display the dashboard:</p>
+<p><img alt="" src="img/07.png"></p>
+<p>You should be able to upload and delete activities.</p>
+	  </section>
+	  <section data-tab="06" class="ui tab stacked moodle-book segment">
+	     <h1>Structure</h1>
+<p>This is the structure of the <code>pacemaker-node</code> at this stage:</p>
+<pre><code>├── app.js
+├── controllers
+│   ├── activities.js
+│   └── users.js
+├── models
+│   ├── activities.js
+│   ├── userdata.js
+│   └── users.js
+├── node_modules
+│   ├── body-parser ...
+│   ├── express ...
+│   ├── sequelize ...
+│   └── sqlite3 ...
+├── package.json
+└── public
+    ├── app
+    │   ├── app.js
+    │   ├── controllers
+    │   │   ├── application_controller.js
+    │   │   ├── dashboard_controller.js
+    │   │   └── login_controller.js
+    │   ├── routes
+    │   │   ├── application_routes.js
+    │   │   └── dashboard_routes.js
+    │   └── utils.js
+    ├── images
+    │   ├── favicon.png
+    │   └── pacemaker.jpg
+    ├── js
+    │   ├── ember-1.4.0.js
+    │   ├── handlebars-1.1.2.js
+    │   ├── jquery-1.10.2.js
+    │   └── underscore-min.js
+    ├── pacemaker.html
+    └── semantic
+        ├── css ...
+        ├── fonts ...
+        ├── images ...
+        └── javascript ...
+</code></pre>
+	  </section>
+	  <section data-tab="Exercises" class="ui tab stacked moodle-book segment">
+	     <h1>Exercises</h1>
+<p>A an archive of the application including the ember UI:</p>
+<ul>
+<li><a href="archives/pacemaker-node-final.zip">pacemaker-node</a></li>
+</ul>
+<h1>Exercise 1:</h1>
+<h1>Exercise 2:</h1>
+	  </section>
+  <div class="ui fixed bottom borderless menu">'
+    <div class="ui small item"> 
+    <p id="footertext">
+    Prepared by  Eamonn de Leastar (edeleastar@wit.ie). Except where otherwise noted, this content is licensed under a  
+     <a  href="http://creativecommons.org/licenses/by-nc/4.0/" title="External link to http://creativecommons.org/licenses/by-nc/4.0/" 
+       target="_blank">Creative Commons Attribution-NonCommercial 4.0 License
+     </a>
+     </p>
+    </div>
+  </div>   
+    
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-49703418-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>  </body>
+ </html>

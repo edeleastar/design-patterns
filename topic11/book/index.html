@@ -59,136 +59,115 @@ v0.10.26
 $
 </code></pre>
 
-<p>Create a folder called <code>pacemaker-node</code> - this will contain the node.js application. In this folder, create the following </p>
-<h2>package.json:</h2>
-<pre><code class="java">{
+<p>Create a folder called <code>pacemaker-node</code> - this will contain the node.js application. </p>
+<p>Change into this folder and enter the following command:</p>
+<pre><code>$ npm init
+</code></pre>
+
+<p>This will ask series of questions, which will result in the creation of a node module in this folder. We can accept the default for almost all questions as shown below:</p>
+<pre><code>This utility will walk you through creating a package.json file.
+It only covers the most common items, and tries to guess sane defaults.
+
+See `npm help json` for definitive documentation on these fields
+and exactly what they do.
+
+Use `npm install &lt;pkg&gt; --save` afterwards to install a package and
+save it as a dependency in the package.json file.
+
+Press ^C at any time to quit.
+name: (pacemaker-node)
+version: (0.0.0)
+description: A sample node.js implementation of the Pacemaker Service
+entry point: (index.js)
+test command:
+git repository: (https://edel020@bitbucket.org/edel020/pacemaker-node.git)
+keywords:
+author:
+license: (ISC)
+About to write to /Users/edeleastar/repos/modules/active/patterns/prj/pacemaker-node/package.json:
+
+{
   &quot;name&quot;: &quot;pacemaker-node&quot;,
-  &quot;version&quot;: &quot;0.0.1&quot;,
-  &quot;private&quot;: true,
+  &quot;version&quot;: &quot;0.0.0&quot;,
+  &quot;description&quot;: &quot;A sample node.js implementation of the Pacemaker Service&quot;,
+  &quot;main&quot;: &quot;index.js&quot;,
   &quot;scripts&quot;: {
-    &quot;start&quot;: &quot;node app&quot;
+    &quot;test&quot;: &quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;
   },
+  &quot;repository&quot;: {
+    &quot;type&quot;: &quot;git&quot;,
+    &quot;url&quot;: &quot;https://edel020@bitbucket.org/edel020/pacemaker-node.git&quot;
+  },
+  &quot;author&quot;: &quot;&quot;,
+  &quot;license&quot;: &quot;ISC&quot;
+}
+
+
+Is this ok? (yes) yes
+</code></pre>
+
+<p>(You  may not have a git repository in your example).</p>
+	  </section>
+	  <section data-tab="02" class="ui tab stacked moodle-book segment">
+	     <h1>Modules</h1>
+<p>We will need 4 node modules to fulfill the role of the frameworks and libraries in the play application. These are:</p>
+<h2>Sequelize</h2>
+<p>A node compatible ORM library:</p>
+<ul>
+<li><a href="http://sequelizejs.com">http://sequelizejs.com</a></li>
+</ul>
+<h2>Sqlite3</h2>
+<p>A  database provider:</p>
+<ul>
+<li><a href="https://github.com/mapbox/node-sqlite3">https://github.com/mapbox/node-sqlite3</a></li>
+</ul>
+<h2>Express</h2>
+<p>A web application framework for node</p>
+<ul>
+<li><a href="http://expressjs.com">http://expressjs.com</a></li>
+</ul>
+<h2>Body Parser</h2>
+<p>We also need a parser for recovering the Json content from the HTTP requests:</p>
+<ul>
+<li><a href="https://github.com/expressjs/body-parser">https://github.com/expressjs/body-parser</a></li>
+</ul>
+<h1>Install Procedure</h1>
+<p>The most direct way of installing these modules is to combine the download of the packages with an update of the 'package.json' module descriptor as documented by the npm init commmand:</p>
+<blockquote>
+<p>Use <code>npm install &lt;pkg&gt; --save</code> afterwards to install a package and save it as a dependency in the package.json file.</p>
+</blockquote>
+<p>Here is the sequence of commands:</p>
+<pre><code>npm install sequelize --save
+npm install sqlite3 --save
+npm install express --save
+npm install body-parser --save
+</code></pre>
+
+<p>If successful, the package.json should be extended to include these dependencies:</p>
+<pre><code class="javascript">{
+  &quot;name&quot;: &quot;pacemaker-node&quot;,
+  &quot;version&quot;: &quot;0.0.0&quot;,
+  &quot;description&quot;: &quot;A sample node.js implementation of the Pacemaker Service&quot;,
+  &quot;main&quot;: &quot;index.js&quot;,
+  &quot;scripts&quot;: {
+    &quot;test&quot;: &quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;
+  },
+  &quot;repository&quot;: {
+    &quot;type&quot;: &quot;git&quot;,
+    &quot;url&quot;: &quot;https://edel020@bitbucket.org/edel020/pacemaker-node.git&quot;
+  },
+  &quot;author&quot;: &quot;&quot;,
+  &quot;license&quot;: &quot;ISC&quot;,
   &quot;dependencies&quot;: {
-    &quot;express&quot;: &quot;~4.0.0&quot;,
-    &quot;sequelize&quot;: &quot;^1.7.2&quot;,
+    &quot;sequelize&quot;: &quot;^2.0.0-dev11&quot;,
+    &quot;sqlite3&quot;: &quot;^2.2.3&quot;,
+    &quot;express&quot;: &quot;^4.1.0&quot;,
     &quot;body-parser&quot;: &quot;^1.0.2&quot;
   }
 }
 </code></pre>
-	  </section>
-	  <section data-tab="02" class="ui tab stacked moodle-book segment">
-	     <h1>Model Infrastructure</h1>
-<p>Create a folder called <code>pacemaker-node</code> - this will contain the node.js application.</p>
-<p>pacemaker-node will use this node.js compatible ORM library:</p>
-<ul>
-<li><a href="http://sequelizejs.com">http://sequelizejs.com</a></li>
-</ul>
-<p>This is installed using the following command:</p>
-<pre><code>npm install sequelize
-</code></pre>
 
-<p>It should respond with something like this:</p>
-<pre><code>npm http GET https://registry.npmjs.org/sequelize
-npm http 200 https://registry.npmjs.org/sequelize
-npm http GET https://registry.npmjs.org/sequelize/-/sequelize-2.0.0-dev11.tgz
-npm http 200 https://registry.npmjs.org/sequelize/-/sequelize-2.0.0-dev11.tgz
-npm http GET https://registry.npmjs.org/lingo
-npm http GET https://registry.npmjs.org/validator
-npm http GET https://registry.npmjs.org/moment
-npm http GET https://registry.npmjs.org/dottie/0.2.1
-npm http GET https://registry.npmjs.org/toposort-class
-npm http GET https://registry.npmjs.org/generic-pool/2.0.4
-npm http GET https://registry.npmjs.org/commander
-npm http GET https://registry.npmjs.org/sql
-npm http GET https://registry.npmjs.org/circular-json
-npm http GET https://registry.npmjs.org/bluebird
-npm http GET https://registry.npmjs.org/lodash
-npm http GET https://registry.npmjs.org/underscore.string
-npm http GET https://registry.npmjs.org/node-uuid
-npm http 200 https://registry.npmjs.org/lingo
-npm WARN deprecated lingo@0.0.5: This project is abandoned
-npm http GET https://registry.npmjs.org/lingo/-/lingo-0.0.5.tgz
-npm http 200 https://registry.npmjs.org/dottie/0.2.1
-npm http GET https://registry.npmjs.org/dottie/-/dottie-0.2.1.tgz
-npm http 200 https://registry.npmjs.org/toposort-class
-npm http GET https://registry.npmjs.org/toposort-class/-/toposort-class-0.3.0.tgz
-npm http 200 https://registry.npmjs.org/generic-pool/2.0.4
-npm http GET https://registry.npmjs.org/generic-pool/-/generic-pool-2.0.4.tgz
-npm http 200 https://registry.npmjs.org/moment
-npm http GET https://registry.npmjs.org/moment/-/moment-2.5.1.tgz
-npm http 200 https://registry.npmjs.org/circular-json
-npm http 200 https://registry.npmjs.org/validator
-npm http GET https://registry.npmjs.org/validator/-/validator-3.2.1.tgz
-npm http GET https://registry.npmjs.org/circular-json/-/circular-json-0.1.6.tgz
-npm http 200 https://registry.npmjs.org/commander
-npm http 200 https://registry.npmjs.org/lingo/-/lingo-0.0.5.tgz
-npm http GET https://registry.npmjs.org/commander/-/commander-2.1.0.tgz
-npm http 200 https://registry.npmjs.org/sql
-npm http GET https://registry.npmjs.org/sql/-/sql-0.35.0.tgz
-npm http 200 https://registry.npmjs.org/dottie/-/dottie-0.2.1.tgz
-npm http 200 https://registry.npmjs.org/toposort-class/-/toposort-class-0.3.0.tgz
-npm http 200 https://registry.npmjs.org/moment/-/moment-2.5.1.tgz
-npm http 200 https://registry.npmjs.org/underscore.string
-npm http 200 https://registry.npmjs.org/commander/-/commander-2.1.0.tgz
-npm http 200 https://registry.npmjs.org/node-uuid
-npm http 200 https://registry.npmjs.org/circular-json/-/circular-json-0.1.6.tgz
-npm http 200 https://registry.npmjs.org/bluebird
-npm http 200 https://registry.npmjs.org/sql/-/sql-0.35.0.tgz
-npm http GET https://registry.npmjs.org/bluebird/-/bluebird-1.0.8.tgz
-npm http 200 https://registry.npmjs.org/validator/-/validator-3.2.1.tgz
-npm http 200 https://registry.npmjs.org/generic-pool/-/generic-pool-2.0.4.tgz
-npm http 200 https://registry.npmjs.org/lodash
-npm http GET https://registry.npmjs.org/lodash/-/lodash-2.4.1.tgz
-npm http 200 https://registry.npmjs.org/bluebird/-/bluebird-1.0.8.tgz
-npm http 200 https://registry.npmjs.org/lodash/-/lodash-2.4.1.tgz
-npm http GET https://registry.npmjs.org/wru
-npm http GET https://registry.npmjs.org/sliced
-npm http GET https://registry.npmjs.org/lodash/-/lodash-1.3.1.tgz
-npm http 200 https://registry.npmjs.org/lodash/-/lodash-1.3.1.tgz
-npm http 200 https://registry.npmjs.org/wru
-npm http GET https://registry.npmjs.org/wru/-/wru-0.2.7.tgz
-npm http 200 https://registry.npmjs.org/sliced
-npm http GET https://registry.npmjs.org/sliced/-/sliced-0.0.5.tgz
-npm http 200 https://registry.npmjs.org/wru/-/wru-0.2.7.tgz
-npm http 200 https://registry.npmjs.org/sliced/-/sliced-0.0.5.tgz
-sequelize@2.0.0-dev11 node_modules/sequelize
-├── commander@2.1.0
-├── dottie@0.2.1
-├── toposort-class@0.3.0
-├── generic-pool@2.0.4
-├── node-uuid@1.4.1
-├── validator@3.2.1
-├── lingo@0.0.5
-├── underscore.string@2.3.3
-├── bluebird@1.0.8
-├── lodash@2.4.1
-├── moment@2.5.1
-├── circular-json@0.1.6 (wru@0.2.7)
-└── sql@0.35.0 (sliced@0.0.5, lodash@1.3.1)
-</code></pre>
-
-<p>We will use sqlite as the database provider:</p>
-<ul>
-<li><a href="https://github.com/mapbox/node-sqlite3">https://github.com/mapbox/node-sqlite3</a></li>
-</ul>
-<p>Install using:</p>
-<pre><code>npm install sqlite3
-</code></pre>
-
-<p>which should respond with:</p>
-<pre><code>npm http GET https://registry.npmjs.org/sqlite3
-npm http 200 https://registry.npmjs.org/sqlite3
-npm http GET https://registry.npmjs.org/sqlite3/-/sqlite3-2.2.3.tgz
-npm http 200 https://registry.npmjs.org/sqlite3/-/sqlite3-2.2.3.tgz
-
-&gt; sqlite3@2.2.3 install /Users/edeleastar/repos/modules/active/patterns/prj/pacemaker-node/node_modules/sqlite3
-&gt; node-pre-gyp install --fallback-to-build
-
-node-pre-gyp http GET https://node-sqlite3.s3.amazonaws.com/Release/node_sqlite3-v2.2.3-node-v11-darwin-x64.tar.gz
-node-pre-gyp http 200 https://node-sqlite3.s3.amazonaws.com/Release/node_sqlite3-v2.2.3-node-v11-darwin-x64.tar.gz
-[sqlite3] Success: &quot;/Users/edeleastar/repos/modules/active/patterns/prj/pacemaker-node/node_modules/sqlite3/lib/binding/node-v11-darwin-x64/node_sqlite3.node&quot; is installed
-sqlite3@2.2.3 node_modules/sqlite3
-</code></pre>
+<p>In addition, the node_modules folder in the project should be populated with the module sources</p>
 	  </section>
 	  <section data-tab="03" class="ui tab stacked moodle-book segment">
 	     <h1>Model</h1>
@@ -200,20 +179,19 @@ sqlite3@2.2.3 node_modules/sqlite3
  */
 var S = require('sequelize');
 
-var activities = function (){};
-var activitiesDAO = {};
+var users = function (){};
+var userDAO = {};
 
-var _activitiesDAO = {
+var _userDAO = {
   id: {type: S.INTEGER, unique: true, primaryKey: true, autoIncrement: true},
-  userId: S.INTEGER,
-  kind: S.STRING,
-  location: S.STRING,
-  distance: S.FLOAT
+  email: {type: S.STRING, unique: true},
+  firstName: S.STRING,
+  lastName: S.STRING,
+  password: S.STRING
 };
 
-
-module.exports = function () {
-  return new activities ();
+module.exports = function (){
+  return new users ();
 };
 
 function _cleanData (data)
@@ -224,41 +202,50 @@ function _cleanData (data)
   return data.dataValues;
 }
 
-activities.prototype.init = function init (sequelize) {
-  activitiesDAO = sequelize.define('activities', _activitiesDAO, {tableName: 'activities', timestamps: false});
+users.prototype.init = function init (sequelize) {
+  userDAO = sequelize.define ('users', _userDAO, {tableName: 'users', timestamps: false});
 };
 
-activities.prototype.readAll = function readAll (usrId, result) {
-  activitiesDAO.findAll ({where: {userId: usrId}}).success (function (dataOut) {
+users.prototype.loadData = function loadData (data) {
+  data.forEach (function (datum) {
+    userDAO.findOrCreate(datum, datum).success (function (dataOut, created) {
+      if (created)
+        console.log (dataOut.dataValues);
+    });
+  });
+}
+
+users.prototype.readAll = function readAll (result) {
+  userDAO.findAll ().success (function (dataOut) {
     var ret = [];
     for (var i = 0, len = dataOut.length; i &lt; len; i++) {
       ret.push (dataOut[i].dataValues);
     }
+
     result (ret);
   });
 };
 
-activities.prototype.create = function create (usrId, dataIn, result) {
-  dataIn.userId = usrId;
-  activitiesDAO.build (dataIn).save ().success (function (dataOut) {
+users.prototype.read = function read (userId, result) {
+  userDAO.find ({where: {id: userId}}).success (function (dataOut) {
     result (_cleanData (dataOut));
   });
 };
 
-activities.prototype.read = function read (usrId, activityId, result) {
-  activitiesDAO.find ({where: {id: activityId, userId: usrId}}).success (function (dataOut) {
+users.prototype.create = function create (dataIn, result) {
+  userDAO.build (user_data).save ().success (function (dataOut) {
     result (_cleanData (dataOut));
   });
 };
 
-activities.prototype.update = function update (usrId, activityId, dataIn, result) {
-  activitiesDAO.update (dataIn, {id: activityId, userId: usrId}).success (function (dataOut) {
+users.prototype.update = function update (userId, dataIn, result) {
+  userDAO.update (dataIn, {id: userId}).success (function (dataOut) {
     result (_cleanData (dataOut));
   });
 };
 
-activities.prototype.delete = function del (usrId, activityId, result) {
-  activitiesDAO.destroy ({id: activityId, userId: usrId}).success (function (dataOut) {
+users.prototype.delete = function del (userId, result) {
+  userDAO.destroy ({id: userId}).success (function (dataOut) {
     result (_cleanData (dataOut));
   });
 };
@@ -333,155 +320,43 @@ activities.prototype.delete = function del (usrId, activityId, result) {
   });
 };
 </code></pre>
+
+<h2>userdata.js</h2>
+<pre><code class="javascript">/**
+ * Created by tomwalsh on 25/04/2014.
+ */
+
+module.exports = [
+  {
+    email: 'homer@simpson.com',
+    firstName: 'homer',
+    lastName: 'simpson',
+    password: 'secret'
+  },
+  {
+    email: 'bart@simpson.com',
+    firstName: 'bart',
+    lastName: 'simpson',
+    password: 'secret'
+  },
+  {
+    email: 'marge@simpson.com',
+    firstName: 'marge',
+    lastName: 'simpson',
+    password: 'secret'
+  },
+  {
+    email: 'lisae@simpson.com',
+    firstName: 'lisa',
+    lastName: 'simpson',
+    password: 'secret'
+  }
+]
+</code></pre>
 	  </section>
 	  <section data-tab="04" class="ui tab stacked moodle-book segment">
-	     <h1>Controller Infrastructure</h1>
-<p>To deliver our application over HTTP, we will equip node with the Express library:</p>
-<ul>
-<li><a href="http://expressjs.com">http://expressjs.com</a></li>
-</ul>
-<pre><code>npm install express
-</code></pre>
-
-<p>The install should respond by installing its dependencies:</p>
-<pre><code>npm http GET https://registry.npmjs.org/express
-npm http 200 https://registry.npmjs.org/express
-npm http GET https://registry.npmjs.org/express/-/express-4.1.0.tgz
-npm http 200 https://registry.npmjs.org/express/-/express-4.1.0.tgz
-npm http GET https://registry.npmjs.org/accepts/1.0.1
-npm http GET https://registry.npmjs.org/type-is/1.1.0
-npm http GET https://registry.npmjs.org/range-parser/1.0.0
-npm http GET https://registry.npmjs.org/cookie/0.1.2
-npm http GET https://registry.npmjs.org/fresh/0.2.2
-npm http GET https://registry.npmjs.org/buffer-crc32/0.2.1
-npm http GET https://registry.npmjs.org/methods/0.1.0
-npm http GET https://registry.npmjs.org/send/0.3.0
-npm http GET https://registry.npmjs.org/cookie-signature/1.0.3
-npm http GET https://registry.npmjs.org/merge-descriptors/0.0.2
-npm http GET https://registry.npmjs.org/utils-merge/1.0.0
-npm http GET https://registry.npmjs.org/escape-html/1.0.1
-npm http GET https://registry.npmjs.org/serve-static/1.1.0
-npm http GET https://registry.npmjs.org/path-to-regexp/0.1.2
-npm http GET https://registry.npmjs.org/qs/0.6.6
-npm http GET https://registry.npmjs.org/parseurl/1.0.1
-npm http GET https://registry.npmjs.org/debug
-npm http 200 https://registry.npmjs.org/accepts/1.0.1
-npm http 200 https://registry.npmjs.org/type-is/1.1.0
-npm http GET https://registry.npmjs.org/accepts/-/accepts-1.0.1.tgz
-npm http GET https://registry.npmjs.org/type-is/-/type-is-1.1.0.tgz
-npm http 200 https://registry.npmjs.org/range-parser/1.0.0
-npm http GET https://registry.npmjs.org/range-parser/-/range-parser-1.0.0.tgz
-npm http 200 https://registry.npmjs.org/fresh/0.2.2
-npm http GET https://registry.npmjs.org/fresh/-/fresh-0.2.2.tgz
-npm http 200 https://registry.npmjs.org/cookie/0.1.2
-npm http GET https://registry.npmjs.org/cookie/-/cookie-0.1.2.tgz
-npm http 200 https://registry.npmjs.org/methods/0.1.0
-npm http GET https://registry.npmjs.org/methods/-/methods-0.1.0.tgz
-npm http 200 https://registry.npmjs.org/cookie-signature/1.0.3
-npm http GET https://registry.npmjs.org/cookie-signature/-/cookie-signature-1.0.3.tgz
-npm http 200 https://registry.npmjs.org/buffer-crc32/0.2.1
-npm http 200 https://registry.npmjs.org/accepts/-/accepts-1.0.1.tgz
-npm http GET https://registry.npmjs.org/buffer-crc32/-/buffer-crc32-0.2.1.tgz
-npm http 200 https://registry.npmjs.org/send/0.3.0
-npm http 200 https://registry.npmjs.org/fresh/-/fresh-0.2.2.tgz
-npm http GET https://registry.npmjs.org/send/-/send-0.3.0.tgz
-npm http 200 https://registry.npmjs.org/merge-descriptors/0.0.2
-npm http GET https://registry.npmjs.org/merge-descriptors/-/merge-descriptors-0.0.2.tgz
-npm http 200 https://registry.npmjs.org/cookie-signature/-/cookie-signature-1.0.3.tgz
-npm http 200 https://registry.npmjs.org/escape-html/1.0.1
-npm http GET https://registry.npmjs.org/escape-html/-/escape-html-1.0.1.tgz
-npm http 200 https://registry.npmjs.org/cookie/-/cookie-0.1.2.tgz
-npm http 200 https://registry.npmjs.org/buffer-crc32/-/buffer-crc32-0.2.1.tgz
-npm http 200 https://registry.npmjs.org/utils-merge/1.0.0
-npm http 200 https://registry.npmjs.org/send/-/send-0.3.0.tgz
-npm http GET https://registry.npmjs.org/utils-merge/-/utils-merge-1.0.0.tgz
-npm http 200 https://registry.npmjs.org/type-is/-/type-is-1.1.0.tgz
-npm http 200 https://registry.npmjs.org/path-to-regexp/0.1.2
-npm http 200 https://registry.npmjs.org/range-parser/-/range-parser-1.0.0.tgz
-npm http 200 https://registry.npmjs.org/qs/0.6.6
-npm http 200 https://registry.npmjs.org/merge-descriptors/-/merge-descriptors-0.0.2.tgz
-npm http GET https://registry.npmjs.org/path-to-regexp/-/path-to-regexp-0.1.2.tgz
-npm http GET https://registry.npmjs.org/qs/-/qs-0.6.6.tgz
-npm http 200 https://registry.npmjs.org/methods/-/methods-0.1.0.tgz
-npm http 200 https://registry.npmjs.org/parseurl/1.0.1
-npm http 200 https://registry.npmjs.org/escape-html/-/escape-html-1.0.1.tgz
-npm http GET https://registry.npmjs.org/parseurl/-/parseurl-1.0.1.tgz
-npm http 200 https://registry.npmjs.org/serve-static/1.1.0
-npm http 200 https://registry.npmjs.org/utils-merge/-/utils-merge-1.0.0.tgz
-npm http GET https://registry.npmjs.org/serve-static/-/serve-static-1.1.0.tgz
-npm http 200 https://registry.npmjs.org/debug
-npm http GET https://registry.npmjs.org/debug/-/debug-0.8.0.tgz
-npm http 200 https://registry.npmjs.org/qs/-/qs-0.6.6.tgz
-npm http 200 https://registry.npmjs.org/parseurl/-/parseurl-1.0.1.tgz
-npm http 200 https://registry.npmjs.org/serve-static/-/serve-static-1.1.0.tgz
-npm http 200 https://registry.npmjs.org/debug/-/debug-0.8.0.tgz
-npm http 200 https://registry.npmjs.org/path-to-regexp/-/path-to-regexp-0.1.2.tgz
-npm http GET https://registry.npmjs.org/negotiator
-npm http GET https://registry.npmjs.org/mime
-npm http GET https://registry.npmjs.org/mime/1.2.11
-npm http 200 https://registry.npmjs.org/mime/1.2.11
-npm http GET https://registry.npmjs.org/mime/-/mime-1.2.11.tgz
-npm http 200 https://registry.npmjs.org/mime
-npm http 200 https://registry.npmjs.org/negotiator
-npm http GET https://registry.npmjs.org/negotiator/-/negotiator-0.4.3.tgz
-npm http 200 https://registry.npmjs.org/mime/-/mime-1.2.11.tgz
-npm http 200 https://registry.npmjs.org/negotiator/-/negotiator-0.4.3.tgz
-express@4.1.0 ../../../../../../node_modules/express
-├── methods@0.1.0
-├── parseurl@1.0.1
-├── merge-descriptors@0.0.2
-├── utils-merge@1.0.0
-├── cookie@0.1.2
-├── escape-html@1.0.1
-├── debug@0.8.0
-├── cookie-signature@1.0.3
-├── fresh@0.2.2
-├── range-parser@1.0.0
-├── qs@0.6.6
-├── buffer-crc32@0.2.1
-├── serve-static@1.1.0
-├── path-to-regexp@0.1.2
-├── send@0.3.0 (mime@1.2.11)
-├── type-is@1.1.0 (mime@1.2.11)
-└── accepts@1.0.1 (negotiator@0.4.3, mime@1.2.11)
-</code></pre>
-
-<p>We also need a parser for recovering the Json content from the HTTP requests:</p>
-<ul>
-<li><a href="https://github.com/expressjs/body-parser">https://github.com/expressjs/body-parser</a></li>
-</ul>
-<pre><code>npm install body-parser
-</code></pre>
-
-<pre><code>pm http GET https://registry.npmjs.org/body-parser
-npm http 200 https://registry.npmjs.org/body-parser
-npm http GET https://registry.npmjs.org/body-parser/-/body-parser-1.0.2.tgz
-npm http 200 https://registry.npmjs.org/body-parser/-/body-parser-1.0.2.tgz
-npm http GET https://registry.npmjs.org/type-is
-npm http GET https://registry.npmjs.org/raw-body
-npm http GET https://registry.npmjs.org/qs
-npm http 200 https://registry.npmjs.org/raw-body
-npm http GET https://registry.npmjs.org/raw-body/-/raw-body-1.1.4.tgz
-npm http 200 https://registry.npmjs.org/type-is
-npm http 200 https://registry.npmjs.org/qs
-npm http 200 https://registry.npmjs.org/raw-body/-/raw-body-1.1.4.tgz
-npm http GET https://registry.npmjs.org/bytes
-npm http GET https://registry.npmjs.org/mime
-npm http 304 https://registry.npmjs.org/mime
-npm http 200 https://registry.npmjs.org/bytes
-npm http GET https://registry.npmjs.org/bytes/-/bytes-0.3.0.tgz
-npm http 200 https://registry.npmjs.org/bytes/-/bytes-0.3.0.tgz
-body-parser@1.0.2 node_modules/body-parser
-├── qs@0.6.6
-├── type-is@1.1.0 (mime@1.2.11)
-└── raw-body@1.1.4 (bytes@0.3.0)
-</code></pre>
-
-<p>Keep an eye on <code>./pacemaker-node/node_modules</code> folder, it should be populated with the modules we have installed.</p>
-	  </section>
-	  <section data-tab="05" class="ui tab stacked moodle-book segment">
 	     <h1>Controllers</h1>
-<p>Create a folder called 'controllers' in pacemaker-node, and incorporate the following two js files:</p>
+<p>Create a folder called 'controllers', and introduce these files:</p>
 <h2>users.js</h2>
 <pre><code class="javascript">var router = require('express').Router();
 
@@ -536,6 +411,7 @@ router.delete('/:userId', function(req, res) {
 });
 
 module.exports = router;
+
 </code></pre>
 
 <h2>activities.js</h2>
@@ -592,27 +468,11 @@ router.delete('/:activityId', function(req, res) {
 module.exports = router;
 </code></pre>
 	  </section>
-	  <section data-tab="06" class="ui tab stacked moodle-book segment">
-	     <h1>Application</h1>
-<p>In the pacemaker-node folder, create the following two files:</p>
-<h2>package.json</h2>
-<pre><code class="javascript">{
-  &quot;name&quot;: &quot;pacemaker-node&quot;,
-  &quot;version&quot;: &quot;0.0.1&quot;,
-  &quot;private&quot;: true,
-  &quot;scripts&quot;: {
-    &quot;start&quot;: &quot;node app&quot;
-  },
-  &quot;dependencies&quot;: {
-    &quot;express&quot;: &quot;~4.0.0&quot;,
-    &quot;sequelize&quot;: &quot;^1.7.2&quot;,
-    &quot;body-parser&quot;: &quot;^1.0.2&quot;
-  }
-}
-</code></pre>
-
+	  <section data-tab="05" class="ui tab stacked moodle-book segment">
+	     <h2>Application</h2>
+<p>In the project folder - pacemaker-node - introduce the main application program:</p>
 <h2>app.js</h2>
-<pre><code class="javascript">var express = require('express');
+<pre><code>var express = require('express');
 var path = require('path');
 var Sequelize = require('sequelize');
 var bodyParser = require('body-parser');
@@ -620,7 +480,7 @@ var bodyParser = require('body-parser');
 var userDb = require('./models/users')();
 var activitiesDb = require('./models/activities')();
 
-var sequelize = new Sequelize('pacemaker-node-db', 'root', 'root', {
+var sequelize = new Sequelize('masters_testdb', 'root', 'root', {
   dialect: &quot;sqlite&quot;, // or 'sqlite', 'postgres', 'mariadb'
   port:    3306 // or 5432 (for postgres)
 });
@@ -629,16 +489,20 @@ sequelize.authenticate().complete(function(err) {
   if (!!err) {
     console.log ('Unable to connect to the database:', err);
   } else {
-    console.log ('Database has been established successfully.');
+    console.log ('Database connection has been established successfully.');
 
     userDb.init (sequelize);
     activitiesDb.init(sequelize);
 
     sequelize.sync ({ force: false }).complete (function (err) {
       if (!!err) {
-        console.log ('An error occurred syncing table:', err);
+        console.log ('An error occurred syncing tables:', err);
       } else {
         console.log ('tables synced!');
+
+        // add default data
+        var sample_data = require('./models/userdata.js');
+        userDb.loadData (sample_data);
       }
     });
   }
@@ -647,7 +511,6 @@ sequelize.authenticate().complete(function(err) {
 var app = express ();
 
 app.use('/assets', express.static('public'));
-//app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser());
 
@@ -671,21 +534,63 @@ app.set('userDb', userDb);
 app.set('activitiesDb', activitiesDb);
 
 app.listen(8080);
-console.log (&quot;masters pacemaker app is listening on port 8080&quot;);
+console.log (&quot;pacemaker-node app is listening on port 8080&quot;);
+</code></pre>
+	  </section>
+	  <section data-tab="06" class="ui tab stacked moodle-book segment">
+	     <h1>Test the API</h1>
+<p>The app can be launched now:</p>
+<pre><code>$ node app.js
+</code></pre>
+
+<p>Which should display some initialisation activity:</p>
+<pre><code>pacemaker-node app is listening on port 8080
+Executing (default): SELECT 1+1 AS result
+Database connection has been established successfully.
+tables synced!
+Executing (default): SELECT * FROM `users` AS `users` WHERE `users`.`email`='homer@simpson.com' AND `users`.`firstName`='homer' AND `users`.`lastName`='simpson' AND `users`.`password`='secret' LIMIT 1;
+Executing (default): SELECT * FROM `users` AS `users` WHERE `users`.`email`='bart@simpson.com' AND `users`.`firstName`='bart' AND `users`.`lastName`='simpson' AND `users`.`password`='secret' LIMIT 1;
+Executing (default): SELECT * FROM `users` AS `users` WHERE `users`.`email`='marge@simpson.com' AND `users`.`firstName`='marge' AND `users`.`lastName`='simpson' AND `users`.`password`='secret' LIMIT 1;
+Executing (default): SELECT * FROM `users` AS `users` WHERE `users`.`email`='lisae@simpson.com' AND `users`.`firstName`='lisa' AND `users`.`lastName`='simpson' AND `users`.`password`='secret' LIMIT 1;
+Executing (default): INSERT INTO `users` (`id`,`email`,`firstName`,`lastName`,`password`) VALUES (NULL,'homer@simpson.com','homer','simpson','secret');
+{ id: null,
+  email: 'homer@simpson.com',
+  firstName: 'homer',
+  lastName: 'simpson',
+  password: 'secret' }
+Executing (default): INSERT INTO `users` (`id`,`email`,`firstName`,`lastName`,`password`) VALUES (NULL,'bart@simpson.com','bart','simpson','secret');
+{ id: null,
+  email: 'bart@simpson.com',
+  firstName: 'bart',
+  lastName: 'simpson',
+  password: 'secret' }
+Executing (default): INSERT INTO `users` (`id`,`email`,`firstName`,`lastName`,`password`) VALUES (NULL,'marge@simpson.com','marge','simpson','secret');
+Executing (default): INSERT INTO `users` (`id`,`email`,`firstName`,`lastName`,`password`) VALUES (NULL,'lisae@simpson.com','lisa','simpson','secret');
+{ id: null,
+  email: 'marge@simpson.com',
+  firstName: 'marge',
+  lastName: 'simpson',
+  password: 'secret' }
+{ id: null,
+  email: 'lisae@simpson.com',
+  firstName: 'lisa',
+  lastName: 'simpson',
+  password: 'secret' }
+</code></pre>
+
+<p>In a browser, we can request the users list via a simple request:</p>
+<ul>
+<li><a href="http://localhost:8080/api/users">http://localhost:8080/api/users</a></li>
+</ul>
+<p>which should respond with:</p>
+<pre><code class="javascript">[{&quot;id&quot;:1,&quot;email&quot;:&quot;homer@simpson.com&quot;,&quot;firstName&quot;:&quot;homer&quot;,&quot;lastName&quot;:&quot;simpson&quot;,&quot;password&quot;:&quot;secret&quot;},
+{&quot;id&quot;:2,&quot;email&quot;:&quot;bart@simpson.com&quot;, &quot;firstName&quot;:&quot;bart&quot;,&quot;lastName&quot;:&quot;simpson&quot;,&quot;password&quot;:&quot;secret&quot;},
+{&quot;id&quot;:3,&quot;email&quot;:&quot;marge@simpson.com&quot;, &quot;firstName&quot;:&quot;marge&quot;,&quot;lastName&quot;:&quot;simpson&quot;,&quot;password&quot;:&quot;secret&quot;},
+{&quot;id&quot;:4,&quot;email&quot;:&quot;lisae@simpson.com&quot;, &quot;firstName&quot;:&quot;lisa&quot;,&quot;lastName&quot;:&quot;simpson&quot;,&quot;password&quot;:&quot;secret&quot;}]
 </code></pre>
 	  </section>
 	  <section data-tab="07" class="ui tab stacked moodle-book segment">
-	     <h1>Launch</h1>
-<p>To run the application, from the console enter:</p>
-<pre><code>node app.js
-</code></pre>
-
-<p>which should make the application available on port 8080:</p>
-<pre><code>pacemaker-node app is listening on port 8080
-Executing (default): SELECT 1+1 AS result
-Database has been established successfully.
-tables synced!
-</code></pre>
+	     
 	  </section>
 	  <section data-tab="Exercises" class="ui tab stacked moodle-book segment">
 	     <h1>Exercises</h1>
