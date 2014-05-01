@@ -23,7 +23,7 @@
   </head>
   <body>
   <nav class="ui fixed top pointing borderless inverted menu">
-    <header class="header item"> <a href="../index.html">Node, Ember & Docker</a></header>
+    <header class="header item"> <a href="../index.html">Javascript & Microservices</a></header>
     <div class="right tab-menu menu">
           <a class="item" data-tab="Lab-11-B"> Lab-11-B </a>
           <a class="item" data-tab="01"> 01 </a>
@@ -174,28 +174,7 @@ App.Router.map(function()
 
 <p>Also in <code>public/app</code>, create a folder called <code>controllers</code> containing the following:</p>
 <h2>application_controller.js</h2>
-<pre><code class="javascript">App.ApplicationController = Ember.Controller.extend(
-{ 
-  signedInUser: function() 
-  {
-    return this.store.find('user', localStorage['currentUser']);
-  }.property('App.currentUser'),
-
-  userSignedIn: function() 
-  {
-    return localStorage['currentUser'] != null;
-  }.property('App.currentUser'),
-
-  actions: 
-  {
-    signout: function() 
-    {
-      delete localStorage['currentUser'];
-      App.set('currentUser', undefined);
-      this.transitionToRoute(&quot;start&quot;);
-    }
-  }
-});
+<pre><code class="javascript">
 </code></pre>
 
 <p>We can now bring the application up. Back in <code>pacemaker.html</code>, introduce these two templates just inside the opening <code>&lt;body&gt;</code> tag:</p>
