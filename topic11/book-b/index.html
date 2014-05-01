@@ -174,7 +174,28 @@ App.Router.map(function()
 
 <p>Also in <code>public/app</code>, create a folder called <code>controllers</code> containing the following:</p>
 <h2>application_controller.js</h2>
-<pre><code class="javascript">
+<pre><code class="javascript">App.ApplicationController = Ember.Controller.extend(
+{ 
+  signedInUser: function() 
+  {
+    return this.store.find('user', localStorage['currentUser']);
+  }.property('App.currentUser'),
+
+  userSignedIn: function() 
+  {
+    return localStorage['currentUser'] != null;
+  }.property('App.currentUser'),
+
+  actions: 
+  {
+    signout: function() 
+    {
+      delete localStorage['currentUser'];
+      App.set('currentUser', undefined);
+      this.transitionToRoute(&quot;start&quot;);
+    }
+  }
+});
 </code></pre>
 
 <p>We can now bring the application up. Back in <code>pacemaker.html</code>, introduce these two templates just inside the opening <code>&lt;body&gt;</code> tag:</p>
