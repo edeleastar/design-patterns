@@ -1,0 +1,8 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "hashicorp/precise64"
+  config.vm.network :forwarded_port, host: 8080, guest: 8080
+  config.vm.provision "docker"
+#  config.vm.provision "docker" do |d|
+#    d.build_image "-t pacemaker-app /vagrant"
+#  end
+end

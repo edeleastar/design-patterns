@@ -1,0 +1,17 @@
+# DOCKER-VERSION 0.3.4
+FROM ubuntu
+
+RUN echo "deb http://archive.ubuntu.com/ubuntu precise universe" >> /etc/apt/sources.list
+RUN apt-get update
+RUN apt-get install -y software-properties-common
+RUN apt-get install -y python-software-properties python g++ make
+RUN add-apt-repository -y ppa:chris-lea/node.js
+RUN apt-get update
+RUN apt-get install -y nodejs
+
+ADD . /mstrs-pacemaker-node-app
+WORKDIR /mstrs-pacemaker-node-app
+RUN npm rebuild
+#VOLUME . /mstrs-pacemaker-node-app
+EXPOSE 8080
+CMD node app

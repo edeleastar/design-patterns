@@ -1,0 +1,701 @@
+ <!DOCTYPE html>
+ <html>
+   <head>
+     <meta charset="utf-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+   
+     <title> Lab-12-A </title>
+   
+     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+     <link rel="stylesheet" href="./style/semantic/css/semantic.min.css" type="text/css">  
+     <link rel="stylesheet" href="./style/custom/main.css" type="text/css"> 
+   
+     <script src="./style/custom/jquery-2.1.0.min.js"></script> 
+     <script src="./style/custom/jquery.address-1.6.min.js"></script>
+     <script src="./style/semantic/javascript/semantic.min.js"></script>
+   
+     <link rel="stylesheet" href="./style/highlight/school_book.css">
+     <script src="./style/highlight/highlight.pack.js"></script> 
+     <script>hljs.initHighlightingOnLoad();</script>
+   
+     <script src="./style/custom/common.js"> </script> 
+     <script src="./style/custom/main.js"> </script> 
+  </head>
+  <body>
+  <nav class="ui fixed top pointing borderless inverted menu">
+    <header class="header item"> <a href="../index.html">Xtend Android</a></header>
+    <div class="right tab-menu menu">
+          <a class="item" data-tab="Lab-12-A"> Lab-12-A </a>
+          <a class="item" data-tab="01"> 01 </a>
+          <a class="item" data-tab="02"> 02 </a>
+          <a class="item" data-tab="03"> 03 </a>
+          <a class="item" data-tab="04"> 04 </a>
+          <a class="item" data-tab="05"> 05 </a>
+          <a class="item" data-tab="06"> 06 </a>
+          <a class="item" data-tab="07"> 07 </a>
+    </div>
+  </nav>
+
+  <br>
+
+	  <section data-tab="Lab-12-A" class="ui tab stacked moodle-book segment">
+	     <h1>Objectives</h1>
+<ul>
+<li>Develop an application in Android using the Xtend language</li>
+<li>Base the application on a twitter-like service hosted here:<ul>
+<li><a href="http://yamba.marakana.com">http://yamba.marakana.com</a></li>
+</ul>
+</li>
+<li>The structure of the application is derived from <a href="http://shop.oreilly.com/product/0636920010883.do">Learning Android</a></li>
+</ul>
+	  </section>
+	  <section data-tab="01" class="ui tab stacked moodle-book segment">
+	     <h1>Install XTend &amp; Android SDK</h1>
+<p>Download latest Android SDK Bundle:</p>
+<ul>
+<li><a href="http://developer.android.com/sdk">http://developer.android.com/sdk</a></li>
+</ul>
+<p>Download the full eclipse with xtend distro from here:</p>
+<ul>
+<li><a href="https://www.eclipse.org/xtend/download.html">https://www.eclipse.org/xtend/download.html</a></li>
+</ul>
+<p>Using the xtend version of eclipse, install the android SDK into it using this update site:</p>
+<ul>
+<li><a href="http://developer.android.com/sdk/installing/installing-adt.html">http://developer.android.com/sdk/installing/installing-adt.html</a></li>
+</ul>
+	  </section>
+	  <section data-tab="02" class="ui tab stacked moodle-book segment">
+	     <h1>Starter Application</h1>
+<p>Create a standard Android Application called 'yambax', with the following characteristics:</p>
+<p><img alt="" src="img/00.png">
+<img alt="" src="img/00b.png">
+<img alt="" src="img/00c.png"></p>
+<p>Make sure you can launch this application in the emulator</p>
+<p><img alt="" src="img/06.png"></p>
+<p>Bring in these string reources:</p>
+<h2>res/values/strings.xml</h2>
+<pre><code>&lt;resources&gt;
+  &lt;string name=&quot;app_name&quot;&gt;Yamba X&lt;/string&gt;
+  &lt;string name=&quot;titleYamba&quot;&gt;YambaX&lt;/string&gt;
+  &lt;string name=&quot;titleStatus&quot;&gt;Status Update&lt;/string&gt;
+  &lt;string name=&quot;hintText&quot;&gt;Please enter your 140-character status&lt;/string&gt;
+  &lt;string name=&quot;buttonUpdate&quot;&gt;Update&lt;/string&gt;
+&lt;/resources&gt;
+</code></pre>
+
+<p>... and this layout:</p>
+<h2>res/layout/activity_status.xml</h2>
+<pre><code>&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+  android:orientation=&quot;vertical&quot; android:layout_width=&quot;fill_parent&quot;
+  android:layout_height=&quot;fill_parent&quot;&gt;
+
+  &lt;!-- Title TextView--&gt;
+  &lt;TextView android:layout_width=&quot;fill_parent&quot;
+    android:layout_height=&quot;wrap_content&quot; android:gravity=&quot;center&quot;
+    android:textSize=&quot;30sp&quot;
+    android:layout_margin=&quot;10dp&quot; android:text=&quot;@string/titleStatus&quot;/&gt;
+
+  &lt;!-- Status EditText  --&gt;
+  &lt;EditText android:layout_width=&quot;fill_parent&quot;
+    android:layout_height=&quot;0dp&quot; android:layout_weight=&quot;1&quot;
+    android:hint=&quot;@string/hintText&quot; android:id=&quot;@+id/editText&quot;
+    android:gravity=&quot;top|center_horizontal&quot;&gt;&lt;/EditText&gt;
+
+  &lt;!-- Update Button --&gt;
+  &lt;Button android:layout_width=&quot;fill_parent&quot;
+    android:layout_height=&quot;wrap_content&quot; android:text=&quot;@string/buttonUpdate&quot;
+    android:textSize=&quot;20sp&quot; android:id=&quot;@+id/buttonUpdate&quot;&gt;&lt;/Button&gt;
+
+&lt;/LinearLayout&gt;
+</code></pre>
+
+<p>Download this jar archive :</p>
+<ul>
+<li><a href="archives/jtwitter-yamba.jar">jtwitter-yamba.jar</a></li>
+</ul>
+<p>and copy to the  <code>lib</code> folder of your android project.</p>
+<p>This is a lightweight java-twitter library, based on this project here:</p>
+<ul>
+<li><a href="https://github.com/winterstein/JTwitter">https://github.com/winterstein/JTwitter</a></li>
+</ul>
+<p>Replace your StatusActivity with the following:</p>
+<h2>StatusActivity:</h2>
+<pre><code class="java">package com.marakana.yambax;
+
+import winterwell.jtwitter.Twitter;
+import android.app.Activity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+
+public class StatusActivity extends Activity implements OnClickListener
+{ 
+  private static final String TAG = &quot;StatusActivity&quot;;
+  EditText editText;
+  Button updateButton;
+  Twitter twitter;
+
+  @Override
+  public void onCreate(Bundle savedInstanceState)
+  {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_status);
+
+    editText = (EditText) findViewById(R.id.editText);
+    updateButton = (Button) findViewById(R.id.buttonUpdate);
+
+    updateButton.setOnClickListener(this); 
+
+    twitter = new Twitter(&quot;student&quot;, &quot;password&quot;); 
+    twitter.setAPIRootUrl(&quot;http://yamba.marakana.com/api&quot;);
+  }
+
+  public void onClick(View v)
+  {
+    twitter.setStatus(editText.getText().toString()); 
+    Log.d(TAG, &quot;onClicked&quot;);
+  }
+}
+</code></pre>
+
+<p>Launch and you should see:</p>
+<p><img alt="" src="img/02.png"></p>
+<p>If you attempt a status update, your application may close. This is caused by an attempt to perform network access on the main thread (inside the twitter.setStatus method). For test purposes, we can disable this:</p>
+<pre><code class="java">    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+    StrictMode.setThreadPolicy(policy); 
+</code></pre>
+
+<p>Run the app again and attempt to update status again. The status should appear here:</p>
+<ul>
+<li>
+<p><a href="http://yamba.marakana.com">http://yamba.marakana.com</a></p>
+</li>
+<li>
+<p><a href="https://github.com/edeleastar/yambax/tree/2598f03c03cc3102d743d7a68ab9c987a23dc5c7"><em>source direct</em></a></p>
+</li>
+</ul>
+	  </section>
+	  <section data-tab="03" class="ui tab stacked moodle-book segment">
+	     <h1>Xtext Nature</h1>
+<p>Add xtext nature to the project by selecting Project Properties-&gt;Configure-&gt;Add Xtext Nature</p>
+<p>Then in settings change the generated java folder to align with ADKs expectations (gen):</p>
+<p><img alt="" src="img/03.png"></p>
+<p>To prime the project with the correct libraries, create a new XTend class call <code>Test</code> in the <code>com.marakana.yambax</code> package:</p>
+<pre><code>package com.marakana.yambax
+
+class Test {
+
+}
+</code></pre>
+
+<p>This will have an error on the package declaration. Select the error and it will prompt with "Add Xtext Lbraries to the project". Select this, and the libraries will be added. Your project will look like this:</p>
+<p><img alt="" src="img/04.png"></p>
+<p>Look carefully at the three jar files added under 'Xtend Library'. You will need to locate these files using explorer/finder, and copy them to the <code>lib</code> folder of your project.</p>
+<p>Delete the "Xtext Library" artifact from the project by selecting it and then selecting 'remove from build path'.</p>
+<p>The project should resemble the following:</p>
+<p><img alt="" src="img/05.png"></p>
+<p>Finally, delete the current classes in com.marakana.com and replace them with the following:</p>
+<h2>StatusActivity.xtend</h2>
+<pre><code class="java">package com.marakana.yambax
+
+import android.app.Activity
+import android.os.Bundle
+import android.widget.EditText
+import android.widget.Button
+import android.view.View.OnClickListener
+import android.view.View
+import winterwell.jtwitter.Twitter
+import android.util.Log
+import android.os.StrictMode
+
+class StatusActivity extends Activity implements OnClickListener
+{
+  val TAG = &quot;StatusActivity&quot;
+  var EditText editText
+  var Button updateButton
+  var twitter = new Twitter(&quot;student&quot;, &quot;password&quot;)
+
+  override onCreate(Bundle savedInstanceState)
+  {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_status)
+
+    val policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+    StrictMode.setThreadPolicy(policy);
+
+    editText     = findViewById(R.id.editText) as EditText
+    updateButton =  findViewById(R.id.buttonUpdate) as Button
+
+    updateButton.setOnClickListener(this)
+
+    twitter.setAPIRootUrl(&quot;http://yamba.marakana.com/api&quot;)
+  }
+
+  override onClick(View arg0)
+  {
+    twitter.setStatus(editText.getText.toString)
+    Log.d(TAG, &quot;onClicked&quot;)
+  }
+}
+</code></pre>
+
+<p>Make sure the application has Internet Permissions enabled in the manifest:</p>
+<h2>AndridManifest.xml</h2>
+<pre><code>    &lt;uses-permission android:name=&quot;android.permission.INTERNET&quot; /&gt; 
+</code></pre>
+
+<p>You should be able to launch this application on the emulator, enter some text and press 'Update'. Expect to see your text on this site:</p>
+<ul>
+<li>
+<p><a href="http://yamba.marakana.com">http://yamba.marakana.com</a></p>
+</li>
+<li>
+<p><a href="https://github.com/edeleastar/yambax/tree/7bc6b7b67d0dbe3930bee74bc27b87231335d7d0">Source</a></p>
+</li>
+</ul>
+	  </section>
+	  <section data-tab="04" class="ui tab stacked moodle-book segment">
+	     <h1>Async Task</h1>
+<p>Create a new package <code>com.marakana.utils</code> containing an xtend class to encapsulate the twitter API:</p>
+<h2>TwitterAPI.xtend</h2>
+<pre><code class="java">package com.marakana.utils
+
+import winterwell.jtwitter.Twitter
+
+class TwitterAPI
+{
+  var Twitter twitter
+
+  new ()
+  {
+    this.twitter = new Twitter(&quot;student&quot;, &quot;password&quot;)
+    twitter.setAPIRootUrl(&quot;http://yamba.marakana.com/api&quot;)
+  }
+
+  def String updateStatus (String status)
+  { 
+    val result = twitter.updateStatus(status)
+    result.text
+  }
+}
+</code></pre>
+
+<p>Introduce an AsyncTask <code>com.marakana.utils</code> to use this API:</p>
+<h2>TwitterPoster.xtend</h2>
+<pre><code class="java">package com.marakana.yambax
+
+import android.os.AsyncTask
+import android.util.Log
+import winterwell.jtwitter.TwitterException
+import android.widget.Toast
+import android.app.Activity
+import com.marakana.utils.TwitterAPI
+
+class TwitterPoster extends AsyncTask&lt;String, Integer, String&gt;
+{
+  var TwitterAPI twitter
+  var Activity activity
+
+  new(TwitterAPI twitter, Activity activity)
+  {
+    this.twitter = twitter
+    this.activity = activity
+  }
+
+  override doInBackground(String... it)
+  {
+    try
+    {
+      var status = twitter.updateStatus(get(0))
+      status
+    }
+    catch (TwitterException e)
+    {
+      Log.e(&quot;YAMBA&quot;, e.toString());
+      &quot;Failed to post&quot;;
+    }
+  }
+
+  override onPostExecute(String result)
+  {
+    Toast.makeText(activity, result, Toast.LENGTH_LONG).show();
+  }
+}
+</code></pre>
+
+<p>Now we can reimplement StatusUpdate activity, using a Lambda to handle the button event:</p>
+<pre><code class="java">package com.marakana.yambax
+
+import android.app.Activity
+import android.os.Bundle
+import android.widget.EditText
+import android.widget.Button
+import android.util.Log
+import com.marakana.utils.TwitterAPI
+
+class StatusActivity extends Activity
+{
+  val twitter = new TwitterAPI
+
+  override onCreate(Bundle savedInstanceState)
+  {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_status)
+
+    val editText     = findViewById(R.id.editText) as EditText
+    val updateButton =  findViewById(R.id.buttonUpdate) as Button
+
+    updateButton.setOnClickListener = [ 
+                                        val twitterPoster = new TwitterPoster(twitter, this)
+                                        twitterPoster.execute(editText.getText().toString())
+                                        Log.d(&quot;YAMBA&quot;, &quot;onClicked&quot;) 
+                                      ]
+  }
+}
+</code></pre>
+
+<p>Notice we no longer need to disable strict mode, as we are not posting from a background task.</p>
+<p>Verify this works as expected, and that the status appears on:</p>
+<ul>
+<li><a href="http://yamba.marakana.com">http://yamba.marakana.com</a></li>
+</ul>
+<p>A toast message should also appear if the update was successful</p>
+<ul>
+<li><a href="https://github.com/edeleastar/yambax/tree/b5d3d142bde4b5e1e73e5ce67f6212b1ff4d059d">Source</a></li>
+</ul>
+	  </section>
+	  <section data-tab="05" class="ui tab stacked moodle-book segment">
+	     <h1>Preferences</h1>
+<p>Introduce the following new strings into <code>res/values/strings.xml</code>:</p>
+<pre><code>  &lt;string name=&quot;titlePrefs&quot;&gt;Preferences&lt;/string&gt;
+  &lt;string name=&quot;titleUsername&quot;&gt;Username&lt;/string&gt;
+  &lt;string name=&quot;titlePassword&quot;&gt;Password&lt;/string&gt;
+  &lt;string name=&quot;titleApiRoot&quot;&gt;API Root&lt;/string&gt;
+
+  &lt;string name=&quot;summaryUsername&quot;&gt;Please enter your username&lt;/string&gt;
+  &lt;string name=&quot;summaryPassword&quot;&gt;Please enter your password&lt;/string&gt;
+  &lt;string name=&quot;summaryApiRoot&quot;&gt;URL of Root API for your service&lt;/string&gt;
+</code></pre>
+
+<p>This will allow us to define a <code>res/menus/menu.xml</code> resource:</p>
+<pre><code>&lt;menu xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot; &gt;
+    &lt;item android:id=&quot;@+id/itemPrefs&quot; android:title=&quot;@string/titlePrefs&quot;
+         android:icon=&quot;@android:drawable/ic_menu_preferences&quot;&gt;&lt;/item&gt;
+&lt;/menu&gt;
+</code></pre>
+
+<p>Now we can create a PreferencesActivity. Introduce a new folder in <code>res</code> called <code>xml</code>, and create this file in there:</p>
+<h2>prefs.xml</h2>
+<pre><code>&lt;PreferenceScreen xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot; &gt;
+  &lt;EditTextPreference android:title=&quot;@string/titleUsername&quot;
+    android:summary=&quot;@string/summaryUsername&quot; android:key=&quot;username&quot;&gt;&lt;/EditTextPreference&gt;
+
+  &lt;EditTextPreference android:title=&quot;@string/titlePassword&quot;
+    android:password=&quot;true&quot; android:summary=&quot;@string/summaryPassword&quot;
+    android:key=&quot;password&quot;&gt;&lt;/EditTextPreference&gt;
+
+  &lt;EditTextPreference android:title=&quot;@string/titleApiRoot&quot;
+    android:summary=&quot;@string/summaryApiRoot&quot; android:key=&quot;apiRoot&quot;&gt;&lt;/EditTextPreference&gt;
+&lt;/PreferenceScreen&gt;
+</code></pre>
+
+<p>Create a new <code>PrefsActivity</code> activity class in <code>com.marakana.yambax</code>:</p>
+<h2>PrefsActivity.xtend:</h2>
+<pre><code class="java">package com.marakana.yambax
+
+import android.os.Bundle
+import android.preference.PreferenceActivity;
+
+class PrefsActivity extends PreferenceActivity 
+{
+  override onCreate(Bundle savedInstanceState)
+  {
+    super.onCreate(savedInstanceState);
+    addPreferencesFromResource(R.xml.prefs); 
+  }  
+}
+</code></pre>
+
+<p>We can display a menu and the PrefsActivity in the StatusUdate activity:</p>
+<pre><code class="java">  override  onCreateOptionsMenu(Menu menu)
+  {
+    getMenuInflater.inflate(R.menu.menu, menu)
+    true
+  }
+
+  override onOptionsItemSelected(MenuItem item)
+  {
+    startActivity(new Intent(this, typeof(PrefsActivity)))
+    true
+  }
+</code></pre>
+
+<p>Finally, make sure the activity is referenced in the manifest:</p>
+<pre><code>    &lt;activity android:name=&quot;.PrefsActivity&quot; android:label=&quot;@string/titlePrefs&quot; /&gt;
+</code></pre>
+
+<p>When the menu is selected, we should see something like this:</p>
+<p><img alt="" src="img/07.png"></p>
+<ul>
+<li><a href="https://github.com/edeleastar/yambax/tree/6cc742a4372e63c61d34ac47f6e8d75df099e39c">Source</a></li>
+</ul>
+	  </section>
+	  <section data-tab="06" class="ui tab stacked moodle-book segment">
+	     <h1>Lambdas</h1>
+<p>Define a new TwitterAPI, which allows account details to be changed:</p>
+<h2>TwitterAPI.xtend</h2>
+<pre><code class="java">package com.marakana.utils
+
+import winterwell.jtwitter.Twitter
+import android.content.SharedPreferences
+
+class TwitterAPI
+{
+  var Twitter twitter
+
+  new (String username, String password, String root)
+  {
+    this.twitter = new Twitter(username, password)
+    twitter.setAPIRootUrl(root)
+  }
+
+  def changeAccount(SharedPreferences prefs)
+  {
+    val username = prefs.getString(&quot;username&quot;, &quot;student&quot;)
+    val password = prefs.getString(&quot;password&quot;, &quot;password&quot;)
+    val root     = prefs.getString(&quot;apiRoot&quot;, &quot;http://yamba.marakana.com/api&quot;)
+    this.twitter = new Twitter(username, password)
+    twitter.setAPIRootUrl(root)
+  }
+
+  def String updateStatus (String status)
+  { 
+    val result = twitter.updateStatus(status)
+    result.text
+  }
+}
+</code></pre>
+
+<p>This is a revised version of StatusUpdate to use preferences and this new api:</p>
+<h2>StatusUpdate.xtend</h2>
+<pre><code class="java">package com.marakana.yambax
+
+import android.app.Activity
+import android.os.Bundle
+import android.widget.EditText
+import android.widget.Button
+import com.marakana.utils.TwitterAPI
+import android.view.Menu
+import android.view.MenuItem
+import android.content.Intent
+import android.view.View.OnClickListener
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener
+import android.content.SharedPreferences
+import android.preference.PreferenceManager
+
+class StatusActivity extends Activity
+{
+  var EditText       editText
+  var Button         updateButton
+  var TwitterAPI     twitter 
+
+  var update       = [ new TwitterPoster(twitter, this).execute(editText.getText.toString)  ] as OnClickListener
+  var prefsChanged = [ SharedPreferences prefs, String s |
+                       twitter.changeAccount(prefs) ]  as OnSharedPreferenceChangeListener
+
+  override onCreate(Bundle savedInstanceState)
+  {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_status)
+
+    twitter = new TwitterAPI(&quot;student&quot;, &quot;password&quot;, &quot;http://yamba.marakana.com/api&quot;)
+
+    editText     = findViewById(R.id.editText) as EditText
+    updateButton = findViewById(R.id.buttonUpdate) as Button
+
+    updateButton.setOnClickListener = update
+    PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener = prefsChanged        
+  }
+
+  override  onCreateOptionsMenu(Menu menu)
+  {
+    getMenuInflater.inflate(R.menu.menu, menu)
+    true
+  }
+
+   override onOptionsItemSelected(MenuItem item)
+  {
+    startActivity(new Intent(this, typeof(PrefsActivity)))
+    true
+  }
+}
+</code></pre>
+
+<p>Notice the <code>lambdas</code> declared as part of the class definition.</p>
+<p>Run the application now. You should be able to tweet as before, but now also be able to use a different account. These accounts can be created on :</p>
+<ul>
+<li><a href="http://yamba.marakana.com">http://yamba.marakana.com</a></li>
+</ul>
+	  </section>
+	  <section data-tab="07" class="ui tab stacked moodle-book segment">
+	     <h1>Application Objects</h1>
+<p>Introduce a new Application class, which will manage the preferences settings:</p>
+<pre><code class="java">package com.marakana.yambax
+
+import com.marakana.utils.TwitterAPI
+import android.content.SharedPreferences
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener
+import android.app.Application
+import android.preference.PreferenceManager
+
+class YambaApplication extends Application
+{
+  @Property TwitterAPI twitter
+
+  var prefsChanged = [ SharedPreferences prefs, String s|
+                       twitter.changeAccount(prefs)  ]  as OnSharedPreferenceChangeListener
+
+  override onCreate()
+  {
+    super.onCreate
+    twitter = new TwitterAPI(&quot;student&quot;, &quot;password&quot;, &quot;http://yamba.marakana.com/api&quot;)
+    PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener = prefsChanged     
+  }
+
+  override onTerminate()
+  {
+    super.onTerminate
+  }
+}
+</code></pre>
+
+<p>In this version, we can rework to TwitterPoster to use the TwitterAPI in the ApplicationObject:</p>
+<pre><code class="java">package com.marakana.yambax
+
+import android.os.AsyncTask
+import android.util.Log
+import winterwell.jtwitter.TwitterException
+import android.widget.Toast
+import android.app.Activity
+import com.marakana.utils.TwitterAPI
+
+class TwitterPoster extends AsyncTask&lt;String, Integer, String&gt;
+{
+  val TwitterAPI twitter
+  val Activity activity
+
+  new(Activity activity)
+  {
+    var app = activity.getApplication() as YambaApplication
+    this.twitter = app.twitter
+    this.activity = activity
+  }
+
+  override doInBackground(String... it)
+  {
+    try
+    {
+      var status = twitter.updateStatus(get(0))
+      status
+    }
+    catch (TwitterException e)
+    {
+      Log.e(&quot;YAMBA&quot;, e.toString());
+      &quot;Failed to post&quot;;
+    }
+  }
+
+  override onPostExecute(String result)
+  {
+    Toast.makeText(activity, result, Toast.LENGTH_LONG).show();
+  }
+}
+</code></pre>
+
+<p>We can now simplify the StatusUpdate class:</p>
+<pre><code class="java">package com.marakana.yambax
+
+import android.app.Activity
+import android.os.Bundle
+import android.widget.EditText
+import android.widget.Button
+import android.view.Menu
+import android.view.MenuItem
+import android.content.Intent
+import android.view.View.OnClickListener
+
+class StatusActivity extends Activity
+{
+  var EditText       editText
+  var Button         updateButton
+
+  var update       = [ new TwitterPoster(this).execute(editText.getText.toString)  ] as OnClickListener
+
+  override onCreate(Bundle savedInstanceState)
+  {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_status)
+
+    editText     = findViewById(R.id.editText) as EditText
+    updateButton = findViewById(R.id.buttonUpdate) as Button
+
+    updateButton.setOnClickListener = update   
+  }
+
+  override  onCreateOptionsMenu(Menu menu)
+  {
+    getMenuInflater.inflate(R.menu.menu, menu)
+    true
+  }
+
+  override onOptionsItemSelected(MenuItem item)
+  {
+    startActivity(new Intent(this, typeof(PrefsActivity)))
+    true
+  }
+}
+</code></pre>
+
+<p>We define the ApplicationObject in the manifest:</p>
+<pre><code>    &lt;application
+        android:allowBackup=&quot;true&quot;
+        android:icon=&quot;@drawable/ic_launcher&quot;
+        android:label=&quot;@string/app_name&quot;
+        android:theme=&quot;@style/AppTheme&quot; 
+        android:name=&quot;com.marakana.yambax.YambaApplication&quot;&gt;
+</code></pre>
+
+<p>Run the application now and it should work as before.</p>
+<ul>
+<li><a href="https://github.com/edeleastar/yambax/tree/e65748e11219b9e4887ad781b5c21e9e1be41cc4">Source</a></li>
+</ul>
+	  </section>
+  <br>  
+  <div class="ui fixed bottom borderless menu">'
+    <div class="ui small item"> 
+    <p id="footertext">
+    Prepared by  Eamonn de Leastar (edeleastar@wit.ie). Except where otherwise noted, this content is licensed under a  
+     <a  href="http://creativecommons.org/licenses/by-nc/4.0/" title="External link to http://creativecommons.org/licenses/by-nc/4.0/" 
+       target="_blank">Creative Commons Attribution-NonCommercial 4.0 License
+     </a>
+     </p>
+    </div>
+  </div>   
+    
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-49703418-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>  </body>
+ </html>

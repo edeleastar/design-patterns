@@ -1,0 +1,917 @@
+ <!DOCTYPE html>
+ <html>
+   <head>
+     <meta charset="utf-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+   
+     <title> Lab-12-B </title>
+   
+     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+     <link rel="stylesheet" href="./style/semantic/css/semantic.min.css" type="text/css">  
+     <link rel="stylesheet" href="./style/custom/main.css" type="text/css"> 
+   
+     <script src="./style/custom/jquery-2.1.0.min.js"></script> 
+     <script src="./style/custom/jquery.address-1.6.min.js"></script>
+     <script src="./style/semantic/javascript/semantic.min.js"></script>
+   
+     <link rel="stylesheet" href="./style/highlight/school_book.css">
+     <script src="./style/highlight/highlight.pack.js"></script> 
+     <script>hljs.initHighlightingOnLoad();</script>
+   
+     <script src="./style/custom/common.js"> </script> 
+     <script src="./style/custom/main.js"> </script> 
+  </head>
+  <body>
+  <nav class="ui fixed top pointing borderless inverted menu">
+    <header class="header item"> <a href="../index.html">Xtend Android</a></header>
+    <div class="right tab-menu menu">
+          <a class="item" data-tab="Lab-12-B"> Lab-12-B </a>
+          <a class="item" data-tab="01"> 01 </a>
+          <a class="item" data-tab="02"> 02 </a>
+          <a class="item" data-tab="03"> 03 </a>
+          <a class="item" data-tab="04"> 04 </a>
+          <a class="item" data-tab="05"> 05 </a>
+          <a class="item" data-tab="06"> 06 </a>
+          <a class="item" data-tab="07"> 07 </a>
+          <a class="item" data-tab="08"> 08 </a>
+    </div>
+  </nav>
+
+  <br>
+
+	  <section data-tab="Lab-12-B" class="ui tab stacked moodle-book segment">
+	     <h1>Objectives</h1>
+<ul>
+<li>Introduce Services into the Xtend YambaX application</li>
+<li>Implement a background service to periodically update the twitter timeline</li>
+</ul>
+	  </section>
+	  <section data-tab="01" class="ui tab stacked moodle-book segment">
+	     <h1>Service Menus</h1>
+<p>Introduce some new menu options, which we will use to trigger start/stop of a background service:</p>
+<h2>strings.xml</h2>
+<pre><code>  &lt;string name=&quot;titleServiceStop&quot;&gt;Stop Service&lt;/string&gt;
+  &lt;string name=&quot;titleServiceStart&quot;&gt;Start Service&lt;/string&gt;
+</code></pre>
+
+<h2>menu.xml</h2>
+<pre><code>    &lt;item android:title=&quot;@string/titleServiceStart&quot; android:id=&quot;@+id/itemServiceStart&quot;
+          android:icon=&quot;@android:drawable/ic_media_play&quot;&gt;&lt;/item&gt;  
+    &lt;item android:title=&quot;@string/titleServiceStop&quot; android:id=&quot;@+id/itemServiceStop&quot;
+          android:icon=&quot;@android:drawable/ic_media_pause&quot;&gt;&lt;/item&gt;
+</code></pre>
+
+<p>Services are introduced by an entry in the manifest:</p>
+<h2>AndroidManifest.xml</h2>
+<pre><code>        &lt;service android:name=&quot;com.marakana.yambax.UpdaterService&quot; /&gt;
+</code></pre>
+
+<p>This is a skeleton service implementation:</p>
+<h2>UpdaterSerice</h2>
+<pre><code class="java">package com.marakana.yambax
+
+import android.app.Service
+import android.content.Intent
+
+class UpdaterService extends Service
+{
+  override onBind(Intent intent)
+  {
+  }
+
+  override onCreate()
+  { 
+    super.onCreate
+  }
+
+  override onStartCommand(Intent intent, int flags, int startId)
+  { 
+    super.onStartCommand(intent, flags, startId)
+    START_STICKY;
+  }
+
+  override onDestroy()
+  { 
+    super.onDestroy
+  }
+}
+</code></pre>
+
+<p>We then start/stop the service in <code>StatusActivity</code>:</p>
+<h2>StatusActivity</h2>
+<pre><code class="java">  override onOptionsItemSelected(MenuItem item)
+  {
+    switch (item.getItemId())
+    {
+      case R.id.itemServiceStart: startService (new Intent(this, typeof(UpdaterService)))
+      case R.id.itemServiceStop:  stopService  (new Intent(this, typeof(UpdaterService)))
+      case R.id.itemPrefs:        startActivity(new Intent(this, typeof(PrefsActivity)))
+    }
+   true
+  }
+</code></pre>
+
+<p>Verify that this builds and executes.</p>
+<ul>
+<li><a href="https://github.com/edeleastar/yambax/tree/a4bf40e0233ceb43ec62af28b729b83b981e1be9">Source</a></li>
+</ul>
+	  </section>
+	  <section data-tab="02" class="ui tab stacked moodle-book segment">
+	     <h1>Service</h1>
+<p>In the UpdaterService, we define and initiate a background thread:</p>
+<pre><code class="java">package com.marakana.yambax
+
+import android.app.Service
+import android.content.Intent
+
+class Updater extends Thread
+{
+  val DELAY=10000
+  var running = false
+
+  override run()
+  {
+    running = true
+    while (!interrupted() &amp;&amp; running)
+    {
+      try
+      {
+        Thread.sleep(DELAY);
+      }
+      catch (InterruptedException e)
+      {
+        running = false
+      }
+    }
+  }
+}
+
+class UpdaterService extends Service
+{
+  var Updater updater
+
+  override onBind(Intent intent)
+  {
+  }
+
+  override onCreate()
+  {
+    super.onCreate
+    updater = new Updater
+  }
+
+  override onStartCommand(Intent intent, int flags, int startId)
+  {
+    super.onStartCommand(intent, flags, startId)
+    updater.start
+    START_STICKY;
+  }
+
+  override onDestroy()
+  {
+    super.onDestroy
+    updater.interrupt
+  }
+}
+</code></pre>
+
+<p>We can rework the Updater class to be a lambda instead:</p>
+<pre><code class="java">package com.marakana.yambax
+
+import android.app.Service
+import android.content.Intent
+
+class UpdaterService extends Service
+{
+  val DELAY   = 10000
+  var running = false 
+  var Thread updateThread
+
+  var updater = [ | 
+                  while (!Thread.currentThread().isInterrupted() &amp;&amp; running)
+                  {
+                    try
+                    {
+                      Thread.sleep(DELAY);
+                    }
+                    catch (InterruptedException e)
+                    {}
+                  } ] as Runnable
+
+  override onBind(Intent intent)
+  {
+  } 
+
+  override onCreate()
+  {
+    updateThread = new Thread(updater)
+    super.onCreate
+  }
+
+  override onStartCommand(Intent intent, int flags, int startId)
+  {
+    super.onStartCommand(intent, flags, startId)
+    running = true
+    updateThread.start
+    START_STICKY;
+  }
+
+  override onDestroy()
+  {
+    super.onDestroy
+    running = false
+    updateThread.interrupt
+  }
+}
+</code></pre>
+
+<p>We should now be able to start/stop the background service via the menus.</p>
+<ul>
+<li><a href="https://github.com/edeleastar/yambax/tree/dfa6cbbc9e628c1a1f2861c9be5afc04ebfedc77">Source</a></li>
+</ul>
+	  </section>
+	  <section data-tab="03" class="ui tab stacked moodle-book segment">
+	     <h1>UTimeline</h1>
+<p>We would like to display the users timeline on the console. First, introduce an accessor to retrieve the timeline from the api: </p>
+<h2>TwitterAPI.xtend</h2>
+<pre><code class="java">  def getFriendsTimeline()
+  {
+    return twitter.getFriendsTimeline()
+  }
+</code></pre>
+
+<p>The UpdaterService can be adjusted to now periodically request the update in the background thread:</p>
+<h3>UpdaterService.xtend</h3>
+<pre><code class="java">package com.marakana.yambax
+
+import android.app.Service
+import android.content.Intent
+import java.util.List
+import winterwell.jtwitter.Twitter;
+import com.marakana.utils.TwitterAPI
+import winterwell.jtwitter.TwitterException
+import android.util.Log
+
+class UpdaterService extends Service
+{
+  val DELAY   = 10000
+  var running = false
+
+  var Thread               updateThread
+  var TwitterAPI           twitter
+  var List&lt;Twitter.Status&gt; timeline;
+
+  var updater = [ | 
+                  while (!Thread.currentThread().isInterrupted() &amp;&amp; running)
+                  {
+                    try
+                    {
+                      timeline = twitter.getFriendsTimeline()
+                      timeline.forEach[ Log.d(&quot;YAMBA&quot;, String.format(&quot;%s: %s&quot;, it.user.name, it.text)); ]
+                      Thread.sleep(DELAY);
+                    }
+                    catch (TwitterException e)
+                    {
+                      Log.e(&quot;YAMBA&quot;, &quot;Failed to connect to twitter service&quot;, e); 
+                    }
+                    catch (InterruptedException e)
+                    {}
+                  } ] as Runnable
+
+  override onBind(Intent intent)
+  {
+    null
+  } 
+
+  override onCreate()
+  {
+    var app = getApplication() as YambaApplication
+    this.twitter = app.twitter
+    updateThread = new Thread(updater)
+    super.onCreate
+  }
+
+  override onStartCommand(Intent intent, int flags, int startId)
+  {
+    super.onStartCommand(intent, flags, startId)
+    running = true
+    updateThread.start
+    START_STICKY;
+  }
+
+  override onDestroy()
+  {
+    super.onDestroy
+    running = false
+    updateThread.interrupt
+  }
+}
+</code></pre>
+
+<p>Launch the app, and verify that the logs contain the output of this periodic update:</p>
+<p><img alt="" src="img/01.png"></p>
+<p>Make sure that when you stop the service the updates cease.</p>
+<ul>
+<li><a href="https://github.com/edeleastar/yambax/tree/e509c23f52594b2ccb3d382f71d6d1362466495f">Source</a></li>
+</ul>
+	  </section>
+	  <section data-tab="04" class="ui tab stacked moodle-book segment">
+	     <h1>BackgoundService Class</h1>
+<p>We define a new abstract class to encapsulate a general purpose background service in <code>com.marakana.utils</code>:</p>
+<h2>BackgroundService.xtend</h2>
+<pre><code class="java">package com.marakana.utils
+
+import android.app.Service
+import android.content.Intent
+
+abstract class BackgroundService extends Service
+{
+  val DELAY   = 10000
+  var running = false 
+  var Thread updateThread
+
+  var updater = [ | 
+                  while (!Thread.currentThread().isInterrupted() &amp;&amp; running)
+                  {
+                    try
+                    {
+                      this.doBackgroundTask()
+                      Thread.sleep(DELAY);
+                    }
+                    catch (InterruptedException e)
+                    {}
+                  } ] as Runnable
+
+  override onBind(Intent intent)
+  {
+    null
+  } 
+
+  def abstract void doBackgroundTask()
+
+  def startBackgroundTask()
+  {
+    running = true
+    updateThread.start
+  }
+
+  def stopBackgroundTask()
+  {
+    running = false
+    updateThread.interrupt
+  }
+
+  override onCreate()
+  {
+    updateThread = new Thread(updater)
+    super.onCreate
+  }
+}
+</code></pre>
+
+<p>This will allow us to simplify the UpdaterService class:</p>
+<h2>UpdaterService.xtend</h2>
+<pre><code class="java">package com.marakana.yambax
+
+import android.content.Intent
+import java.util.List
+import winterwell.jtwitter.Twitter;
+import com.marakana.utils.TwitterAPI
+import winterwell.jtwitter.TwitterException
+import android.util.Log
+import com.marakana.utils.BackgroundService
+
+class UpdaterService extends BackgroundService
+{
+  var TwitterAPI           twitter
+  var List&lt;Twitter.Status&gt; timeline;
+
+  override onBind(Intent intent)
+  {
+    null
+  } 
+
+  override def void doBackgroundTask()
+  {
+    try
+    {
+      timeline = twitter.getFriendsTimeline()
+      timeline.forEach[ Log.d(&quot;YAMBA&quot;, String.format(&quot;%s: %s&quot;, it.user.name, it.text))]
+    }
+    catch (TwitterException e)
+    {
+      Log.e(&quot;YAMBA&quot;, &quot;Failed to connect to twitter service&quot;, e); 
+    }
+  }
+
+  override onCreate()
+  {
+    super.onCreate
+    var app = getApplication() as YambaApplication
+    this.twitter = app.twitter
+  }
+
+  override onStartCommand(Intent intent, int flags, int startId)
+  {
+    super.onStartCommand(intent, flags, startId)
+    startBackgroundTask
+    START_STICKY;
+  }
+
+  override onDestroy()
+  {
+    super.onDestroy
+    stopBackgroundTask
+  }
+}
+</code></pre>
+
+<p>Test the application again.</p>
+<ul>
+<li><a href="https://github.com/edeleastar/yambax/tree/b63666909763a3718aa559562d67acc58496bd7f">Source</a></li>
+</ul>
+	  </section>
+	  <section data-tab="05" class="ui tab stacked moodle-book segment">
+	     <h1>Timeline UI</h1>
+<p>We can introduce a UI to render the timeline using these resources:</p>
+<h2>res/values/strings.xml</h2>
+<pre><code>&lt;resources&gt;
+  &lt;string name=&quot;app_name&quot;&gt;Yamba X&lt;/string&gt;
+  &lt;string name=&quot;titleYamba&quot;&gt;Yamba&lt;/string&gt;
+  &lt;string name=&quot;titleStatus&quot;&gt;Status Update&lt;/string&gt;
+  &lt;string name=&quot;hintText&quot;&gt;Please enter your 140-character status&lt;/string&gt;
+  &lt;string name=&quot;buttonUpdate&quot;&gt;Update&lt;/string&gt;
+
+  &lt;string name=&quot;titlePrefs&quot;&gt;Preferences&lt;/string&gt;
+  &lt;string name=&quot;titleUsername&quot;&gt;Username&lt;/string&gt;
+  &lt;string name=&quot;titlePassword&quot;&gt;Password&lt;/string&gt;
+  &lt;string name=&quot;titleApiRoot&quot;&gt;API Root&lt;/string&gt;
+
+  &lt;string name=&quot;summaryUsername&quot;&gt;Please enter your username&lt;/string&gt;
+  &lt;string name=&quot;summaryPassword&quot;&gt;Please enter your password&lt;/string&gt;
+  &lt;string name=&quot;summaryApiRoot&quot;&gt;URL of Root API for your service&lt;/string&gt;
+
+  &lt;string name=&quot;titleServiceStop&quot;&gt;Stop Service&lt;/string&gt;
+  &lt;string name=&quot;titleServiceStart&quot;&gt;Start Service&lt;/string&gt;
+
+  &lt;string name=&quot;titleTimeline&quot;&gt;Timeline&lt;/string&gt; 
+  &lt;string name=&quot;msgAllDataPurged&quot;&gt;All data has been purged&lt;/string&gt;
+  &lt;string name=&quot;titlePurge&quot;&gt;Purge Data&lt;/string&gt;
+&lt;/resources&gt;
+</code></pre>
+
+<h2>res/menu/menu.xml</h2>
+<pre><code>&lt;menu xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot; &gt;
+  &lt;item android:id=    &quot;@+id/itemStatus&quot;                  android:title= &quot;@string/titleStatus&quot;        android:icon= &quot;@android:drawable/ic_menu_edit&quot;&gt;&lt;/item&gt;
+  &lt;item android:title= &quot;@string/titleTimeline&quot;            android:id=    &quot;@+id/itemTimeline&quot;          android:icon= &quot;@android:drawable/ic_menu_sort_by_size&quot;&gt;&lt;/item&gt;
+  &lt;item android:id=    &quot;@+id/itemPrefs&quot;                   android:title= &quot;@string/titlePrefs&quot;         android:icon= &quot;@android:drawable/ic_menu_preferences&quot;&gt;&lt;/item&gt;
+  &lt;item android:icon=  &quot;@android:drawable/ic_menu_delete&quot; android:title= &quot;@string/titlePurge&quot;         android:id=   &quot;@+id/itemPurge&quot;&gt;&lt;/item&gt;
+  &lt;item android:id=    &quot;@+id/itemToggleService&quot;           android:title= &quot;@string/titleServiceStart&quot;  android:icon= &quot;@android:drawable/ic_media_play&quot;&gt;&lt;/item&gt;
+&lt;/menu&gt;
+</code></pre>
+
+<h2>res/layout/row.xml</h2>
+<pre><code>&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+  android:layout_height=&quot;wrap_content&quot; android:orientation=&quot;vertical&quot;
+  android:layout_width=&quot;fill_parent&quot;&gt;
+
+  &lt;LinearLayout android:layout_height=&quot;wrap_content&quot;
+    android:layout_width=&quot;fill_parent&quot;&gt;
+
+    &lt;TextView android:layout_height=&quot;wrap_content&quot;
+      android:layout_width=&quot;fill_parent&quot; android:layout_weight=&quot;1&quot;
+      android:id=&quot;@+id/textUser&quot; android:text=&quot;&quot;
+      android:textStyle=&quot;bold&quot; /&gt;
+
+    &lt;TextView android:layout_height=&quot;wrap_content&quot;
+      android:layout_width=&quot;fill_parent&quot; android:layout_weight=&quot;1&quot;
+      android:gravity=&quot;right&quot; android:id=&quot;@+id/textCreatedAt&quot;
+      android:text=&quot;&quot; /&gt;
+  &lt;/LinearLayout&gt;
+
+  &lt;TextView android:layout_height=&quot;wrap_content&quot;
+    android:layout_width=&quot;fill_parent&quot; android:id=&quot;@+id/textText&quot;
+    android:text=&quot;&quot; /&gt;
+
+&lt;/LinearLayout&gt;
+</code></pre>
+
+<h2>res/layout/timeline.xml</h2>
+<pre><code>&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+  android:orientation=&quot;vertical&quot; android:layout_height=&quot;fill_parent&quot;
+  android:layout_width=&quot;fill_parent&quot;&gt;
+
+  &lt;TextView android:layout_width=&quot;wrap_content&quot;
+    android:layout_height=&quot;wrap_content&quot; android:layout_gravity=&quot;center&quot;
+    android:layout_margin=&quot;10dp&quot; android:text=&quot;@string/titleTimeline&quot;
+    android:textColor=&quot;#fff&quot; android:textSize=&quot;30sp&quot; /&gt;
+
+  &lt;ListView android:layout_height=&quot;fill_parent&quot;
+    android:layout_width=&quot;fill_parent&quot; android:id=&quot;@+id/listTimeline&quot;
+    android:background=&quot;#6000&quot; /&gt;
+
+&lt;/LinearLayout&gt;
+</code></pre>
+
+<ul>
+<li><a href="https://github.com/edeleastar/yambax/tree/474c01dd718e4732dda06871556b4c6fda2709ae">Source</a></li>
+</ul>
+	  </section>
+	  <section data-tab="06" class="ui tab stacked moodle-book segment">
+	     <h1>YambaApplication</h1>
+<p>Substantially rework the main application object to orchestrate the timeline and updater service:</p>
+<h2>YambaApplication.xtend</h2>
+<pre><code class="java">package com.marakana.yambax
+
+import com.marakana.utils.TwitterAPI
+import android.content.SharedPreferences
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener
+import android.app.Application
+import android.preference.PreferenceManager
+import java.util.List
+import winterwell.jtwitter.Twitter;
+import winterwell.jtwitter.Twitter.Status;
+import java.util.LinkedList
+
+interface TimelineUpdateListener
+{
+  def void timelineUpdate()
+}
+
+class YambaApplication extends Application
+{
+  @Property TwitterAPI             twitter        = new TwitterAPI(&quot;student&quot;, &quot;password&quot;, &quot;http://yamba.marakana.com/api&quot;)
+  @Property boolean                serviceRunning = false
+  @Property List&lt;Twitter.Status&gt;   timeline       = new LinkedList&lt;Status&gt;
+  @Property TimelineUpdateListener updateListener
+
+  var prefsChanged = [ SharedPreferences prefs, String s |
+                       twitter.changeAccount(prefs)  ]  as OnSharedPreferenceChangeListener
+
+  override onCreate()
+  {
+    super.onCreate
+    val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+    prefs.registerOnSharedPreferenceChangeListener = prefsChanged    
+  }
+
+  override onTerminate()
+  {
+    super.onTerminate
+  }
+
+  def updateTimeline(Iterable&lt;Twitter.Status&gt; newTweets)
+  {
+    newTweets.forEach[timeline.add(0, it)]
+    updateListener?.timelineUpdate
+  }
+
+  def clearTimeline()
+  {
+    timeline.clear
+    updateListener?.timelineUpdate
+  }
+}
+</code></pre>
+
+<p>The UpdaterService can be reworked to inter operate with the application object:</p>
+<h2>UpdaterService.xtend</h2>
+<pre><code class="java">package com.marakana.yambax
+
+import android.content.Intent
+import java.util.List
+import winterwell.jtwitter.Twitter
+import winterwell.jtwitter.Twitter.Status
+import com.marakana.utils.TwitterAPI
+import winterwell.jtwitter.TwitterException
+import android.util.Log
+import com.marakana.utils.BackgroundService
+import android.os.Looper
+import android.os.Handler
+
+class UpdaterService extends BackgroundService
+{
+  var YambaApplication app
+  var TwitterAPI       twitter
+  var Iterable&lt;Status&gt; newTweets 
+
+  override onCreate()
+  {
+    super.onCreate
+    app        = getApplication as YambaApplication
+    twitter    = app.twitter
+  }
+
+  override onStartCommand(Intent intent, int flags, int startId)
+  {
+    super.onStartCommand(intent, flags, startId)
+    startBackgroundTask
+    app.serviceRunning = true
+    START_STICKY;
+  }
+
+  override onDestroy()
+  {
+    super.onDestroy
+    stopBackgroundTask
+    app.serviceRunning = false
+  }
+
+  override def void doBackgroundTask()
+  {
+    try
+    {
+      val List&lt;Twitter.Status&gt; timeline  = twitter.getFriendsTimeline
+      newTweets = if (app.timeline.size == 0) timeline else timeline.filter [it.id &gt; app.timeline.get(0).id]
+
+      Log.e(&quot;YAMBA&quot;, &quot;number of new tweets= &quot; + newTweets.size)       
+      val handler = new Handler(Looper.getMainLooper)      
+
+      handler.post ([| app.updateTimeline(newTweets)])
+    }
+    catch (TwitterException e)
+    {
+      Log.e(&quot;YAMBA&quot;, &quot;Failed to connect to twitter service&quot;, e); 
+    }
+  }
+}
+</code></pre>
+	  </section>
+	  <section data-tab="07" class="ui tab stacked moodle-book segment">
+	     <h1>Revised Activities</h1>
+<p>Introduce a new class to encapsulate a generalised Activity for the application:</p>
+<h2>BaseActivity.xtend</h2>
+<pre><code class="java">package com.marakana.yambax
+
+import android.app.Activity
+import android.content.Intent
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
+
+interface Command
+{
+  def void doCommand()
+}
+
+class BaseActivity extends Activity
+{
+  protected var YambaApplication app
+
+  val prefs         = [ | startActivity(new Intent(this, typeof(PrefsActivity))
+                                              .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)) ] as Command
+
+  val toggleService = [ | intent = new Intent(this, typeof(UpdaterService))
+                          if (app.isServiceRunning)
+                            stopService(intent)
+                          else
+                            startService(intent) ] as Command
+
+  val purge         = [ | app.clearTimeline
+                          Toast.makeText(this, R.string.msgAllDataPurged, Toast.LENGTH_LONG).show() ] as Command
+
+  val timeline      = [ | startActivity(new Intent(this, typeof(TimelineActivity))
+                                        .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                                        .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)) ] as Command
+
+  val status        = [ | startActivity(new Intent(this, typeof(StatusActivity))
+                                        .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT))] as Command
+
+  var commands      = #{ R.id.itemPrefs         -&gt; prefs,
+                         R.id.itemToggleService -&gt; toggleService,
+                         R.id.itemPurge         -&gt; purge,
+                         R.id.itemTimeline      -&gt; timeline,
+                         R.id.itemStatus        -&gt; status  }
+
+  override onCreate(Bundle savedInstanceState)
+  {
+    super.onCreate(savedInstanceState);
+    app = getApplication as YambaApplication 
+  }
+
+  override onCreateOptionsMenu(Menu menu)
+  { 
+    getMenuInflater.inflate(R.menu.menu, menu)
+    true
+  }  
+
+  override onOptionsItemSelected(MenuItem item)
+  { 
+    val command = commands.get(item.getItemId) as Command
+    command.doCommand
+    true
+  } 
+
+  override onMenuOpened(int featureId, Menu menu)
+  { 
+    val toggleItem = menu.findItem(R.id.itemToggleService)
+    toggleItem.title = if (app.isServiceRunning) R.string.titleServiceStop         else R.string.titleServiceStart
+    toggleItem.icon  = if (app.isServiceRunning) android.R.drawable.ic_media_pause else android.R.drawable.ic_media_play
+    true
+  }   
+}
+</code></pre>
+
+<p>Note that it defines a set of 'commands', which represent actions that can be triggered form the application menu.</p>
+<p>Two views can be based on this activity:</p>
+<h2>StatusActivity.xtend</h2>
+<pre><code class="java">package com.marakana.yambax
+
+import android.os.Bundle
+import android.widget.EditText
+import android.widget.Button
+import android.view.View.OnClickListener
+
+class StatusActivity extends  BaseActivity 
+{
+  var EditText       editText
+  var Button         updateButton
+  var update       = [ new TwitterPoster(this).execute(editText.getText.toString)  ] as OnClickListener
+
+  override onCreate(Bundle savedInstanceState)
+  {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_status)
+
+    editText     = findViewById(R.id.editText) as EditText
+    updateButton = findViewById(R.id.buttonUpdate) as Button
+
+    updateButton.setOnClickListener = update   
+  }
+}
+</code></pre>
+
+<h2>TimelineActivity</h2>
+<pre><code>package com.marakana.yambax
+
+import android.os.Bundle
+import android.widget.ListView
+import android.widget.ArrayAdapter
+import winterwell.jtwitter.Twitter
+import android.content.Context
+import java.util.List
+import winterwell.jtwitter.Twitter.Status
+import android.view.View
+import android.view.ViewGroup
+import android.view.LayoutInflater
+import android.widget.TextView
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+
+class TimelineActivity extends BaseActivity
+{
+  var TimelineAdapter timelineAdapter
+  var timelineUpdate = [| timelineAdapter.notifyDataSetChanged ] as TimelineUpdateListener
+
+  override onCreate(Bundle savedInstanceState)
+  {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.timeline)
+    timelineAdapter    = new TimelineAdapter(this, R.layout.row, app.timeline)
+    app.updateListener = timelineUpdate
+  }
+
+  override onStart()
+  { 
+    super.onStart    
+    val listTimeline = findViewById(R.id.listTimeline) as ListView
+    listTimeline.setAdapter(timelineAdapter);
+  }
+}
+
+class StatusAdapter
+{
+  @Property View view;
+  var DateFormat df = new SimpleDateFormat(&quot;MM/dd/yyyy HH:mm:ss&quot;);
+
+  new (Context context, ViewGroup parent, Twitter.Status status)
+  {
+    val LayoutInflater inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    view = inflater.inflate(R.layout.row, parent, false)    
+    view.id = status.id.intValue
+    updateControls(status)
+  }
+
+  def updateControls(Twitter.Status status)
+  {
+    val user       = view.findViewById(R.id.textUser)      as TextView
+    val createdAt  = view.findViewById(R.id.textCreatedAt) as TextView
+    val text       = view.findViewById(R.id.textText)      as TextView 
+
+    user.text      = status.getUser.name
+    createdAt.text = df.format(status.createdAt)
+    text.text      = status.text
+  }
+}
+
+class TimelineAdapter extends ArrayAdapter&lt;Twitter.Status&gt;
+{
+  var List&lt;Status&gt; timeline
+  var Context      context
+
+  new(Context context, int textViewResourceId, List&lt;Twitter.Status&gt; timeline) 
+  {
+    super(context, textViewResourceId, timeline)
+    this.timeline = timeline
+    this.context  = context
+  }
+
+  override getView(int position, View convertView, ViewGroup parent)
+  {
+    val status = timeline.get(position)
+    val item = new StatusAdapter (context, parent, status)
+    return item.view
+  }
+
+  override getCount()
+  {
+    return timeline.size
+  }
+
+  override Twitter.Status getItem(int position)
+  {
+    return timeline.get(position);
+  }
+
+  override getItemId(int position)
+  {
+    val status = timeline.get(position);
+    status.id;
+  }
+
+  override getPosition(Twitter.Status c)
+  {
+    return timeline.indexOf(c);
+  }  
+}
+</code></pre>
+	  </section>
+	  <section data-tab="08" class="ui tab stacked moodle-book segment">
+	     <h1>AndroidManifest</h1>
+<p>The manifest will need these new activities to be defined. This is the complete manifest for the application:</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    package=&quot;com.marakana.yambax&quot;
+    android:versionCode=&quot;1&quot;
+    android:versionName=&quot;1.0&quot; &gt;
+
+    &lt;uses-sdk
+        android:minSdkVersion=&quot;16&quot;
+        android:targetSdkVersion=&quot;16&quot; /&gt;
+
+    &lt;uses-permission android:name=&quot;android.permission.INTERNET&quot; /&gt; 
+
+    &lt;application
+        android:allowBackup=&quot;true&quot;
+        android:icon=&quot;@drawable/ic_launcher&quot;
+        android:label=&quot;@string/app_name&quot;
+        android:theme=&quot;@style/AppTheme&quot; 
+        android:name=&quot;com.marakana.yambax.YambaApplication&quot;&gt;
+
+       &lt;activity android:name=&quot;com.marakana.yambax.TimelineActivity&quot; android:label=&quot;@string/titleTimeline&quot;&gt;
+         &lt;intent-filter&gt; 
+           &lt;action android:name=&quot;android.intent.action.MAIN&quot; /&gt; 
+           &lt;category android:name=&quot;android.intent.category.LAUNCHER&quot; /&gt;
+         &lt;/intent-filter&gt;
+      &lt;/activity&gt;  
+
+      &lt;activity android:name=&quot;com.marakana.yambax.StatusActivity&quot; android:label=&quot;@string/app_name&quot; /&gt; 
+      &lt;activity android:name=&quot;com.marakana.yambax.PrefsActivity&quot;  android:label=&quot;@string/titlePrefs&quot; /&gt;  
+      &lt;service  android:name=&quot;com.marakana.yambax.UpdaterService&quot; /&gt;
+    &lt;/application&gt;
+
+&lt;/manifest&gt;
+</code></pre>
+
+<p>Build and test the application.</p>
+<ul>
+<li><a href="https://github.com/edeleastar/yambax/tree/dc1a6072d6ef2faf6ec5f66f934bea4029d51df5">Source</a></li>
+</ul>
+	  </section>
+  <br>  
+  <div class="ui fixed bottom borderless menu">'
+    <div class="ui small item"> 
+    <p id="footertext">
+    Prepared by  Eamonn de Leastar (edeleastar@wit.ie). Except where otherwise noted, this content is licensed under a  
+     <a  href="http://creativecommons.org/licenses/by-nc/4.0/" title="External link to http://creativecommons.org/licenses/by-nc/4.0/" 
+       target="_blank">Creative Commons Attribution-NonCommercial 4.0 License
+     </a>
+     </p>
+    </div>
+  </div>   
+    
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-49703418-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>  </body>
+ </html>
