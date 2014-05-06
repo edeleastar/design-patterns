@@ -1,0 +1,317 @@
+ <!DOCTYPE html>
+ <html>
+   <head>
+     <meta charset="utf-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+   
+     <title> Lab-12-C </title>
+   
+     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+     <link rel="stylesheet" href="./style/semantic/css/semantic.min.css" type="text/css">  
+     <link rel="stylesheet" href="./style/custom/main.css" type="text/css"> 
+   
+     <script src="./style/custom/jquery-2.1.0.min.js"></script> 
+     <script src="./style/custom/jquery.address-1.6.min.js"></script>
+     <script src="./style/semantic/javascript/semantic.min.js"></script>
+   
+     <link rel="stylesheet" href="./style/highlight/school_book.css">
+     <script src="./style/highlight/highlight.pack.js"></script> 
+     <script>hljs.initHighlightingOnLoad();</script>
+   
+     <script src="./style/custom/common.js"> </script> 
+     <script src="./style/custom/main.js"> </script> 
+  </head>
+  <body>
+  <nav class="ui fixed top pointing borderless inverted menu">
+    <header class="header item"> <a href="../index.html">Xtend Android</a></header>
+    <div class="right tab-menu menu">
+          <a class="item" data-tab="Lab-12-C"> Lab-12-C </a>
+          <a class="item" data-tab="01"> 01 </a>
+          <a class="item" data-tab="02"> 02 </a>
+          <a class="item" data-tab="03"> 03 </a>
+          <a class="item" data-tab="04"> 04 </a>
+    </div>
+  </nav>
+
+  <br>
+
+	  <section data-tab="Lab-12-C" class="ui tab stacked moodle-book segment">
+	     <h1>Objectives</h1>
+<ul>
+<li>Incorporate Broadcast Event Senders/Receivers into the application</li>
+<li>Use BootReciever to recieve boot event to start application service on launch</li>
+<li>Use NetworkReveicer to stop/start service when network is starting/stopping</li>
+<li>Use Broadcast Events for status updates from background service to TimelineActivity</li>
+</ul>
+	  </section>
+	  <section data-tab="01" class="ui tab stacked moodle-book segment">
+	     <h1>BroadcastReciever - Boot</h1>
+<h2>YambaApplication.xtend</h2>
+<pre><code class="java">class BootReceiver extends BroadcastReceiver
+{
+  override onReceive(Context context, Intent intent) 
+  {
+    context.startService(new Intent(context, typeof(UpdaterService)))
+  }
+} 
+</code></pre>
+
+<h2>AndroidManifest</h2>
+<pre><code>    &lt;uses-permission android:name=&quot;android.permission.RECEIVE_BOOT_COMPLETED&quot; /&gt;
+</code></pre>
+
+<pre><code>      &lt;receiver android:name=&quot;com.marakana.yambax.BootReceiver&quot;&gt;
+        &lt;intent-filter&gt;
+          &lt;action android:name=&quot;android.intent.action.BOOT_COMPLETED&quot; /&gt;
+        &lt;/intent-filter&gt; 
+      &lt;/receiver&gt;  
+</code></pre>
+
+<h2>YambaApplication.xtend</h2>
+<pre><code class="java">  @Property boolean                serviceRunning = true
+</code></pre>
+
+<h2>BaseActivity.xtend</h2>
+<pre><code class="java">  val toggleService = [ | intent = new Intent(this, typeof(UpdaterService))
+                          if (app.isServiceRunning)
+                            stopService(intent)
+                           else
+                            startService(intent) 
+                          app.serviceRunning = !app.serviceRunning] as Command
+</code></pre>
+
+<p><img alt="" src="img/00.png"></p>
+	  </section>
+	  <section data-tab="02" class="ui tab stacked moodle-book segment">
+	     <h1>BaroadcastReciever - tweets</h1>
+<h2>res/values/strings.xml</h2>
+<pre><code>  &lt;string name=&quot;send_timeline_notifications_permission_label&quot;&gt;Sends Timeline Notifications&lt;/string&gt;
+  &lt;string name=&quot;send_timeline_notifications_permission_description&quot;&gt;Allow this application to send timeline notifications to other applications&lt;/string&gt;
+  &lt;string name=&quot;receive_timeline_notifications_permission_label&quot;&gt;Receive Timeline Notifications&lt;/string&gt;
+  &lt;string name=&quot;receive_timeline_notifications_permission_description&quot;&gt;Allow this application to receive timeline notifications from other applications&lt;/string&gt;
+</code></pre>
+
+<h2>AndroidManifest.xml</h2>
+<pre><code>    &lt;uses-permission android:name=&quot;com.marakana.yamba.SEND_TIMELINE_NOTIFICATIONS&quot; /&gt;
+    &lt;uses-permission android:name=&quot;com.marakana.yamba.RECEIVE_TIMELINE_NOTIFICATIONS&quot; /&gt;
+
+    &lt;permission android:name=&quot;com.marakana.yamba.SEND_TIMELINE_NOTIFICATIONS&quot;
+      android:label=&quot;@string/send_timeline_notifications_permission_label&quot;
+      android:description=&quot;@string/send_timeline_notifications_permission_description&quot;
+      android:permissionGroup=&quot;android.permission-group.PERSONAL_INFO&quot;
+      android:protectionLevel=&quot;normal&quot; /&gt;
+
+    &lt;permission android:name=&quot;com.marakana.yamba.RECEIVE_TIMELINE_NOTIFICATIONS&quot;
+      android:label=&quot;@string/receive_timeline_notifications_permission_label&quot;
+      android:description=&quot;@string/receive_timeline_notifications_permission_description&quot;
+      android:permissionGroup=&quot;android.permission-group.PERSONAL_INFO&quot;
+      android:protectionLevel=&quot;normal&quot; /&gt;  
+</code></pre>
+
+<h2>UpdaterService</h2>
+<p>New static strings:</p>
+<pre><code>  public static final String NEW_STATUS_INTENT              = &quot;com.marakana.yamba.NEW_STATUS&quot;
+  public static final String SEND_TIMELINE_NOTIFICATIONS    = &quot;com.marakana.yamba.SEND_TIMELINE_NOTIFICATIONS&quot;;
+  public static final String RECEIVE_TIMELINE_NOTIFICATIONS = &quot;com.marakana.yamba.RECEIVE_TIMELINE_NOTIFICATIONS&quot;
+</code></pre>
+
+<pre><code class="java">  override def void doBackgroundTask()
+  {
+    try
+    {
+      val List&lt;Twitter.Status&gt; timeline  = twitter.getFriendsTimeline
+      newTweets = if (app.timeline.size == 0) timeline else timeline.filter [it.id &gt; app.timeline.get(0).id]
+      Log.e(&quot;YAMBA&quot;, &quot;number of new tweets= &quot; + newTweets.size)      
+
+      app.updateTimeline(newTweets)
+      sendBroadcast(new Intent(NEW_STATUS_INTENT), RECEIVE_TIMELINE_NOTIFICATIONS);      
+    }
+    catch (TwitterException e)
+    {
+      Log.e(&quot;YAMBA&quot;, &quot;Failed to connect to twitter service&quot;, e); 
+    }
+  }
+</code></pre>
+
+<h2>YambaApplication.xtend</h2>
+<pre><code>  def updateTimeline(Iterable&lt;Twitter.Status&gt; newTweets)
+  {
+    newTweets.forEach[timeline.add(0, it)]
+  }
+
+  def clearTimeline()
+  {
+    timeline.clear
+    // todo - clear timeline view
+  }
+}
+</code></pre>
+
+<h2>TimelineReceiver</h2>
+<pre><code class="java">class TimelineReceiver extends BroadcastReceiver
+{
+  var TimelineActivity timelineActivity
+
+  new (TimelineActivity activity)
+  {
+    timelineActivity = activity;
+  }
+
+  override onReceive(Context context, Intent intent) 
+  {
+    timelineActivity.timelineAdapter.notifyDataSetChanged
+  }
+} 
+</code></pre>
+
+<pre><code class="java">class TimelineActivity extends BaseActivity
+{  
+  @Property TimelineAdapter timelineAdapter
+  var TimelineReceiver receiver
+  var IntentFilter     filter
+
+  override onCreate(Bundle savedInstanceState)
+  {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.timeline)
+    timelineAdapter    = new TimelineAdapter(this, R.layout.row, app.timeline)
+
+    receiver = new TimelineReceiver (this)
+    filter   = new IntentFilter( UpdaterService.NEW_STATUS_INTENT )
+  }
+
+  override onStart()
+  { 
+    super.onStart    
+    val listTimeline = findViewById(R.id.listTimeline) as ListView
+    listTimeline.setAdapter(timelineAdapter);
+  }
+
+  override onResume()
+  {
+    super.onResume
+    super.registerReceiver(receiver, filter, UpdaterService.SEND_TIMELINE_NOTIFICATIONS, null);
+  }
+
+  override onPause() 
+  {
+    super.onPause();
+    unregisterReceiver(receiver) 
+  }
+}
+</code></pre>
+	  </section>
+	  <section data-tab="03" class="ui tab stacked moodle-book segment">
+	     <h1>BroadcastReceiver - Network Events</h1>
+<pre><code>class NetworkReceiver extends BroadcastReceiver 
+{ 
+  override onReceive(Context context, Intent intent) 
+  {
+    val isNetworkDown = intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false); 
+
+    if (isNetworkDown) 
+    {
+      if (YambaApplication.serviceRunning)
+      {
+        Log.d(&quot;YAMBA&quot;, &quot;onReceive: NOT connected, stopping UpdaterService&quot;);
+        context.stopService(new Intent(context, typeof(UpdaterService)))
+      }
+    }
+    else 
+    {
+      if (!YambaApplication.serviceRunning)
+      {
+        Log.d(&quot;YAMBA&quot;, &quot;onReceive: connected, starting UpdaterService&quot;);
+        context.startService(new Intent(context, typeof(UpdaterService)))
+      }
+    }
+  }
+}
+</code></pre>
+
+<h2>YambaApplication.xtend</h2>
+<pre><code class="java">  public static boolean            serviceRunning = false
+</code></pre>
+
+<h2>BaseActivity.xtend</h2>
+<pre><code>  val toggleService = [ | intent = new Intent(this, typeof(UpdaterService))
+                          if (YambaApplication.serviceRunning)
+                            stopService(intent)
+                           else
+                            startService(intent) 
+                          YambaApplication.serviceRunning = !YambaApplication.serviceRunning] as Command
+</code></pre>
+
+<pre><code>  override onMenuOpened(int featureId, Menu menu)
+  { 
+    val toggleItem = menu.findItem(R.id.itemToggleService)
+    toggleItem.title = if (YambaApplication.serviceRunning) R.string.titleServiceStop         else R.string.titleServiceStart
+    toggleItem.icon  = if (YambaApplication.serviceRunning) android.R.drawable.ic_media_pause else android.R.drawable.ic_media_play
+    true
+  } 
+</code></pre>
+
+<h2>UpdaterService</h2>
+<pre><code>  override onStartCommand(Intent intent, int flags, int startId)
+  {
+    super.onStartCommand(intent, flags, startId)
+    startBackgroundTask
+    YambaApplication.serviceRunning = true
+    START_STICKY;
+  }
+
+  override onDestroy()
+  {
+    super.onDestroy
+    stopBackgroundTask
+    YambaApplication.serviceRunning = false
+  }
+</code></pre>
+
+<h2>AndroidManifest</h2>
+<pre><code>  &lt;uses-permission android:name=&quot;android.permission.ACCESS_NETWORK_STATE&quot; /&gt;
+</code></pre>
+
+<pre><code>      &lt;receiver android:name=&quot;com.marakana.yambax.NetworkReceiver&quot;&gt;
+        &lt;intent-filter&gt;
+          &lt;action android:name=&quot;android.net.conn.CONNECTIVITY_CHANGE&quot; /&gt;
+        &lt;/intent-filter&gt;
+      &lt;/receiver&gt;
+</code></pre>
+	  </section>
+	  <section data-tab="04" class="ui tab stacked moodle-book segment">
+	     <h1>Purge Timeline</h1>
+<h2>YambaApplication.xtend</h2>
+<pre><code>  def clearTimeline()
+  {
+    timeline.clear
+    sendBroadcast(new Intent(UpdaterService.NEW_STATUS_INTENT), UpdaterService.RECEIVE_TIMELINE_NOTIFICATIONS);   
+  }
+</code></pre>
+	  </section>
+  <br>  
+  <div class="ui fixed bottom borderless menu">'
+    <div class="ui small item"> 
+    <p id="footertext">
+    Prepared by  Eamonn de Leastar (edeleastar@wit.ie). Except where otherwise noted, this content is licensed under a  
+     <a  href="http://creativecommons.org/licenses/by-nc/4.0/" title="External link to http://creativecommons.org/licenses/by-nc/4.0/" 
+       target="_blank">Creative Commons Attribution-NonCommercial 4.0 License
+     </a>
+     </p>
+    </div>
+  </div>   
+    
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-49703418-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>  </body>
+ </html>
