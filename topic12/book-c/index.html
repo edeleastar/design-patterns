@@ -30,6 +30,7 @@
           <a class="item" data-tab="02"> 02 </a>
           <a class="item" data-tab="03"> 03 </a>
           <a class="item" data-tab="04"> 04 </a>
+          <a class="item" data-tab="Exercises"> Exercises </a>
     </div>
   </nav>
 
@@ -46,6 +47,7 @@
 	  </section>
 	  <section data-tab="01" class="ui tab stacked moodle-book segment">
 	     <h1>BroadcastReciever - Boot</h1>
+<p>Introduce this class to receive bootloader events:</p>
 <h2>YambaApplication.xtend</h2>
 <pre><code class="java">class BootReceiver extends BroadcastReceiver
 {
@@ -56,6 +58,7 @@
 } 
 </code></pre>
 
+<p>This will start the updater service when the device boots. It requires this permission in the manifest:</p>
 <h2>AndroidManifest</h2>
 <pre><code>    &lt;uses-permission android:name=&quot;android.permission.RECEIVE_BOOT_COMPLETED&quot; /&gt;
 </code></pre>
@@ -67,10 +70,12 @@
       &lt;/receiver&gt;  
 </code></pre>
 
+<p>We can change our default service state to running:</p>
 <h2>YambaApplication.xtend</h2>
 <pre><code class="java">  @Property boolean                serviceRunning = true
 </code></pre>
 
+<p>.. and also make some adjustments to the toggle service action:</p>
 <h2>BaseActivity.xtend</h2>
 <pre><code class="java">  val toggleService = [ | intent = new Intent(this, typeof(UpdaterService))
                           if (app.isServiceRunning)
@@ -80,10 +85,16 @@
                           app.serviceRunning = !app.serviceRunning] as Command
 </code></pre>
 
+<p>You can inspect the list of running services on the device:</p>
 <p><img alt="" src="img/00.png"></p>
+<hr>
+<h4><a href="https://github.com/edeleastar/yambax/commit/18e01fd9497959213352b2a9c91a77a78ccc2c3f">Source</a></h4>
+<hr>
 	  </section>
 	  <section data-tab="02" class="ui tab stacked moodle-book segment">
 	     <h1>BaroadcastReciever - tweets</h1>
+<p>We can employ Android Broadcast events for the status updates, removing the custom event mechanism we have hand coded.</p>
+<p>We first define some resources to describe the events:</p>
 <h2>res/values/strings.xml</h2>
 <pre><code>  &lt;string name=&quot;send_timeline_notifications_permission_label&quot;&gt;Sends Timeline Notifications&lt;/string&gt;
   &lt;string name=&quot;send_timeline_notifications_permission_description&quot;&gt;Allow this application to send timeline notifications to other applications&lt;/string&gt;
@@ -91,6 +102,7 @@
   &lt;string name=&quot;receive_timeline_notifications_permission_description&quot;&gt;Allow this application to receive timeline notifications from other applications&lt;/string&gt;
 </code></pre>
 
+<p>.. and then declare them in the manifest:</p>
 <h2>AndroidManifest.xml</h2>
 <pre><code>    &lt;uses-permission android:name=&quot;com.marakana.yamba.SEND_TIMELINE_NOTIFICATIONS&quot; /&gt;
     &lt;uses-permission android:name=&quot;com.marakana.yamba.RECEIVE_TIMELINE_NOTIFICATIONS&quot; /&gt;
@@ -108,13 +120,14 @@
       android:protectionLevel=&quot;normal&quot; /&gt;  
 </code></pre>
 
+<p>The strings need to be replicated in the UpdaterService class:</p>
 <h2>UpdaterService</h2>
-<p>New static strings:</p>
 <pre><code>  public static final String NEW_STATUS_INTENT              = &quot;com.marakana.yamba.NEW_STATUS&quot;
   public static final String SEND_TIMELINE_NOTIFICATIONS    = &quot;com.marakana.yamba.SEND_TIMELINE_NOTIFICATIONS&quot;;
   public static final String RECEIVE_TIMELINE_NOTIFICATIONS = &quot;com.marakana.yamba.RECEIVE_TIMELINE_NOTIFICATIONS&quot;
 </code></pre>
 
+<p>.. and then dispatched :</p>
 <pre><code class="java">  override def void doBackgroundTask()
   {
     try
@@ -133,6 +146,7 @@
   }
 </code></pre>
 
+<p>The knock on changes involve changes to the main application object:</p>
 <h2>YambaApplication.xtend</h2>
 <pre><code>  def updateTimeline(Iterable&lt;Twitter.Status&gt; newTweets)
   {
@@ -147,7 +161,8 @@
 }
 </code></pre>
 
-<h2>TimelineReceiver</h2>
+<p>.. and the TimelineActivity, which gets an new receiver object:</p>
+<h2>TimelineActivity</h2>
 <pre><code class="java">class TimelineReceiver extends BroadcastReceiver
 {
   var TimelineActivity timelineActivity
@@ -162,9 +177,8 @@
     timelineActivity.timelineAdapter.notifyDataSetChanged
   }
 } 
-</code></pre>
 
-<pre><code class="java">class TimelineActivity extends BaseActivity
+class TimelineActivity extends BaseActivity
 {  
   @Property TimelineAdapter timelineAdapter
   var TimelineReceiver receiver
@@ -200,9 +214,14 @@
   }
 }
 </code></pre>
+
+<hr>
+<h4><a href="https://github.com/edeleastar/yambax/commit/7e3b107c6d33b759924c08711cdde46fdecc6284">Source</a></h4>
+<hr>
 	  </section>
 	  <section data-tab="03" class="ui tab stacked moodle-book segment">
 	     <h1>BroadcastReceiver - Network Events</h1>
+<p>We can also potentially improve the energy deficiency of our application by disabling the background task when the network is unavailable:</p>
 <pre><code>class NetworkReceiver extends BroadcastReceiver 
 { 
   override onReceive(Context context, Intent intent) 
@@ -229,10 +248,12 @@
 }
 </code></pre>
 
+<p>This will involves setting our initial service back to false:</p>
 <h2>YambaApplication.xtend</h2>
 <pre><code class="java">  public static boolean            serviceRunning = false
 </code></pre>
 
+<p>.. and other adjustments:</p>
 <h2>BaseActivity.xtend</h2>
 <pre><code>  val toggleService = [ | intent = new Intent(this, typeof(UpdaterService))
                           if (YambaApplication.serviceRunning)
@@ -278,9 +299,14 @@
         &lt;/intent-filter&gt;
       &lt;/receiver&gt;
 </code></pre>
+
+<hr>
+<h3><a href="https://github.com/edeleastar/yambax/commit/0a3dc09d6d5642901c3e4f85ed9aaccfae5aad07">Source</a></h3>
+<hr>
 	  </section>
 	  <section data-tab="04" class="ui tab stacked moodle-book segment">
 	     <h1>Purge Timeline</h1>
+<p>Finally, our timeline should be cleared if a purge action received:</p>
 <h2>YambaApplication.xtend</h2>
 <pre><code>  def clearTimeline()
   {
@@ -288,6 +314,196 @@
     sendBroadcast(new Intent(UpdaterService.NEW_STATUS_INTENT), UpdaterService.RECEIVE_TIMELINE_NOTIFICATIONS);   
   }
 </code></pre>
+
+<hr>
+<h3><a href="https://github.com/edeleastar/yambax/commit/6982314d07f27d2edfe973028f3d75c719ee9a75">Source</a></h3>
+<hr>
+	  </section>
+	  <section data-tab="Exercises" class="ui tab stacked moodle-book segment">
+	     <h1>Exercises (Assignment Ideas)</h1>
+<p>These labs are based on the application developed using this text:</p>
+<ul>
+<li><a href="http://shop.oreilly.com/product/0636920010883.do">http://shop.oreilly.com/product/0636920010883.do</a></li>
+</ul>
+<p>The Yamba application here uses android API largely compatible with Android 3.0 and earlier.</p>
+<p>However, it has been substantially revised to use a full suite of modern facilities introduced in subsequent releases:</p>
+<ul>
+<li><a href="http://shop.oreilly.com/product/0636920023456.do">http://shop.oreilly.com/product/0636920023456.do</a></li>
+</ul>
+<p>A full set up repos for all the code in the revised application is here:</p>
+<ul>
+<li><a href="https://github.com/learning- android">https://github.com/learning- android</a></li>
+</ul>
+<p>(Toc is reproduce at the end of this page)</p>
+<p>Specifically, the revised application includes:</p>
+<ul>
+<li>Fragments</li>
+<li>Actions and Action Bars</li>
+<li>Content Providers</li>
+<li>Intent Services</li>
+<li>Alarms</li>
+<li>
+<p>Live Wallpapers</p>
+</li>
+<li>
+<p>a number of minor improvements.</p>
+</li>
+</ul>
+<p>A version of YambaX (written in xtend) -  fully updated to include the above features, would be an interesting and useful assignment topic</p>
+<h2>ToC for Learning Android 2nd Edition</h2>
+<h3>Chapter 1 Android Overview</h3>
+<ul>
+<li>Android Overview</li>
+<li>History</li>
+<li>Android Versions</li>
+<li>Android Flavors</li>
+<li>Summary</li>
+</ul>
+<h3>Chapter 2 Java Review</h3>
+<ul>
+<li>Comments</li>
+<li>Data Types: Primitives and Objects</li>
+<li>Modifiers</li>
+<li>Arrays</li>
+<li>Operators</li>
+<li>Control Flow Statements</li>
+<li>Error/Exception Handling</li>
+<li>Complex Example</li>
+<li>Interfaces and Inheritance</li>
+<li>Collections</li>
+<li>Generics</li>
+<li>Threads</li>
+<li>Summary</li>
+</ul>
+<h3>Chapter 3 The Stack</h3>
+<ul>
+<li>Stack Overview</li>
+<li>Linux</li>
+<li>Native Layer</li>
+<li>Dalvik</li>
+<li>Application Framework</li>
+<li>Applications</li>
+<li>Summary</li>
+</ul>
+<h3>Chapter 4 Installing and Beginning Use of Android Tools</h3>
+<ul>
+<li>Installing Java Development Kit</li>
+<li>Installing the Android SDK</li>
+<li>Hello World!</li>
+<li>Anatomy of an Android Project</li>
+<li>Drawable Resources</li>
+<li>Building the Project</li>
+<li>Android Emulator</li>
+<li>Summary</li>
+</ul>
+<h3>Chapter 5 Main Building Blocks</h3>
+<ul>
+<li>A Real- World Example</li>
+<li>Activities</li>
+<li>Intents</li>
+<li>Services</li>
+<li>Content Providers</li>
+<li>Broadcast Receivers</li>
+<li>Application Context</li>
+<li>Summary</li>
+</ul>
+<h3>Chapter 6 Yamba Project Overview</h3>
+<ul>
+<li>The Yamba Application</li>
+<li>Design Philosophy</li>
+<li>Project Design</li>
+<li>Part 1: Android User Interface</li>
+<li>Part 2: Intents, ActionBar, and More</li>
+<li>Part 3: Android Services</li>
+<li>Part 4: Content Providers</li>
+<li>Part 5: Lists and Adapters</li>
+<li>Part 6: Broadcast Receivers</li>
+<li>Part 7: App Widgets</li>
+<li>Part 8: Networking and the Web (HTTP)</li>
+<li>Part 9: Live Wallpaper and Handlers</li>
+<li>Summary</li>
+</ul>
+<h3>Chapter 7 Android User Interface</h3>
+<ul>
+<li>Two Ways to Create a User Interface</li>
+<li>Views and Layouts</li>
+<li>Starting the Yamba Project</li>
+<li>The StatusActivity Layout</li>
+<li>The StatusActivity Java Class</li>
+<li>Logging Messages in Android</li>
+<li>Threading in Android</li>
+<li>Other UI Events</li>
+<li>Alternative Resources</li>
+<li>Summary</li>
+</ul>
+<h3>Chapter 8 Fragments</h3>
+<ul>
+<li>Fragment Example</li>
+<li>Fragment Life Cyle</li>
+<li>Dynamically Adding Fragments</li>
+<li>Summary</li>
+</ul>
+<h3>Chapter 9 Intents, Action Bar, and More</h3>
+<ul>
+<li>Preferences</li>
+<li>The Action Bar</li>
+<li>Shared Preferences and Updating Status Fragment</li>
+<li>The Filesystem Explained</li>
+<li>Summary</li>
+</ul>
+<h3>Chapter 10 Services</h3>
+<ul>
+<li>Our Example Service: RefreshService</li>
+<li>Pulling Data from Yamba</li>
+<li>Summary</li>
+</ul>
+<h3>Chapter 11 Content Providers</h3>
+<ul>
+<li>Databases on Android</li>
+<li>Status Contract Class</li>
+<li>Update RefreshService</li>
+<li>Content Providers</li>
+<li>Creating a Content Provider</li>
+<li>Summary</li>
+</ul>
+<h3>Chapter 12 Lists and Adapters</h3>
+<ul>
+<li>MainActivity</li>
+<li>Basic MainActivity</li>
+<li>Timeline Fragment</li>
+<li>About Adapters</li>
+<li>Loading the Data</li>
+<li>Custom Logic via ViewBinder</li>
+<li>Details View</li>
+<li>Summary</li>
+</ul>
+<h3>Chapter 13 Broadcast Receivers</h3>
+<ul>
+<li>About Broadcast Receivers</li>
+<li>BootReceiver</li>
+<li>Alarms and System Services</li>
+<li>Broadcasting Intents</li>
+<li>Summary</li>
+</ul>
+<h3>Chapter 14 App Widgets</h3>
+<ul>
+<li>Using Content Providers Through Widgets</li>
+<li>Summary
+Chapter 15 Networking and Web Overview</li>
+<li>Quick Example</li>
+<li>Networking Basics</li>
+<li>HTTP API</li>
+<li>Apache HTTP Client</li>
+<li>HttpUrlConnection</li>
+<li>Networking in the Background using AsyncTask and AsyncTaskLoader</li>
+<li>Summary</li>
+</ul>
+<h3>Chapter 16 Interaction and Animation: Live Wallpaper and Handlers</h3>
+<ul>
+<li>Live Wallpaper</li>
+<li>Handler</li>
+<li>Summary</li>
+</ul>
 	  </section>
   <br>  
   <div class="ui fixed bottom borderless menu">'
