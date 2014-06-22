@@ -4,7 +4,7 @@
      <meta charset="utf-8" />
      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
    
-     <title> Lab-0x </title>
+     <title> SwiftToDoLab </title>
    
      <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
      <link rel="stylesheet" href="./style/semantic/css/semantic.min.css" type="text/css">  
@@ -25,7 +25,7 @@
   <nav class="ui fixed top pointing borderless inverted menu">
     <header class="header item"> <a href="../index.html">Perspectives on Swift</a></header>
     <div class="right tab-menu menu">
-          <a class="item" data-tab="Lab-0x"> Lab-0x </a>
+          <a class="item" data-tab="SwiftToDoLab"> SwiftToDoLab </a>
           <a class="item" data-tab="01"> 01 </a>
           <a class="item" data-tab="02"> 02 </a>
           <a class="item" data-tab="03"> 03 </a>
@@ -33,33 +33,61 @@
           <a class="item" data-tab="05"> 05 </a>
           <a class="item" data-tab="06"> 06 </a>
           <a class="item" data-tab="07"> 07 </a>
-          <a class="item" data-tab="Exercises"> Exercises </a>
+          <a class="item" data-tab="08"> 08 </a>
+          <a class="item" data-tab="09"> 09 </a>
     </div>
   </nav>
 
   <br>
 
-	  <section data-tab="Lab-0x" class="ui tab stacked moodle-book segment">
+	  <section data-tab="SwiftToDoLab" class="ui tab stacked moodle-book segment">
 	     <h1>Objectives</h1>
-<ul>
-<li>
 <p>Rebuild the ToDo application from the apple developer documentation:</p>
-<p><a href="https://developer.apple.com/library/ios/referencelibrary/GettingStarted/RoadMapiOS/SecondTutorial.html#//apple_ref/doc/uid/TP40011343-CH8-SW1">Statrting IOS Development Today</a></p>
-</li>
-<li>
-<p>This Lab requires XCode 6</p>
-</li>
+<ul>
+<li><a href="https://developer.apple.com/library/ios/referencelibrary/GettingStarted/RoadMapiOS/SecondTutorial.html#//apple_ref/doc/uid/TP40011343-CH8-SW1">Statrting IOS Development Today</a></li>
+</ul>
+<p>Built as an exercise to illustrate this talk:</p>
+<ul>
+<li><a href="http://edeleastar.github.io/design-patterns/topic13/index.html">Perspectives on Swift</a></li>
+</ul>
+<p>Complete source for the lab here:</p>
+<ul>
+<li><a href="https://github.com/edeleastar/SwiftToDo">ToDoList-Swift</a></li>
 </ul>
 	  </section>
 	  <section data-tab="01" class="ui tab stacked moodle-book segment">
 	     <h1>Setup</h1>
-<p>In XCode, create a new 'Empty' Swift application:</p>
-<p><img alt="" src="img/00.png"></p>
-<p>Make sure the app is a Swift application:</p>
+<p>In XCode, create a new IOS 'Single View' Swift application:</p>
 <p><img alt="" src="img/01.png"></p>
+<p>Make sure the app is a Swift application:</p>
+<p><img alt="" src="img/02.png"></p>
+<p>Use this .gitignore file:</p>
+<pre><code># Xcode
+#
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+</code></pre>
+
+<p>(just copy/paste this into .gitignore in your projects folder)</p>
+<p>Commit this to git using your preferred method.</p>
 <p>Run the app now using the simulator:</p>
 <p><img alt="" src="img/02.png"></p>
-<p>You should have a single source file:</p>
+<p>You should have these sources:</p>
+<h2>AppDelegate</h2>
 <pre><code>import UIKit
 
 @UIApplicationMain
@@ -69,10 +97,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate
 
   func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: NSDictionary?) -&gt; Bool
   {
-    self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
-    // Override point for customization after application launch.
-    self.window!.backgroundColor = UIColor.whiteColor()
-    self.window!.makeKeyAndVisible()
     return true
   }
 
@@ -97,85 +121,561 @@ class AppDelegate: UIResponder, UIApplicationDelegate
   }
 }
 </code></pre>
+
+<h2>ViewController:</h2>
+<pre><code>import UIKit
+
+class ViewController: UIViewController
+{
+  override func viewDidLoad()
+  {
+    super.viewDidLoad()
+  }
+
+  override func didReceiveMemoryWarning()
+  {
+    super.didReceiveMemoryWarning()
+  }
+}
+</code></pre>
+
+<p>Select the View Controller in the File Inspector:</p>
+<p><img alt="" src="img/03.png"></p>
+<p>and disable the use of Auto Layout and size classes. The storyboard scene will be reconfigured to look like this:</p>
+<p><img alt="" src="img/04.png"></p>
 	  </section>
 	  <section data-tab="02" class="ui tab stacked moodle-book segment">
-	     <h1>Storyboards</h1>
-<p>Create a new StoryBoard in your project by selecting the "ToDoList" folder, right clicking and select New:</p>
-<p><img alt="" src="img/03.png"></p>
-<p>Call the story board 'Main'. You project workspace should look like this:</p>
-<p><img alt="" src="img/04.png"></p>
-<p>Open the Storyboard - which will be blank - and drag a ViewController from the Object Library onto the canvas:</p>
-<p><img alt="" src="img/05.png"></p>
-<p>It should look something like this:</p>
+	     <h1>Outlets &amp; Delegates</h1>
+<p>Drag a TextField onto the ViewController scene:</p>
+<p><img alt="" src="img/06.png"></p>
+<p>Positioning it as shown.</p>
+<p>You should now be be able to run the app and enter text:</p>
 <p><img alt="" src="img/07.png"></p>
-<p>Back in project settings - make sure the Main storyboard we have created is set as the `Main Interface'</p>
+<p>In the storyboard view, select the View and then View Controller and then select "View-&gt;Editors-&gt;Show Assistant Editor" from the main menu. This will show the visual and textual representations side-by-side:</p>
 <p><img alt="" src="img/08.png"></p>
-<p>Try running the app. Does the Label appear?</p>
-<p>No - it is not visible yet. We need to edit the AppDelegate.swift file, and change this method:</p>
-<pre><code>  func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: NSDictionary?) -&gt; Bool
+<p>Select the EditText control in the view and Ctrl-Drag it to the class. A line appears and try to drop it just inside the opening brace of the class:</p>
+<p><img alt="" src="img/09.png"></p>
+<p>In the pop up dialog, enter the name 'toDoItem' as shown and press connect. T The class will look like this:</p>
+<pre><code>import UIKit
+
+class ViewController: UIViewController
+{
+  @IBOutlet var toDoItem: UITextField
+
+  override func viewDidLoad()
+  {
+    super.viewDidLoad()
+  }
+
+  override func didReceiveMemoryWarning()
+  {
+    super.didReceiveMemoryWarning()
+  }
+}
+</code></pre>
+
+<p>A new attribute has been inserted. See if you can locate a reference to this outlet in the 'Connections Inspector'</p>
+<p><img alt="" src="img/10.png"></p>
+<p>We would like to know when the user presses return while entering text. One way of doing this is to implement the this protocol:</p>
+<ul>
+<li><a href="https://developer.apple.com/library/prerelease/iOS/documentation/UIKit/Reference/UITextFieldDelegate_Protocol/index.html#//apple_ref/occ/intf/UITextFieldDelegate">UITextFieldDelegate</a> </li>
+</ul>
+<p>Implementing a protocol involves appending the protocol name to the class:</p>
+<pre><code>class ViewController: UIViewController, UITextFieldDelegate
+</code></pre>
+
+<p>.. and then setting the delegate as soon as the object loads:</p>
+<pre><code>  override func viewDidLoad()
+  {
+    super.viewDidLoad()
+    toDoItem.delegate = self
+  }
+</code></pre>
+
+<p>Finally, we need to implement a handler for the event we are interested in:</p>
+<pre><code>  func textFieldShouldReturn(textField: UITextField!) -&gt; Bool
+  {
+    println(toDoItem.text)
+    return true
+  }
+</code></pre>
+
+<p>We should be able to run the app now and the text we have typed should appear on the xcode output window:</p>
+<p><img alt="" src="img/11.png"></p>
+<p>This is the complete class:</p>
+<pre><code>import UIKit
+
+class ViewController: UIViewController, UITextFieldDelegate
+{
+  @IBOutlet var toDoItem: UITextField
+
+  override func viewDidLoad()
+  {
+    super.viewDidLoad()
+    toDoItem.delegate = self
+  }
+
+  func textFieldShouldReturn(textField: UITextField!) -&gt; Bool
+  {
+    println(toDoItem.text)
+    return true
+  }
+
+  override func didReceiveMemoryWarning()
+  {
+    super.didReceiveMemoryWarning()
+  }
+}
+</code></pre>
+	  </section>
+	  <section data-tab="03" class="ui tab stacked moodle-book segment">
+	     <h1>TableView</h1>
+<p>In the storyboard, introduce a TableViewController, and position it alongside the existing view in the scene as shown:</p>
+<p><img alt="" src="img/12.png"></p>
+<p>Drag and drop the 'initial scene' arrow from the existing controller to the front of the new controller:</p>
+<p><img alt="" src="img/13.png"></p>
+<p>(Note the 'This is the View Controller' will be automatically ticked in the Attributes Inspector on the right)</p>
+<p>Run the app again - a different (table) view appears instead.</p>
+	  </section>
+	  <section data-tab="04" class="ui tab stacked moodle-book segment">
+	     <h1>Connecting Views</h1>
+<p>Select the Table View Controller in the storyboard editor, and select 'Editor-&gt;Embed in-&gt;Navigation Controller. This will reconfigure the layout as follows:</p>
+<p><img alt="" src="img/14.png"></p>
+<p>It has created space at the top of the TableView, into which we can now drag and drop a button:</p>
+<p><img alt="" src="img/23.png"></p>
+<p>Into the navigation area:</p>
+<p><img alt="" src="img/24.png"></p>
+<p>When this is placed, select the 'Bar Button' as it is called in the outline view:</p>
+<p><img alt="" src="img/15.png"></p>
+<p>Change its identifier to 'Add' in the attributes inspector:</p>
+<p><img alt="" src="img/16.png"></p>
+<p>Now Control-Drag the new button to the ViewControler - establishing a new 'segue' in the scene:</p>
+<p><img alt="" src="img/18.png"></p>
+<p>When connecting the controller, select 'Push' as the transition type.</p>
+<p>You should now be able to run the app and move from the initial table view to the second view using the '+' button. You should also be able to return to this opening view via an automatically generated 'Back' button</p>
+<p>In the storyboard outline view, select 'Navigation Item': </p>
+<p><img alt="" src="img/19.png"></p>
+<p>.. and in the Attributes Inspector, enter a title for the Table Controller:</p>
+<p><img alt="" src="img/20.png"></p>
+<p>Now try running the app again. Note the changed title in the Item view - from 'Back" to 'To Do List'</p>
+	  </section>
+	  <section data-tab="05" class="ui tab stacked moodle-book segment">
+	     <h1>Custom Classes</h1>
+<p>The TableViewController we introduced in the storyboard is currently entirely visual, and without any Swift class associated with it. We can create a class now and establish the connection with the visual representation.</p>
+<p>Select the folder containing our classes in the project view, right click and select 'New File' then select 'Cocoa Touch' class:</p>
+<p><img alt="" src="img/25.png"></p>
+<p>Make sure the class is derived from 'UITableViewController', and call it ToDoListController:</p>
+<p><img alt="" src="img/26.png"></p>
+<p>This will generate the following class:</p>
+<pre><code>import UIKit
+
+class ToDoListController: UITableViewController
+{
+  init(style: UITableViewStyle)
+  {
+    super.init(style: style)
+  }
+
+  override func viewDidLoad()
+  {
+    super.viewDidLoad()
+   }
+
+  override func didReceiveMemoryWarning()
+  {
+    super.didReceiveMemoryWarning()
+  }
+
+  // #pragma mark - Table view data source
+
+  override func numberOfSectionsInTableView(tableView: UITableView?) -&gt; Int
+  {
+    return 0
+  }
+
+  override func tableView(tableView: UITableView?, numberOfRowsInSection section: Int) -&gt; Int
+  {
+    return 0
+  }
+}
+</code></pre>
+
+<p>(Comments removed)</p>
+<p>We now need to connect this class with the visual version as designed in the storyboard.</p>
+<p>Select the TableView controller in the outline view:</p>
+<p><img alt="" src="img/27.png"></p>
+<p>In the Identity Inspector, select the ToDoListContorller class form the 'Class' drop down:</p>
+<p><img alt="" src="img/28.png"></p>
+<p>The class is now bound. To verify this, we can place a simple print statement:</p>
+<pre><code>  override func viewDidLoad()
+  {
+    super.viewDidLoad()
+    println (&quot;Tableview Loaded&quot;)
+   }
+</code></pre>
+
+<p>Run the app now, we get an error message as it is launched:</p>
+<pre><code>/Users/edeleastar/repos/projects/ios/ToDoListSwift/ToDoListSwift/ToDoListController.swift: 3: 3: fatal error: use of unimplemented initializer 'init(coder:)' for class 'ToDoListSwift.ToDoListController'
+(lldb) 
+</code></pre>
+
+<p>This may be a bug in the xcode beta - include this method in the ToDoListController:</p>
+<pre><code> init(coder aDecoder: NSCoder!)
+  {
+    super.init(coder: aDecoder)
+  }
+</code></pre>
+
+<p>Finally, run it again and look to the the message appearing in xcode:</p>
+<p><img alt="" src="img/29.png"></p>
+	  </section>
+	  <section data-tab="06" class="ui tab stacked moodle-book segment">
+	     <h1>Done / Cancel Buttons</h1>
+<p>Just as we encapsulated the TableView controller in a Navigation Controller earlier - we will now also embed the View controller.</p>
+<p>First select the View Controller:</p>
+<p><img alt="" src="img/30.png"></p>
+<p>.. and then select "Editor-&gt;Embed in-&gt;Navigation Controller". This will reconfigure the scenes:</p>
+<p><img alt="" src="img/31.png"></p>
+<p>Run the app now - and you will see this error in the console:</p>
+<pre><code>2014-06-22 06:25:24.663 ToDoListSwift[33780:955905] *** Terminating app due to uncaught exception 'NSInvalidArgumentException',
+reason: 'Pushing a navigation controller is not supported'
+</code></pre>
+
+<p>This is because of an incorrect 'seague' form the table to the item controller. Select this segue:</p>
+<p><img alt="" src="img/32.png"></p>
+<p>and reset its Segue type to 'modal':</p>
+<p><img alt="" src="img/33.png"></p>
+<p>Run the application again. This time it operates correctly, however when we navigate to the item view, we can no longer return to the table view. We will customise this now.</p>
+<p>First, drag drop two buttons to the navigation bar of the item view:</p>
+<p><img alt="" src="img/34.png"></p>
+<p>We need to connect these buttons somehow to the TableViewController, so that when they are pressed, we can recover the todo text (or otherwise if Cancel is pressed).</p>
+<p>Try to Control-Drag the Cancel button to the "Exit" </p>
+<p><img alt="" src="img/35.png"></p>
+<p>This will not work, as the "Exit" responder fails to propose any outlets/endpoints. To fix this, introduce the following function into ToDoListController:</p>
+<pre><code>  @IBAction func unwindToList (segue: UIStoryboardSegue?)
+  {
+    println (&quot;seague unwound&quot;)
+  }
+</code></pre>
+
+<p>Try the Control-Drag of one of the buttons again - it still will not engage. One last change should fix this. Introduce the following header into the project:</p>
+<h2>ToDoListController.h</h2>
+<pre><code>#import &lt;Foundation/Foundation.h&gt;
+
+#import &lt;UIKit/UIKit.h&gt;
+
+class ToDoListController
+@interface ToDoListController
+
+- (IBAction)unwindToList: (UIStoryboardSegue *)segue;
+
+@end
+</code></pre>
+
+<p>This is an Objective-C bridging header for the class ToDoListController. We need to complete the bridge in the ToDoListController swift class:</p>
+<pre><code>@objc(ToDoListController)
+class ToDoListController: UITableViewController
+{
+  ...
+</code></pre>
+
+<p>Make sure you rebuild the app now. The, Control-Drag the buttons to the Exit - and the seague method defined above should appear. Select it for both buttons in turn.</p>
+<p>Run the app again. Does it item view return this time? Perhaps not. If the return fails, try the following workaround:</p>
+<pre><code>//@objc(ToDoListController)
+class ToDoListController: UITableViewController
+{
+  ...
+</code></pre>
+
+<p>(Comment out the objc attribute above).</p>
+<p>It should work now (hopefully). I.e. 'Done' and 'Cancel' should return to the list view, and the log message should appear in the console.</p>
+	  </section>
+	  <section data-tab="07" class="ui tab stacked moodle-book segment">
+	     <h1>ToDoItem Class</h1>
+<p>Introduce the following class:</p>
+<h2>ToDoItem</h2>
+<pre><code>class ToDoItem
+{
+  var completed = false
+  var itemName  = &quot;&quot;
+
+  init(completed: Bool = false, itemName:String = &quot;empty&quot;)
+  {
+    self.completed = completed
+    self.itemName  = itemName
+  }
+}
+</code></pre>
+
+<p>Open the View Controller again on storyboard, and using 'View-&gt;Show Assistant Editor', open the source alongside it:</p>
+<p><img alt="" src="img/36.png"></p>
+<p>Control Drag each of the buttons into the class, giving the outlet the names 'cancel' and 'done'. We should get the following generated in the ViewController:</p>
+<pre><code>  @IBOutlet var cancel   : UIButton
+  @IBOutlet var done     : UIButton
+</code></pre>
+
+<p>(Make sure the type is UIButton, not UIBarButton in the generated code). We can now introduce a property to hold the todo text:</p>
+<pre><code>  var todo               : ToDoItem?
+</code></pre>
+
+<p>And we can intercept the return from the view in the 'prepareForSeague' override to initialise (and print) this text item</p>
+<pre><code>  override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!)
+  {
+    if let button = sender as? NSObject
+    {
+      todo = button == done ? ToDoItem(itemName:toDoItem.text): nil
+      println(todo?.itemName)
+    }
+  }
+</code></pre>
+
+<p>Look carefully at what we are doing here: determining which button has been pressed, and if it is done, we recover the text from the control.</p>
+<p>Run the app now. You should see the todo item printed when 'done' is pressed.</p>
+<p>This is the final version of the ViewController class (we have removed one of the method we had earlier):</p>
+<pre><code>import UIKit
+
+class ViewController: UIViewController, UITextFieldDelegate
+{
+  @IBOutlet var toDoItem : UITextField
+  @IBOutlet var cancel   : UIButton
+  @IBOutlet var done     : UIButton
+  var todo               : ToDoItem?
+
+  override func viewDidLoad()
+  {
+    super.viewDidLoad()
+  }
+
+  override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!)
+  {
+    if let button = sender as? NSObject
+    {
+      todo = button == done ? ToDoItem(itemName:toDoItem.text): nil
+      println(todo?.itemName)
+    }
+  }
+
+  override func didReceiveMemoryWarning()
+  {
+    super.didReceiveMemoryWarning()
+  }
+}
+</code></pre>
+	  </section>
+	  <section data-tab="08" class="ui tab stacked moodle-book segment">
+	     <h1>ToDoListTableView Class</h1>
+<p>Our final step is to display the item in the TableView. </p>
+<p>First introduce an array of ToDoItems in the tableview controller:</p>
+<pre><code>  var todoItems = ToDoItem[]()
+</code></pre>
+
+<p>We can refactor the unwind method to retrieve the text:</p>
+<pre><code>  @IBAction func unwindToList (segue: UIStoryboardSegue?)
+  {
+    var controller = segue?.sourceViewController as ViewController
+    if controller.todo != nil
+    {
+      todoItems.append(controller.todo!)
+      var str = controller.todo?.itemName
+      println (&quot;adding&quot; + str! + &quot; to list&quot;)
+    }
+  }
+</code></pre>
+
+<p>Run the app now and you should see an appropriate message in the debug console.</p>
+<p>This method can be more elegantly written using <a href="https://developer.apple.com/library/prerelease/mac/documentation/Swift/Conceptual/Swift_Programming_Language/OptionalChaining.html">Optional Chaining</a> as follows:</p>
+<pre><code>  @IBAction func unwindToList (segue: UIStoryboardSegue?)
+  {
+    if let controller = segue?.sourceViewController as? ViewController
+    {
+      if let toDo = controller.todo
+      {
+        println (&quot;adding&quot; + toDo.itemName + &quot; to list&quot;)
+        todoItems.append(toDo)
+      }
+    }
+  }
+</code></pre>
+
+<p>Our next step is to display this list in the table. First change this method from retuning zero to returning the number of elements in the list:</p>
+<pre><code>  override func tableView(tableView: UITableView?, numberOfRowsInSection section: Int) -&gt; Int
+  {
+    return todoItems.count
+  }
+</code></pre>
+
+<p>Also, change the numberOfSections override to return 1:</p>
+<pre><code>  override func numberOfSectionsInTableView(tableView: UITableView?) -&gt; Int
+  {
+    return 1
+  }
+</code></pre>
+
+<p>In order to display the todo items, we need one further change to the storyboard. Select the "TableViewCell" in the outline view, and locate the 'ReuseIdentifier' in the Attributes Inspector:</p>
+<p><img alt="" src="img/37.png"></p>
+<p>Change this to 'ToDoCell'</p>
+<p><img alt="" src="img/38.png"></p>
+<p>We can now proceed to implement the override to display the entry for each cell:</p>
+<pre><code>  override func tableView(tableView: UITableView?, cellForRowAtIndexPath : NSIndexPath!) -&gt; UITableViewCell?
+  {
+    let cell           = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: &quot;ToDoCell&quot;)
+    var task           = todoItems[cellForRowAtIndexPath.row]
+
+    cell.text          = task.itemName
+    cell.accessoryType = task.completed ? UITableViewCellAccessoryType.Checkmark : UITableViewCellAccessoryType.None
+
+    return cell
+  }
+</code></pre>
+
+<p>Finally, the todoitem will not appear until we reload the data in the unwind:</p>
+<pre><code>  @IBAction func unwindToList (segue: UIStoryboardSegue?)
+  {
+    if let controller = segue?.sourceViewController as? ViewController
+    {
+      if let toDo = controller.todo
+      {
+        println (&quot;adding&quot; + toDo.itemName + &quot; to list&quot;)
+        todoItems.append(toDo)
+        self.tableView.reloadData()
+      }
+    }
+  }
+</code></pre>
+
+<p>(just one extra line here).</p>
+<p>The app should now launch and run as expected.</p>
+<p>This is the current version of the TableView controller:</p>
+<pre><code>import UIKit
+
+//@objc(ToDoListController)
+class ToDoListController: UITableViewController
+{
+  var todoItems = ToDoItem[]()
+
+  init(style: UITableViewStyle)
+  {
+    super.init(style: style)
+  }
+
+  init(coder aDecoder: NSCoder!)
+  {
+    super.init(coder: aDecoder)
+  }
+
+  override func viewDidLoad()
+  {
+    super.viewDidLoad()
+    println (&quot;Tableview Loaded&quot;)
+   }
+
+  @IBAction func unwindToList (segue: UIStoryboardSegue?)
+  {
+    if let controller = segue?.sourceViewController as? ViewController
+    {
+      if let toDo = controller.todo
+      {
+        println (&quot;adding&quot; + toDo.itemName + &quot; to list&quot;)
+        todoItems.append(toDo)
+        self.tableView.reloadData()
+      }
+    }
+  }
+
+  override func didReceiveMemoryWarning()
+  {
+    super.didReceiveMemoryWarning()
+  }
+
+  // #pragma mark - Table view data source
+
+  override func numberOfSectionsInTableView(tableView: UITableView?) -&gt; Int
+  {
+    return 1
+  }
+
+  override func tableView(tableView: UITableView?, numberOfRowsInSection section: Int) -&gt; Int
+  {
+    return todoItems.count
+  }
+
+  override func tableView(tableView: UITableView?, cellForRowAtIndexPath : NSIndexPath!) -&gt; UITableViewCell?
+  {
+    let cell  = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: &quot;ToDoCell&quot;)
+    var task           = todoItems[cellForRowAtIndexPath.row]
+
+    cell.text          = task.itemName
+    cell.accessoryType = task.completed ? UITableViewCellAccessoryType.Checkmark : UITableViewCellAccessoryType.None
+
+    return cell
+  }
+}
+</code></pre>
+	  </section>
+	  <section data-tab="09" class="ui tab stacked moodle-book segment">
+	     <h2>Edit Cells</h2>
+<p>Finally, we would like the enable checking / unchecking + redordring and deleting of the todo items in the list.</p>
+<p>First to support tick/tick items, introduce this override:</p>
+<pre><code>  override func tableView(tableView: UITableView!, didSelectRowAtIndexPath : NSIndexPath!)
+  {
+    tableView.deselectRowAtIndexPath(didSelectRowAtIndexPath, animated: false)
+    var task = self.todoItems[didSelectRowAtIndexPath.row] as ToDoItem
+    task.completed = !task.completed
+    tableView.reloadRowsAtIndexPaths([didSelectRowAtIndexPath], withRowAnimation: UITableViewRowAnimation.None)
+  }
+</code></pre>
+
+<p>Run the app and when you tap on a todo item, at check mark toggles on / off.</p>
+<p>To support Edit/Rearrage/Delete, we need a few changes. First, in the viewDidLoad method we enable the 'Edit' button:</p>
+<pre><code>  override func viewDidLoad()
+  {
+    super.viewDidLoad()
+    navigationItem.leftBarButtonItem = self.editButtonItem()
+    println (&quot;Tableview Loaded&quot;)
+  }
+</code></pre>
+
+<p>If you run the app now, the button appears and will seem to have some effect. However to perform the delete we need this override:</p>
+<pre><code>  override func tableView(tableView: UITableView?, commitEditingStyle: UITableViewCellEditingStyle, forRowAtIndexPath: NSIndexPath?)
+  {
+    if commitEditingStyle == .Delete
+    {
+      if let index = forRowAtIndexPath?.row
+      {
+        todoItems.removeAtIndex(index)
+        tableView?.deleteRowsAtIndexPaths([forRowAtIndexPath!], withRowAnimation: .Fade)
+      }
+    }
+    else if commitEditingStyle == .Insert
+    {
+    }
+  }
+</code></pre>
+
+<p>This should work now.</p>
+<p>In order to enable re-ordering, we need these overrides:</p>
+<pre><code>  override func tableView(tableView: UITableView?, moveRowAtIndexPath : NSIndexPath?, toIndexPath: NSIndexPath?)
+  {
+  }
+
+  override func tableView(tableView: UITableView?, canMoveRowAtIndexPath : NSIndexPath?) -&gt; Bool
   {
     return true
   }
 </code></pre>
 
-<p>(We have removed some default initialization)</p>
-<p>Run the app now, and the Label should appear.</p>
-	  </section>
-	  <section data-tab="03" class="ui tab stacked moodle-book segment">
-	     <h1>Scenes</h1>
-<p>Create a new TableViewControler in your scene (drag from from the object library)</p>
-<p><img alt="" src="img/09.png"></p>
-<p>Drag and drop the 'Entry Arrow' such that the new controller is our initial view:</p>
-<p><img alt="" src="img/10.png"></p>
-<p>Test again - your initial view should be the table view (it will have lines).</p>
-<p>We can set up a title + some content. In the outline view, select "TableView" under TableViewController:</p>
-<p><img alt="" src="img/12.png"></p>
-<p>Select the 'Attributes Inspector', and change to 'Static Cells'</p>
-<p><img alt="" src="img/13.png"></p>
-<p>You table view should now look like this:</p>
-<p><img alt="" src="img/14.png"></p>
-<p>In the outline view for the TableView Storyboard, select the 'Table View Cell':</p>
-<p><img alt="" src="img/15.png"></p>
-<p>...and in the Attributes Inspector, change the cell type to 'Basic'</p>
-<p><img alt="" src="img/16.png"></p>
-<p>A 'Title' string will appear in the controller:</p>
-<p><img alt="" src="img/17.png"></p>
-<p>You and edit this directly and change the text. Do this for the first three cells:</p>
-<p><img alt="" src="img/18.png"></p>
-<p>Verify that the app runs as expected:</p>
-<p><img alt="" src="img/19.png"></p>
-	  </section>
-	  <section data-tab="04" class="ui tab stacked moodle-book segment">
-	     <h1>Connecting Scenes</h1>
-<p>In the outline view, select the Table View Controller again:</p>
-<p><img alt="" src="img/20.png"></p>
-<p>and from the main menu, select 'Editor-&gt;Embed in-&gt;Navigation Controller'</p>
-<p><img alt="" src="img/21.png"></p>
-<p>This will reconfigure the scenes:</p>
-<p><img alt="" src="img/22.png"></p>
-<p>We can then set a title for our TableView controller:</p>
-<p><img alt="" src="img/23.png"></p>
-<p><img alt="" src="img/24.png"></p>
-<p><img alt="" src="img/25.png"></p>
-<p>Run the app an verify that it title appears as expected.</p>
-<p>We will now place a new 'Button' directly onto the title bar - drag and drop from the Object Library:</p>
-<p><img alt="" src="img/27.png"></p>
-<p>With the button selected as shown above, change the 'Identifier' to 'Add':</p>
-<p><img alt="" src="img/28.png"></p>
-<p>Which will redisplay the scene to use a different icon:</p>
-<p><img alt="" src="img/29.png"></p>
-	  </section>
-	  <section data-tab="05" class="ui tab stacked moodle-book segment">
-	     <h1>Title</h1>
-	  </section>
-	  <section data-tab="06" class="ui tab stacked moodle-book segment">
-	     <h1>Title</h1>
-	  </section>
-	  <section data-tab="07" class="ui tab stacked moodle-book segment">
-	     <h1>Title</h1>
-	  </section>
-	  <section data-tab="Exercises" class="ui tab stacked moodle-book segment">
-	     <h1>Exercises</h1>
+<p>If you run it now, and add more than one item, you will be able to reorder them when editing is enabled.</p>
+<p>Finally, you might like to load some data for test purposes on launch:</p>
+<pre><code>  override func viewDidLoad()
+  {
+    super.viewDidLoad()
+    navigationItem.leftBarButtonItem = self.editButtonItem()
+    todoItems.append(ToDoItem(itemName:&quot;Buy Milk&quot;,    completed:false))
+    todoItems.append(ToDoItem(itemName:&quot;Buy eggs&quot;,    completed:true))
+    todoItems.append(ToDoItem(itemName:&quot;Read a book&quot;, completed:false))
+    println (&quot;Tableview Loaded&quot;)
+  }
+</code></pre>
 	  </section>
   <br>  
   <div class="ui fixed bottom borderless menu">'
